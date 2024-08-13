@@ -1,6 +1,6 @@
 # requirements.txt 파일 목록의 패키지를 설치하는 방법
 
-코드 입력
+cmd 입력
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.pip
 ```
