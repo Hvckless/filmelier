@@ -1,0 +1,9 @@
+#console > span{
+    white-space: pre-wrap;
+}
+
+#console{
+    background-color: white;
+    height: 100%; width: 100%;
+    overflow: auto;
+}
