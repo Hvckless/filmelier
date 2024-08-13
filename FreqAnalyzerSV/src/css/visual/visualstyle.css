@@ -1,0 +1,19 @@
+.invisible{
+    display: none;
+}
+
+.wrapper{
+    position: absolute;
+}
+
+.relative{
+    position: relative;
+}
+
+.float{
+    position: fixed;
+}
+
+.blur{
+    filter: blur(3px);
+}
