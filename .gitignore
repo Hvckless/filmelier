@@ -7,3 +7,4 @@ venv/
 *.gubun
 *.model
 *.txt
+*.csv
