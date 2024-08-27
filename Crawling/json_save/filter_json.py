@@ -19,7 +19,7 @@ def from_movie(filename):
 def get_movie(movie_cd):
     global Load_count  # 전역 카운터 변수를 사용합니다.
 
-    url = f"https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=faf0eb22bf586b7340d3948f472265b7&movieCd={movie_cd}"
+    url = f"https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=494fd51f5e5b4a22cc080457849a3f49&movieCd={movie_cd}"
     for get_info in range(3):
         try:
             response = requests.get(url)
@@ -90,4 +90,5 @@ if __name__ == "__main__":
     input_csv = 'src/filmelier/Crawling/json_save/movie_list3.csv'
     output_csv = 'movie_filterList1.csv'
     main(input_csv, output_csv)
+
 

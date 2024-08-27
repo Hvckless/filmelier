@@ -11,11 +11,11 @@ option = webdriver.ChromeOptions()
 service = Service(ChromeDriverManager().install())
 
 driver = webdriver.Chrome(service=service, options=option)
-file_path = os.path.join(os.getcwd(),'src/crolling/movi_list.txt')
+file_path = os.path.join(os.getcwd(),'src/filmelier/Crawling/crawling/movie_filterList.txt')
 
-default_url = "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query=%EC%98%81%ED%99%94%EB%A6%AC%EB%B7%B0{}"
-with open(file_path, "r", encoding="utf-8") as file:
-    movie_title = file.read().split('/')
+default_url = "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query=%EC%98%81%ED%99%94%20%EB%A6%AC%EB%B7%B0%20{}"
+with open(file_path, "r", encoding="utf-16") as file:
+    movie_title = file.read().split('\n')
 
 def process_movie(title):
     title = title.strip()
@@ -29,17 +29,24 @@ def process_movie(title):
     time.sleep(5)
 
     blog_links = []
-    links = WebDriverWait(driver,10).until(ec.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.title_area > a')))
-    for link in links:
-        url = link.get_attribute('href')
-        if 'blog.naver.com' in url:
-            blog_links.append(url)
-            print("blog:",len(blog_links))
-        if len(blog_links) < 1:
-            break
-        if len(blog_links) >= 4:
-            print("blog_url :", blog_links)
-            break
+    try:
+        links = WebDriverWait(driver,10).until(ec.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.title_area > a')))
+        for link in links:
+            url = link.get_attribute('href')
+            if 'blog.naver.com' in url:
+                blog_links.append(url)
+                print("blog:",len(blog_links))
+            if len(blog_links) < 1:
+                break
+            if len(blog_links) >= 2:
+                print("blog_url :", blog_links)
+                break
+        if len(blog_links) == 0:
+            print(f"검색결과가 없습니다:{title}")
+            return
+    except Exception as e:
+        print(f"검색 도중 오류발생{title}:{str(e)}")
+        return
 
     for i, blog_url in enumerate(blog_links):
         driver.get(blog_url)
@@ -56,8 +63,17 @@ def process_movie(title):
         except Exception as e:
             print(f"파일 오류{blog_url}: {str(e)}")
 
-    reset_title = title.replace('/', '_')
-    file_name = f"{reset_title}_review.txt"
+    reset_title = (title
+                       .replace('/', '_')
+                       .replace('\\', '_')
+                       .replace(':', '_')
+                       .replace('*', '_')
+                       .replace('?', '_')
+                       .replace('"', '_')
+                       .replace('<', '_')
+                       .replace('>', '_')
+                       .replace('|', '_'))
+    file_name = f"src/filmelier/Crawling/crawling/blog_review/{reset_title}_review.txt"
     with open(file_name, "w", encoding="utf-8") as file:
         file.write('\n'.join(all_text))
         print("text :", all_text)
@@ -75,3 +91,5 @@ print("end")
 #EB%A6%AC%EB%B7%B0
 #EB%A6%AC%EB%B7%B0
 #EB%A6%AC%EB%B7%B0
+#%EC%98%81%ED%99%94%EB%A6%AC%EB%B7%B0
+#%EC%98%81%ED%99%94%20%EB%A6%AC%EB%B7%B0
