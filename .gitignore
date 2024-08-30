@@ -1,10 +1,12 @@
 node_modules/
 venv/
 
+ignore/
+
 .vscode/
 .idea/
 
-*.gubun
-*.model
-*.txt
-*.csv
+#*.gubun
+#*.model
+#*.txt
+#*.csv
