@@ -1,5 +1,5 @@
-import numpy as np
 import fasttext
+import numpy as np
 
 
 model = fasttext.load_model('./ignore/cc.ko.100.bin')
