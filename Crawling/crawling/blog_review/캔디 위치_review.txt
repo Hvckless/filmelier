@@ -1,0 +1,271 @@
+^
+<javascript> 마리오 게임 만들기(whack a mole)
+어제 하루동안 많은일이 있었습니다 ^^
+실컷 만든 영화 리뷰 사이트를 git hub로 연동할 수는 없을까? 하여..
+요래조래 만지다가 아이맥 초기화를 시켰습니다. 예?
+다시 급 수습을 해보려고 했지만 포기하고...,,,,
+하지만 좌절하지 않고 새로운 걸 만들어 봤습니다 ㅎ
+뭔가 게임을 만들고 싶어서 유튜브에서 찾던 중, 재밌는 걸 발견했지 모에요 ㅎ
+whack a mole 이라는 게임인데요. 마리오 주제로 만든 게임입니다.
+https://www.youtube.com/watch?v=ej8SatOj3V4&list=PLnKe36F30Y4bLhA-st9sC4ZthyV7nsL2Q
+실제로 이분 계정에 들어가니 스토쿠 캔디크러쉬 등 많은 게임을 구현하더라구요.
+쉽게 설명해줘서 잘 따라할 수 있었던 것 같습니다.
+html 이용하기
+우선 당연히 html 먼저 만들어야겠죠.
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whack a Mole</title>
+<link rel ="stylesheet" href ="mole.css">
+<script src="mole.js"></script>
+</head>
+여러 강의를 보며 느낀건 미리 css 폴더 및 js 폴더를 만든 후 링크를 걸어서 진행하는 사람이 있는 반면,
+미리 html 폴더에서 만든 후 해당 폴더로 옮기는 사람이 있더군요.
+아무래도 실제 실무자들은 ? 본인이 편하게 미리 css js 폴더를 만들어 거기서 직접 작성하지 않을까 추측해봅니다.
+확인하기 쉽도록이요.
+<body>
+<h1>Whack a Mole</h1>
+<h2 id = "score">0</h2>
+<!---3x3-->
+<div id = "board"></div>
+</body>
+</html>
+제목도 만들어 주고요.
+맨위에 점수도 나오도록 h2태그에 id = "score"로 해서 0으로 만들어줍니다.
+여기서 id를 만들었단 것은 css 든 js든 사용할 예정이라는 것을 추측할 수 있겠죠. (id 쓰임새 이제 깨달은 1인)
+게임판을 어떻게 만들지에 대해 이야기를 해보겠습니다.
+3x3
+총 9개의 칸이 나오도록 설정을 해야겠죠.
+우선 div 태그에 id = "board" 로 설정하여 css에서 만들어 보도록 하겠습니다.
+css 이용하기
+우선 body 부터 만들어 주겠습니다. ( 화면 전체)
+body {
+font-family: Arial, Helvetica, sans-serif; --> 글꼴 여러개를 설정할때 사용합니다. sans-serif : 삐침이 없고 굵기가 일정한 고딕 계열의 글꼴
+text-align: center;
+background: url("./mario-bg.jpg"); --> 저장한 이미지를 해당 파일 링크 설정
+background-size: cover; --> 배경 사이즈를 웹브라우저 사이즈에 맞게 알아서 설정해준다.
+}
+#board {
+width : 540px;
+height : 540px;
+background-color: green;
+margin : 0 auto;
+display : flex; --> 박스레이아웃 할때 유용. parent 에 맞춰 사이즈를 알아서 유연하게 조절
+flex-wrap : wrap;
+background: url("./soil.png"); --> 저장한 이미지 불러오기
+background-size: cover;
+border: 3px solid white; --> 끝에 흰색 선 설정하기
+border-radius: 25px; --> 모서리 둥글게
+}
+그 다음 pipe 이미지를 알맞게 배치해줘야합니다.
+#board div{
+/* board = 540x540, divide into 3x3 --> 180x180 per div*/
+width : 180px;
+height : 180px;
+background-image: url("./pipe.png");
+background-size: cover;
+}
+board 태그에서 저희는 가로 세로 비율을 540x540으로 만들어 주었죠.
+세개씩 배치하려면 당연히 180 x 180이 되어야 겠죠?
+배경 이미지를 불러오고 사이즈는 cover.
+이제 동작시키는 일만 남았습니다.
+js 폴더로 넘어가서 만들어주면 됩니다. 역시나 큰 고비는 자바스크립트죠 ㅎ
+window.onload = function(){
+setGame( );
+};
+setGame( ) 함수를 만들어 주고요.
+윈도우 창 로드하면 게임 시작해! 아래 처럼. 이라고 해석하면 되겠죠? (내맘대로 해석중. 대충 이렇게하면 이해가 되더라구요.)
+그럼 컴퓨터는 기다리겠죠
+??? : setGame( ) 어떻게 동작하면 되는데?
+저의 답변은:
+function setGame( ){
+for(let i = 0; i<9; i++){
+let tile = document.createElement("div");
+tile.id = i.toString( );
+tile.addEventListener("click", selectTile);
+document.getElementById("board").appendChild(tile);
+}
+}
+게임이 계속 반복해서 돌아가야겠죠? 이럴땐 for 함수를 이용해 반복시켜주면 됩니다.
+신기하게도 저는 변수 var를 배웠는데 let를 더 많이 사용하는 것 같습니다. var, let 차이는 예전에 제가 정리를 한적이 있었는데요.
+대충 설명하자면 var는 좀 위험성이 큰 것 같아요. let은 좀 덜하고 const? 가 제일 안전하고 확실하다는... 그냥 그렇게만 개념 이해했습니다 ㅠㅋㅋ (시험이 아니잖아 ㅎ)
+반복문 선언하고..
+loop to create 9 tiles 이니까 i<9 로 해줘야합니다. 실제로는 0-8까지만 적용되겠죠.
+중괄호 안에
+각 타일에 새로운 '<div>' 요소 생성해주기
+let tile = document.createElement("div");
+그 요소의 id속성은 i의 문자열 표현.
+왜 문자열로 표현했을까요? 그냥 숫자로 인식하면 안되는지 궁금해서 찾아보니,
+HTML 에서 요소의 'id'값으로 사용되는 문자열은 숫자로만 이루어질 수 없다고 합니다. 복잡한 코드를 작성해야할 수 있는 상황에서 숫자를 문자열로 변환하여 'id'로 사용하면 코드를 보다 직관적으로 만들 수 있기 때문이라네요.. (출처: chat gpt, 반박시 님 말 맞음)
+addEventListener 메서드를 사용해 각 타일에 클릭 이벤트 추가합니다. (나중에 mole이 움직이면 클릭해서 점수 올리기를 실행해야하거든요.)
+클릭 이벤트가 발생하면 'selectTile' 함수가 호출 됩니다.
+document.getElementById("board").appendChild(tile);
+--> DOM을 사용하여 새로 생성한 'tile'요소를 HTML 문서의 특정 요소에 추가하는 역할을 합니다.
+즉, 저희는 이미 html에서 id = board 를 만들었죠. id가 "board"인 요소를 찾아서 그 안에 새로 생성한 'tile'요소를 추가합니다.
+그 후, .appendChild(tile)은 선택된 요소에 새로운 자식 요소인 'tile'을 추가하는 역할을 합니다. 따라서 tile 은 board의 자식 요소로 추가.
+setInterval(setMole, 1000); //1000 milliseconds = 1 sec 마다 움직임
+setInterval(setPlant, 2000); //3000 milliseconds = 2 sec
+}
+function getRandomTile(){
+// math.random --> (0-1) * 9 = (0-9) -->round down to (0-8) integers
+let num = Math.floor(Math.random() * 9);
+return num.toString();
+}
+Mole이 해당 파이프마다 랜덤으로 움직이게 설정해줘야겠죠.
+이때 쓰는 함수는 math.random 입니다. 0이상 1미만의 난수를 생성하기 때문에 x9 를 하면 0이상9 미만이 되겠죠. math.floor()함수를 사용해 소수점 이하를 버린 후 0-8이하의 정수로 반환됩니다.
+function setMole( ){
+if(gameOver){
+return; // 이건 나중에 추가한 것인데, 게임 끝났을 때 멈추는 기능이다.
+}
+그 다음 window.onload 보다 위에 let currMoleTile; 전역변수를 만들어줘야합니다.
+if(currMoleTile){
+currMoleTile.innerHTML = ""; //mole 타일에 중복 방지
+}
+let mole = document.createElement("img");
+mole.src = "./monty-mole.png";
+let num = getRandomTile();
+if(currPlantTile && currPlantTile.id == num){
+return;
+}
+currMoleTile = document.getElementById(num);
+currMoleTile.appendChild(mole);
+}
+그 다음 let currPlantTile; 또한 let currMoleTile; 밑에 만들고요.
+위의 네이비색상 부분과 같이 만들어주면 됩니다.
+function setPlant(){ //이건 마지막에
+if (gameOver){
+return;
+}
+if(currPlantTile){
+currPlantTile.innerHTML = "";
+}
+let plant = document.createElement("img");
+plant.src = "./piranha-plant.png";
+let num = getRandomTile();
+if(currMoleTile && currMoleTile.id == num){
+return;
+}
+currPlantTile = document.getElementById(num);
+currPlantTile.appendChild(plant);
+}
+function selectTile(){
+if(gameOver){ // 이건 나중에 추가한 것인데, 게임 끝났을 때 멈추는 기능이다.
+return
+}
+if(this == currMoleTile){ //우선 tile이 클릭이 되면 이것이 Mole 이미지와 같은지 찾습니다.
+score +=10; //10점씩 늘어나겠죠
+document.getElementById("score").innerText = score.toString(); //update score
+}
+else if(this == currPlantTile){
+document.getElementById("score").innerText = "GAME OVER: " + score.toString();
+gameOver = true;
+}
+}
+아까 맨위에 변수선언 let currMoleTile; let currPlanTile; 쓴다고 했죠?
+바로 아래에 게임이 끝났을때 최종 점수도 보여주어야 합니다. let gameOver = false; 도 만들어주세요.
+여기까지 하셨는데도 game over 했을 때 게임이 그대로 동작을 한다면 아래를 참고하여
+function setMole( ){
+if(gameOver){
+return;
+}
+function setPlant(){
+if (gameOver){
+return;
+}
+function selectTile(){
+if(gameOver){
+return
+}
+위의 해당위치에 잘들어가있는지 확인해주세요.
+이후, 게임시 드래그가 되는 모습을 볼 수 있는데요.
+사용자 입장에선 거슬리니..
+css 파일에서 #board div img { } 부분 맨 밑에 아래와 같이 넣어 드래그를 막아줍니다.
+user-select : none;
+-moz-user-select: none;
+-webkit-user-drag : none;
+-webkit-user-select : none;
+-ms-user-select : none;
+}
+실행해보면 잘 동작합니다 !
+즐겜하세용!
+사각사각 필사하는 꿈꾸는 캔디입니다.
+2022년은 저에게 챌린지의 해라고 해도 과언이 아닐 정도로 챌린지 참여가 많았습니다.
+무리한 챌린지에 지치기도 했는데요. 챌린지를 하면서 깨달은 건 무리하게 급하게 다른사람들이 한다고 해서 무조건 따라 하는 것이 아니라 나에게 맞는 나만의 속도로 조절을 해가면서 해야 지치지 않고 성취를 맛볼 수 있다는 거였습니다.
+◆ 꿈꾸는 캔디의 블로그 왕초보 탈출기 14탄
+▶ 상위 0.1% 블로거가 알려주는 블로그 확장 팁
+▶▷ 작은 성취 경험을 쌓는 챌린지 프로그램
+이웃님들 블로그에 방문했을 때 챌린지 화면으로 바뀌던 게 바로 이거였네요.
+네이버 블로그 챌린지 프로그램
+프로그램명
+특징
+HOT TOPIC 도전
+매주 화, 목, 금요일 블로그씨 질문에 답변한 도전 글을 선정해 노출하는 이벤트, 방문자 상승 및 검색 노출 가능
+블로거 영화를 말하다
+챌린지 프로그램에서 영화 리뷰 연재 신청 완료 후 영화 리뷰를 3회 이상 꾸준하게 작성하면 선정된 글을 챌린지 프로그램 영역에 노출, 방문자 상승효과 기대
+목표 달성!
+미션 위젯
+마스터 위젯
+기간과 상관없이 연재할 카테고리에 글 100개 연재(해외 생활, 공부, 좋은 부모, 업무/커리어, 나만의 테마로 구성된 주제에 유리)
+100일 위젯
+100일 동안 연재할 카테고리에 하루도 빠짐없이 글 100개를 연재(매일 글을 써야 하는 부담감, 개인적인 목표 달성에 적극 추천)
+▶▷ 짧은 영상이 대세 : 네이버 블로그 모먼트
+기존의 블로그=장문의 텍스트 콘텐츠라는 인식의 틀을 깨고 사진과 글을 넘어 동영상 영역까지 블로그의 카테고리를 확장했다는 평가를 받고 있습니다. 모먼트는 아직 모바일 버전에서만 사용 가능
+▶▷ 내 블로그에 적합한 레이아웃 설정하기
+블로그는 나만의 이야기를 담아내는 공간이자 다른 사람과 소통하기 위한 공간이기도 합니다. 지금까지 블로그 최정화, 성장, 수익화에 있어 가장 중요한 요소는 꾸준함, 키워드, 사람이라고 배웠지만 아무리 좋은 콘텐츠가 많아도 방문자가 포스팅을 읽기 불편하다거나 다른 정보를 찾기 어렵다면 분명 블로그 성장에 걸림돌이 될 것입니다.
+1단 레이아웃의 특징
+이미지 강조형 블로그에 추천
+상단에 이미지 배러를 활용해 자신만의 개성 표현이 가능
+상단 또는 하단에 사이드 바 배치
+화면이 넓어 보이는 장점이 있지만 카테고리나 위젯 배치가 불편하다는 단점이 있다. 카테고리 수가 많을 경우 상단에 두면 한쪽으로 쏠려 균형이 맞지 않는다는 느낌을 준다.
+2단 레이아웃의 특징
+텍스트 강조형 블로그에 추천
+네이버 블로그의 기본 레이아웃 형태
+한 번에 카테고리 및 위젯 확인이 가능함
+대중적인 구성으로 방문자가 카테고리를 찾기 편함
+좌측 또는 우측에 사이드바를 길게 배치
+3단 레이아웃의 특징
+위젯 강조형 블로그에 추천
+좌측, 우측 양쪽에 사이드 바 배치 가능
+글 영역이 레이아웃 중 가장 좁기 때문에 포스팅 공강이 좁다는 단점이 있지만 위젯이 상단에 위치하여 강조하기 좋은 장점이 있다.
+▶▷ 올바른 해시태그 활용법
+# 해시태그란
+포스팅에 달 수 있는 일종의 꼬리표
+특정 키워드 앞에 # 기호를 붙여 게시물을 구분하는 역할
+여기서 잠깐!!!
+블로그 해시태그 사용 시 유의 사항
+제목과 연관된 해시태그 사용하기
+내용과 무관한 낚시성, 과도한 해시태그 사용 피하기
+본문 사이에 해시태그 넣지 않기
+▶▷ 다음, 구글, 줌[ZOOM] 검색등록하기
+-> 다양한 검색 사이트에 블로그를 등록하는 것도 블로그를 확장하고 방문자를 늘리는 데 도움이 됩니다.
+다음 검색등록
+검색 사이트->다음 검색등록 검색->[신규 등록하기] or[블로그 등록]에 블로그 주소 URL 직접 입력 -> 개인정보 제공 동의->블로그에 관한 정보 간단히 입력하면 신청 완료
+Daum 검색등록 사이트 검색을 무료로 등록할 수 있는 서비스입니다. 언제든 정보보완 수정이 가능하며, 등록 후에는 Daum 검색결과에 노출되어 수많은 네티즌들이 방문하게 됩니다. 신규등록하기 조회하기 등록 변경 삭제 조회 사이트 검색 지역정보 블로그 등록 URL 확인 0 /200 byte 검색등록 처음이세요? 등록신청에 대한 안내와 절차를 자세히 보실 수 있습니다 자세히보기 검색등록 가이드 검색 노출에 필요한 기준을 반드시 확인하세요 자세히보기 제출서류 안내 사이트 업종별 필수 제출서류를 꼭 확인하세요 자세히보기 검색등록 절차 검...
+register.search.daum.net
+줌 검색등록
+검색 사이트->줌 검색등록 검색->[신규 등록] 클릭 -> 개인정보 제공 동의->블로그에 관한 정보 간단히 입력하면 신청 완료
+이용방법 안내 사이트 등록/수정/삭제 신청 절차에 대해 자세히 안내 해 드립니다. 등록가이드 사이트 검색등록 기준 및 제출 서류 안내, 작성가이드 등을 안내 해 드립니다. 자주묻는 질문 사이트 검색등록 시 자주 묻는 질문에 대해 상세한 답변을 드립니다.
+help.zum.com
+구글 검색등록(키자드)
+검색 사이트->기자 드 검색->접속 후 회원가입 ->로그인->[네이버 블로그 구글 검색등록]에서 검색될 포스트의 주소를 복사해 붙여 넣은 후 [검색등록] 클릭
+* 키자드에서 네이버 블로그를 등록하는 방법 세 가지
+네이버 블로그 포스트 주소 입력 : 네이버 ID 연동 이후 포스트 주소를 개별적으로 입력하여 등록하는 방식, 하루에 한 개씩 무료로 이용
+RSS 등록 : 1일 1회 무료 이용 가능, 최근 50개의 포스팅 URL을 한 번에 등록 가능
+전체 등록 : 공개된 모든 포스트를 한 번에 등록 가능하지만 일정 포인트가 필요, 포인트 획득하는 방법으로는 1일 1 로그인 출석, 키자드 사이트에 글쓰기, 댓글 쓰기, 게시글 추천 등
+네이버 블로그를 구글 검색에 등록하는 서비스. 구글 검색 노출 및 백링크를 걸어서 SEO최적화를 시켜줍니다.
+keyzard.org
+#왕초보블로그탈출공부하기 #11월#30일챌린지#무지개맘의행복공작소#김동석#네이버블로그로돈벌기#한빛미디어
+사각사각 필사하는 꿈꾸는 캔디입니다. 
+아주 작은 습관과 꾸준함의 힘으로 성장,발전,변화하는 나의 일상 모습을 기록합니다. 
+ 
+찐소통을 원하시는 분들  
+서이추 환영합니다. 
+ 
+ 
+프로필
+^
+◀ 2024.08 ▶
+월별보기
+서재안에 글 85

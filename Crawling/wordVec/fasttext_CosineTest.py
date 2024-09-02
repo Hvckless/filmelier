@@ -3,7 +3,7 @@ from scipy.spatial.distance import cosine
 
 model = fasttext.load_model('cc.ko.100.bin')
 
-file_path = 'Genre_test.txt'
+file_path = 'category.txt'
 
 with open(file_path, 'r', encoding='utf-8') as file:
     words = [line.strip() for line in file if line.strip()]

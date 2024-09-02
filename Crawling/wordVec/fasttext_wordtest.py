@@ -5,7 +5,7 @@ import pandas as pd
 
 ft_model = fasttext.load_model('cc.ko.100.bin')
 
-category_df = pd.read_csv('src/filmelier/Crawling/wordVec/category.csv', header=None)
+category_df = pd.read_csv('category.csv', header=None)
 
 '''
 # 카테고리 중심 벡터 계산
