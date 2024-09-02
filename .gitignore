@@ -6,6 +6,8 @@ ignore/
 .vscode/
 .idea/
 
+__pycache__/
+
 #*.gubun
 #*.model
 #*.txt

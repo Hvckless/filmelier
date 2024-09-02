@@ -3,7 +3,7 @@ import fasttext
 from scipy.spatial.distance import cosine
 
 
-model = fasttext.load_model('cc.ko.100.bin')
+model = fasttext.load_model('./ignore/cc.ko.100.bin')
 
 '''
 def cosine_fast(vec1, vec2):
