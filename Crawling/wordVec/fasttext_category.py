@@ -1,65 +1,65 @@
 import fasttext
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-import pandas as pd
+import csv
+from scipy.spatial.distance import cosine
+from collections import defaultdict
 
 # FastText 모델 로드
-ft_model = fasttext.load_model('cc.ko.300.bin')
+model = fasttext.load_model('cc.ko.100.bin')
 
-# 카테고리 데이터 로드
-category_df = pd.read_csv('src/filmelier/Crawling/wordVec/category.csv')
+# 카테고리 파일 로드
+with open('category.txt', 'r', encoding='utf-8') as file:
+    categories = [line.strip() for line in file if line.strip()]
 
-# 카테고리 중심 벡터 계산
-category_vectors = {}
-for category in category_df.columns:
-    words = category_df[category].dropna().tolist()
-    if words:
-        word_vectors = [ft_model.get_word_vector(word) for word in words]
-        category_vectors[category] = np.mean(word_vectors, axis=0)
-    else:
-        category_vectors[category] = np.zeros(ft_model.get_dimension())
+# 형태소 파일 로드 (단어와 빈도수를 함께 저장)
+morpheme_words = []
+word_frequencies = {}
 
-# 임계값 설정
-SIMILARITY_THRESHOLD = 0.5
+with open('1번국도_review_dic.txt', 'r', encoding='utf-8') as file:
+    for line in file:
+        if line.strip():
+            word, freq = line.split()
+            morpheme_words.append(word)
+            word_frequencies[word] = int(freq)
 
-# 단어 분류 함수
-def classify_word(word, category_vectors):
-    word_vector = ft_model.get_word_vector(word).reshape(1, -1)
-    similarities = {
-        category: cosine_similarity(word_vector, vector.reshape(1, -1))[0][0]
-        for category, vector in category_vectors.items()
-    }
+# 각 형태소 단어를 가장 유사한 카테고리에 할당
+results = []
+category_count = defaultdict(int)
 
-    # 각 카테고리와의 유사도를 출력
-    print(f"Word: {word}")
-    for category, similarity in similarities.items():
-        print(f" - {category}: {similarity}")
+for morph_word in morpheme_words:
+    best_category = None
+    best_similarity = 0.3
 
-    # 유사도가 임계값 이상인 카테고리만 선택
-    filtered_similarities = {k: v for k, v in similarities.items() if v >= SIMILARITY_THRESHOLD}
+    morph_vector = model.get_word_vector(morph_word)
 
-    if filtered_similarities:
-        return max(filtered_similarities, key=filtered_similarities.get)
-    else:
-        return "미분류"  # 유사도가 낮은 경우 '미분류'로 처리
+    for category in categories:
+        category_vector = model.get_word_vector(category)
+        similarity = 1 - cosine(morph_vector, category_vector)
 
-# 분류할 단어 로드
-words_df = pd.read_csv('마션.csv')
-words = words_df['Word'].tolist()
+        if similarity > best_similarity:
+            best_similarity = similarity
+            best_category = category
 
-# 각 단어를 분류
-class_words = {category: [] for category in category_vectors.keys()}
-class_words["미분류"] = []
+    if best_category:
+        results.append((morph_word, best_category, best_similarity, word_frequencies[morph_word]))
+        category_count[best_category] += 1
 
-for word in words:
-    category = classify_word(word, category_vectors)
-    class_words[category].append(word)
+# 카테고리별로 단어 수를 정렬
+sorted_categories = sorted(category_count.items(), key=lambda x: x[1], reverse=True)
 
-# 결과를 DataFrame으로 변환 및 저장
-result_df = pd.DataFrame({
-    k: pd.Series(v, dtype=object) for k, v in class_words.items()
-})
+# 결과를 CSV 파일로 저장
+output_file = '1번국도_categorized_words1.csv'
+with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.writer(csvfile)
 
-result_df.to_csv('class_words.csv', index=False)
+    # 형태소 단어별 결과 작성 (빈도수 포함)
+    writer.writerow(['Word', 'Category', 'Similarity', 'Frequency'])
+    for word, category, similarity, frequency in results:
+        writer.writerow([word, category, similarity, frequency])
 
-print("단어 분류 결과가 저장되었습니다.")
+    # 카테고리별 단어 수 추가
+    writer.writerow([])  # 빈 줄 추가
+    writer.writerow(['Category', 'Count'])  # 헤더 작성
+    for category, count in sorted_categories:
+        writer.writerow([category, count])
+
+print('카테고리화 완료 및 CSV 저장 완료')
