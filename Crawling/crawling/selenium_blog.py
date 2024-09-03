@@ -13,7 +13,7 @@ service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=option)
 # file_path = 영화 목록 파일
 # 영화 목록 파일이 있는 경로만 복사 해서 변경 해주면 된다.
-file_path = os.path.join(os.getcwd(),'src/filmelier/Crawling/crawling/insideout.txt')
+file_path = os.path.join(os.getcwd(),'src/filmelier/Crawling/crawling/movie_list.txt')
 
 # default_url = 영화 검색 url
 # 영화 리뷰 {} 라고 쓰여 있고, {} 부분에 title 을 하나씩 넣는다
