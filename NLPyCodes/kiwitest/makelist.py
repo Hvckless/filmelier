@@ -2,6 +2,7 @@
 
 import pandas as pd
 import numpy as np
+from scipy.spatial.distance import cosine
 
 from kiwipiepy import Kiwi
 import fasttext
@@ -33,6 +34,7 @@ kiwi = Kiwi()
 
 # 코사인 유사도 함수 START
 
+#@deprecated
 def cosine_fast(vec1, vec2):
     return np.dot(vec1,vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
 
@@ -46,17 +48,69 @@ def cosine_fast(vec1, vec2):
 
 
 
+# configuration 값 정의 start
+
+
+similarityThreshold = 0
+categoryFilepath = "undefined"
+reviewFolderpath = "undefined"
+
+
+
+# configuration 값 정의 end
+
+
+
+
+
+
+
+
+
+
+# configuration handler start
+
+def setSimilarityThreshold(criticality:int):
+    similarityThreshold = criticality
+
+def setCategoryFilepath(filepath:str):
+    categoryFilepath = filepath
+
+def setReviewFolderpath(folderpath:str):
+    reviewFolderpath = folderpath
+
+
+
+
+# configuration handler end
+
+
+
+
+
+
+
+
+
 # CSV 파일 출력 함수 START
 
 def exportCSV(movie_name):
-    reviewFile = codecs.open('./reviews/'+movie_name+".txt", 'r', encoding='utf-8')
+    reviewFile = codecs.open(reviewFolderpath+movie_name+".txt", 'r', encoding='utf-8')
     reviewTextContent = reviewFile.read()
 
-    categoryFile = codecs.open('./movielist/categoryList.txt', 'r', encoding='utf-8')
+    categoryFile = codecs.open(categoryFilepath, 'r', encoding='utf-8')
     categoryTextContent = categoryFile.read()
+
+
+
+    # 정의 start
 
     text_dict = {}
     category_dict = categoryTextContent.split("\n")
+
+
+
+    # 정의 end
 
 
     # kiwi 형태소분석 start
@@ -82,7 +136,7 @@ def exportCSV(movie_name):
 
 
     wordList = []
-    contentList = [] # 카테고리, 유사도, 빈도수
+    contentList = [] # 카테고리, 유사도, 빈도수 + [각 카테고리별 유사도]
 
     # fasttext 유사도분석 start
 
@@ -95,12 +149,23 @@ def exportCSV(movie_name):
         topRankWord = "undefined"
         topRankSimilarity = 0
 
+        similarityArray = []
+
         for category in category_dict:
             category_vector = model.get_word_vector(category)
 
-            currentSimilarity = cosine_fast(texttoken_vector, category_vector)
+            #currentSimilarity = cosine_fast(texttoken_vector, category_vector)
+            currentSimilarity = 1 - cosine(texttoken_vector, category_vector)
+
+            if currentSimilarity > similarityThreshold:
+                similarityArray.append(currentSimilarity)
+            else:
+                similarityArray.append("")
+
+
+            #print(f"현재 단어 : {textToken} | 비교군 : {category} | 유사도 : {currentSimilarity}")
             
-            if currentSimilarity > 0.3:
+            if currentSimilarity > similarityThreshold:
                 if currentSimilarity > topRankSimilarity:
                     topRankSimilarity = currentSimilarity
                     topRankWord = category
@@ -109,11 +174,23 @@ def exportCSV(movie_name):
 
         if topRankSimilarity != 0:
             wordList.append(textToken)
-            contentList.append([topRankWord, topRankSimilarity, text_dict[textToken]])
+
+            alpha = np.array([topRankWord, topRankSimilarity, text_dict[textToken]])
+            beta = np.array(similarityArray)
+
+            theta = np.concatenate((alpha, beta), axis=0)
+
+            #theta = alpha
+
+            contentList.append(theta)
 
     # fasttext 유사도분석 end
 
 
+    # 추가 유사도 start
+
+
+    # 추가 유사도 end
 
 
 
@@ -124,8 +201,21 @@ def exportCSV(movie_name):
 
     # CSV 출력 START
 
-    df = pd.DataFrame(contentList, index=wordList, columns=['카테고리', '유사도', '빈도'])
-    df.to_csv('./reviews/'+movie_name+"_data.csv")
+    _cate_dict = ['카테고리', '유사도', '빈도']
+
+    alpha = np.array(_cate_dict)
+    beta = np.array(category_dict)
+
+    theta = np.concatenate((alpha, beta), axis=0)
+
+    #theta = _cate_dict
+
+    df = pd.DataFrame(contentList, index=wordList, columns=theta)
+    df.to_csv(reviewFolderpath+movie_name+"_data.csv")
+
+
+
+    #print(theta)
 
     # CSV 출력 END
 
@@ -146,12 +236,21 @@ def exportCSV(movie_name):
 
 
 
+# configuration 설정 start
 
+setSimilarityThreshold(0.4) # 유사도 최솟값
+
+setCategoryFilepath("./movielist/categoryList.txt") # 카테고리 목록 경로
+setReviewFolderpath("./review/") # 리뷰 파일이 있는 경로
+
+# configuration 설정 end
 
 
 
 # 시작 코드 START
 
-exportCSV("martianALL")
+exportCSV("martianALL") # 리뷰 파일 이름 (.txt 제외한 이름)
+                        # setReviewFolderpath로 지정한 폴더 아래에 있어야 합니다.
+
 
 # 시작 코드 END
