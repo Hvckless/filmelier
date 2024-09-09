@@ -5,6 +5,7 @@ import os
 import math
 
 import pandas as pd
+import numpy as np
 from io import StringIO
 
 
@@ -12,6 +13,8 @@ import dataframeHandler as dataframeHandler
 from dataframeHandler import DataFrameList
 import similarityCalculator as similarityCalculator
 from similarityCalculator import UserSimilarityList
+
+import formulaCalculator as formulaCalculator
 
 # import end
 
@@ -26,6 +29,9 @@ weightList:UserSimilarityList
 
 
 categoryDict:UserSimilarityList = {}
+
+
+finalResult:dict[float, str] = {}
 
 
 reviewFolderpath:str = "undefined"
@@ -64,7 +70,11 @@ def getParameterValue() -> list:
     """
     _movieList:list = []
     try:
-        _movieList = sys.argv[1][1:len(sys.argv[1])-1].split(",")
+        _movieList:list = []
+
+        for token in sys.argv[1][1:len(sys.argv[1])-1].split(","):
+            _movieList.append(token.replace("*", " "))
+            
 
         return _movieList
     except:
@@ -112,8 +122,69 @@ def getWeightBetweenMovies(movies:list) -> UserSimilarityList:
 
     return similarityCalculator.getUserPreferWeightList(categoryDict)
 
-def compareAllMovies(weightlist:UserSimilarityList):
-    print("HELLO WORLD!")
+def compareAllMovies(weightlist:UserSimilarityList, movielist:list[str], reviewlist:list[str]):
+
+    
+
+
+    for reviewComponent in reviewlist:
+        if reviewComponent not in movielist:
+
+            _totalScoreOfMovie:float = 0
+
+            #print(reviewComponent)
+
+
+
+
+
+            _filepath:str = reviewFolderpath+reviewComponent+"_categorized_words.csv"
+
+            _dfList:DataFrameList = dataframeHandler.splitDataFrame22(_filepath)
+            categoryDict:UserSimilarityList = {}
+
+            df1 = _dfList[0]
+            df2 = _dfList[1]
+
+            #영화의 계산 가중치
+            categoryDict = similarityCalculator.getMovieCalculatedWeight(df1, df2, categoryDict)
+
+            for keyToken in categoryDict.keys():
+                _distance_multiplier:float = 0
+                _similarity_multiplier:float = 0
+
+                if (categoryDict.get(keyToken) == None) or (weightlist.get(keyToken) == None):
+                    continue
+
+                _distance:float = weightlist[keyToken][0][0]
+                _similarity:float = weightlist[keyToken][0][1]
+
+                _distance2:float = categoryDict[keyToken][0][0]
+                _similarity2:float = categoryDict[keyToken][0][1]
+
+
+                _distance_multiplier = formulaCalculator.getWeightFromGapBetweenDistance(np.abs(_distance - _distance2), 10, 2, 0.2)
+                _similarity_multiplier = formulaCalculator.getWeightFromGapBetweenWeight(np.abs(_similarity - _similarity2))
+
+                _totalScoreOfMovie = _totalScoreOfMovie + (_similarity * _distance_multiplier * _similarity_multiplier)
+
+            print(f"영화 최종 추천도 영화 : {reviewComponent} / 추천도 : {_totalScoreOfMovie}")
+
+            finalResult[_totalScoreOfMovie] = reviewComponent
+
+    sorted_result = dict(sorted(finalResult.items(), key=lambda item: item[0], reverse=True))
+
+    #print(sorted_result)
+    _ccnt = 0
+    for sortToken in sorted_result:
+        print(f"{_ccnt}위 : {sorted_result[sortToken]}")
+        _ccnt = _ccnt + 1
+
+
+
+
+
+
 
     
 
@@ -165,18 +236,20 @@ reviewFolderpath = "../../csvfile/"
 
 reviewList = getReviewList()
 movieList = getParameterValue()
+print(movieList)
 
 weightList = getWeightBetweenMovies(movieList)
 
 
-compareAllMovies(weightList)
+
 
 
 print(reviewList)
-print(movieList)
+
 
 print("✨가중치 목록을 출력합니다")
 print(weightList)
 
+compareAllMovies(weightList, movieList, reviewList)
 
 # 💻 initial code end

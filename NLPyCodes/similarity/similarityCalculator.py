@@ -52,6 +52,11 @@ UserSimilarityList = dict[str, list[tuple[float, float]]]
 
 
 def getUserPreferWeightList(categoryDict:UserSimilarityList)->UserSimilarityList:
+    """
+    위치, 유사도 테이블을 받아서 평균 거리와 유사도를 반환하는 함수
+    :categoryDict: 각 카테고리에 여러개의 (1~. 보통 2 이상) 위치, 유사도 값들이 있는 UserSimilarityList
+    :return: 카테고리당 위치,유사도 쌍이 한개씩 들어있는 평균 유사도 맵
+    """
 
     _userPreferWeightList:UserSimilarityList = {}
 
