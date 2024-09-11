@@ -1,3 +1,8 @@
+from .filehandler import FileHandler
+from csv.csv import CSV
+
+from enum.CSVFormat import CSVFormat
+
 class File:
     filepath:str
 
@@ -11,6 +16,12 @@ class File:
     
     def setFilepath(self, filepath:str)->None:
         self.filepath = filepath
+
+
+
+
+    def readFileAsCSV(self, filepath:str, format:CSVFormat)->CSV:
+        return FileHandler().readCSV(filepath, format)
 
 
 FileList = list[File]

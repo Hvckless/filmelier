@@ -3,6 +3,7 @@
 from parameter.parameterhandler import ParameterHandler
 from file.filehandler import FileHandler
 
+from data.weightcalculator import WeightCalculator
 
 from data.movie import MovieList
 from data.weight import WeightList
@@ -26,12 +27,17 @@ class Main:
         return FileHandler().getListFromReviews(self.reviewFolderpath)
 
 
-    def getWeightListFromMovieList(self):
-        print("HELLO")
+    def getWeightListFromMovieList(self, mvlist_param:MovieList)->WeightList:
+        """
+        파라메터로 받은 MovieList에서 추출한 영화 목록의 평균 가중치를 반환하는 함수
+        :mvlist_param: 파라메터에서 가져온 MovieList 객체
+        :return: 평균 가중치 WeightList 객체
+        """
+        return WeightCalculator().getWeightFromMovieList(self.reviewFolderpath, mvlist_param)
 
     
-    def getWeightListBetweenMovies(self):
-        print("HELLO")
+    def getWeightListBetweenMovies(self)->WeightList:
+        return WeightCalculator().getWeightBetweenMovies()
 
     
 
@@ -62,5 +68,5 @@ app = Main()
 app.setReviewFolderpath("../../csvfile")
 
 
-hello:MovieList = app.getMovieListFromParameter()
-bye:MovieList = app.getMovieListFromReviews()
+hello:MovieList = app.getMovieListFromParameter() #영화 파라메터 목록
+bye:MovieList = app.getMovieListFromReviews() #영화 파일 목록
