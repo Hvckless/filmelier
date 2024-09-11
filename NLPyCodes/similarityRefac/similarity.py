@@ -2,11 +2,8 @@
 
 import sys
 import os
-import math
 
-import pandas as pd
 import numpy as np
-from io import StringIO
 
 
 import dataframeHandler as dataframeHandler
@@ -62,6 +59,13 @@ reviewFolderpath:str = "undefined"
 
 
 # 📚 function definition start
+
+def getMovieListFromParameter() -> list:
+    """
+    파라메터에서 영화 목록을 불러옵니다
+    """
+
+    return []
 
 def getParameterValue() -> list:
     """
