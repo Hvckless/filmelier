@@ -8,7 +8,6 @@ import pandas as pd
 
 from data.movie import MovieList
 
-from .file import File
 from .file import FileList
 from data.dataframe import DataFrameList
 
@@ -19,7 +18,6 @@ from enum.CSVFormat import CSVFormat
 
 
 class FileHandler:
-    file:File
     def __init__(self):
         self.initial = 1
 
@@ -27,7 +25,6 @@ class FileHandler:
     """def createFile(self)->File:
         return File()
     """
-
 
     def getListFromReviews(self, filepath:str)->MovieList:
         movielist:MovieList = []
@@ -41,14 +38,10 @@ class FileHandler:
 
 
 
-    def readFile(self, filepath:str)->File:
-
-        filelist:File
+    def readFile(self, filepath:str)->None:
 
         for filename in os.listdir(filepath):
             print(filename)
-
-        return self.file
     
     def readFileFromIO(self, data:StringIO)->None:
         print("A")
@@ -90,6 +83,3 @@ class FileHandler:
         return csv_tables
 
     
-
-    def splitFile(self)->File:
-        return self.file

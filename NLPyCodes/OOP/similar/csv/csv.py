@@ -1,6 +1,10 @@
 from pandas import DataFrame
+from file.file import File
+from enum.CSVFormat import CSVFormat
 
-class CSV:
+
+
+class CSV(File):
     data:DataFrame
     def __init__(self):
         self.initial = 1
@@ -10,4 +14,6 @@ class CSV:
     def getDataFrame(self)->DataFrame:
         return self.data
     
+
+
 CSVList = list[CSV]

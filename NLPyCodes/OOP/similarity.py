@@ -1,12 +1,12 @@
 # import start
 
-from parameter.parameterhandler import ParameterHandler
-from file.filehandler import FileHandler
+from similar.parameter.parameterhandler import ParameterHandler
+from similar.file.filereader import FileReader
 
-from data.weightcalculator import WeightCalculator
+from similar.data.weightcalculator import WeightCalculator
 
-from data.movie import MovieList
-from data.weight import WeightList
+from similar.data.movie import MovieList
+from similar.data.weight import WeightList
 
 # import end
 
@@ -24,7 +24,7 @@ class Main:
         return ParameterHandler().getListFromParameter()
     
     def getMovieListFromReviews(self) -> MovieList:
-        return FileHandler().getListFromReviews(self.reviewFolderpath)
+        return FileReader().getMovieListFromReview(self.reviewFolderpath)
 
 
     def getWeightListFromMovieList(self, mvlist_param:MovieList)->WeightList:
@@ -65,7 +65,7 @@ class Main:
 app = Main()
 
 
-app.setReviewFolderpath("../../csvfile")
+app.setReviewFolderpath("../../csvfile/")
 
 
 hello:MovieList = app.getMovieListFromParameter() #영화 파라메터 목록
