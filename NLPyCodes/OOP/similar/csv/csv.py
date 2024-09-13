@@ -1,6 +1,7 @@
 from pandas import DataFrame
-from file.file import File
-from enum.CSVFormat import CSVFormat
+
+from similar.file.file import File
+from similar.enum.CSVFormat import CSVFormat
 
 
 

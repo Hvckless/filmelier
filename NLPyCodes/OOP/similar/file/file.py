@@ -1,7 +1,3 @@
-from csv.csv import CSV
-
-from enum.CSVFormat import CSVFormat
-
 class File:
     filepath:str
 
