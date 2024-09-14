@@ -114,6 +114,8 @@ def getWeightBetweenMovies(movies:list) -> UserSimilarityList:
 
         categoryDict = similarityCalculator.getMovieCalculatedWeight(df1, df2, categoryDict)
 
+        
+
         """
         categoryDict가 List로 전달되야 하는 건 아닌지???
         찾아보니까 getMovieCalculatedWeight는 가중치 하나를 반환하는게 맞는데, 그걸 넘겨주면 
@@ -207,7 +209,7 @@ def compareAllMovies(weightlist:UserSimilarityList, movielist:list[str], reviewl
 
 # 📝 configuration start
 
-reviewFolderpath = "../../csvback/"
+reviewFolderpath = "../../csvfile/"
 
 # 📝 configuration end
 
@@ -235,7 +237,7 @@ reviewFolderpath = "../../csvback/"
 
 reviewList = getReviewList()
 movieList = getParameterValue()
-print(movieList)
+#print(movieList)
 
 weightList = getWeightBetweenMovies(movieList)
 
@@ -243,7 +245,7 @@ weightList = getWeightBetweenMovies(movieList)
 
 
 
-print(reviewList)
+#print(reviewList)
 
 
 print("✨가중치 목록을 출력합니다")

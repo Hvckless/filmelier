@@ -1,7 +1,7 @@
 from os import error
 import sys
 
-from data.movie import MovieList
+from similar.data.movie import MovieList
 
 class ParameterHandler:
 
