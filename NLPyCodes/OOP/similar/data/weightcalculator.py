@@ -96,6 +96,8 @@ class WeightCalculator:
             filepath:str = reviewpath+movie_name+"_categorized_words.csv"
             
             weightpoints = self.getWeightFromMovieElement(filepath, format, weightpoints)
+
+            print(f"{movie_name} 완료")
             
         weightpointsV2:WeightList = self.getWeightFromMovieWithDistance(weightpoints)
 
@@ -119,10 +121,6 @@ class WeightCalculator:
         category_avg_map:dict[str,float] = {}
         weightlist:WeightList = originalWeightList
 
-        if type("10") == int:
-            print("HI")
-        elif type("10") == str:
-            print("BYE")
 
         #Count의 모든 값은 결국 모든 형태소의 갯수와 같다
         morphemeCNT:int = df2["Count"].sum()
