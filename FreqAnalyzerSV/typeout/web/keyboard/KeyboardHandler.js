@@ -16,6 +16,9 @@ class KeyboardHandler {
         let movieHandler = new MoviePanelHandler();
         switch (event.code) {
             case 'KeyC': {
+                /**
+                 * 영화 목록을 받아오는 코드
+                 */
                 (() => __awaiter(this, void 0, void 0, function* () {
                     let sometext = yield new FileHandler().readTextFile();
                     let textsplit = sometext.split("\r\n");

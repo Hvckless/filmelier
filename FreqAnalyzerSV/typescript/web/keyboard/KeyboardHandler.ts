@@ -13,6 +13,9 @@ class KeyboardHandler{
 
         switch(event.code){
             case 'KeyC': {
+                /**
+                 * 영화 목록을 받아오는 코드
+                 */
                 (
                     async ()=>{
                         let sometext:string = await new FileHandler().readTextFile();
