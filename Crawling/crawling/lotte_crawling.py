@@ -32,7 +32,7 @@ except Exception as e:
 
 
 def next_button(clicks):
-    for i in range(clicks):
+    while(clicks):
         try:
             print("=============================",ec.element_to_be_clickable((By.XPATH, '//button[@style="width: 490px; left: 50%; margin-left: 0px;"]')))
             next_btn = WebDriverWait(driver, 10).until(
@@ -50,7 +50,7 @@ def next_button(clicks):
 
 
 
-next_button(5)
+next_button()
 
 
 def get_comments():

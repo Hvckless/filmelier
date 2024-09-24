@@ -6,6 +6,14 @@ fp = codecs.open("src/konlpy_test/animation/insideout.txt", "r", encoding="utf-8
 text = fp.read()
 okt = Okt()
 
+def test():
+    """
+    test
+    :return:
+    """
+    print('test')
+
+
 text_dic = {}
 lines = text.split("\n")
 for line in lines:
