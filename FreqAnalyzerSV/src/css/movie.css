@@ -1,5 +1,5 @@
 #movieWrapper{
-    display: flex;
+    display: none; /*프로덕션에서는 flex로 변경*/
 
     flex-wrap: wrap;
     justify-content: center;

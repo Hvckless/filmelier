@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
 
-    background-image: url(../../image/background.jpg);
+    background-image: url(../../image/background.webp);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -15,21 +15,61 @@
     flex-direction: column;
     justify-content: flex-start;
 
-    width: 80%; height: 100%;
+    width: 50%; height: 100%;
 
-    margin-left: 10vw;
+    margin-left: 25vw;
 
-    background-color: #ffa5002e;
+    /* background-color: #ffa5000a; */
 }
 
 nav{
     width: 100%; height: 200px;
     
-    background-color: #ff7f5026;
+    /* background-color: #ff7f500a; */
 }
 
 article{
     width: 100%; height: fit-content;
 
-    background-color: #00ffff2e;
+    /* background-color: #00ffff0f; */
+}
+
+#searchBar{
+    height: 80px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+#searchField{
+    width: 70%;
+    height: 50%;
+}
+
+#searchInput{
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    border: 0px;
+    padding-left: 15px;
+    outline: none;
+
+    transition-duration: 0.7s;
+}
+
+#searchInput:focus{
+    box-shadow: 0 0 5px 4px #ff8f0069;
+}
+
+div#logo{
+    background-image: url(../../image/svg/hello.svg);
+    height: 100%;
+    width: 100%;
+
+    filter: invert(91%) sepia(4%) saturate(11%) hue-rotate(330deg) brightness(92%) contrast(94%);
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
