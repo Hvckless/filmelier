@@ -2,11 +2,8 @@
 
 import sys
 import os
-import math
 
-import pandas as pd
 import numpy as np
-from io import StringIO
 
 
 import dataframeHandler as dataframeHandler
@@ -63,6 +60,13 @@ reviewFolderpath:str = "undefined"
 
 # 📚 function definition start
 
+def getMovieListFromParameter() -> list:
+    """
+    파라메터에서 영화 목록을 불러옵니다
+    """
+
+    return []
+
 def getParameterValue() -> list:
     """
     파라메터에서 영화 목록을 불러오는 함수
@@ -113,8 +117,6 @@ def getWeightBetweenMovies(movies:list) -> UserSimilarityList:
         
 
         categoryDict = similarityCalculator.getMovieCalculatedWeight(df1, df2, categoryDict)
-
-        
 
         """
         categoryDict가 List로 전달되야 하는 건 아닌지???
@@ -209,7 +211,7 @@ def compareAllMovies(weightlist:UserSimilarityList, movielist:list[str], reviewl
 
 # 📝 configuration start
 
-reviewFolderpath = "../../csvfile/"
+reviewFolderpath = "../../csvback/"
 
 # 📝 configuration end
 
@@ -237,7 +239,7 @@ reviewFolderpath = "../../csvfile/"
 
 reviewList = getReviewList()
 movieList = getParameterValue()
-#print(movieList)
+print(movieList)
 
 weightList = getWeightBetweenMovies(movieList)
 
@@ -245,7 +247,7 @@ weightList = getWeightBetweenMovies(movieList)
 
 
 
-#print(reviewList)
+print(reviewList)
 
 
 print("✨가중치 목록을 출력합니다")

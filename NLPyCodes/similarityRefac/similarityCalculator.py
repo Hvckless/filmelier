@@ -105,7 +105,6 @@ def getMovieCalculatedWeight(df1:pd.DataFrame, df2:pd.DataFrame, referCategory:U
     percentage = 0
 
     totalcnt = df2["Count"].sum()
-    #print(totalcnt)
 
     #print(df2.count().iloc[1])
     #print(movie)
