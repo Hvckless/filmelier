@@ -11,7 +11,7 @@ let connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query('SELECT movie_name from movie_info' , function (error, results, fields) {
+connection.query('SELECT movie_name, movie_image like %{title}% from movie_info' , function (error, results, fields) {
     if (error) throw error;
     console.log('The solution is: ', results);
 });

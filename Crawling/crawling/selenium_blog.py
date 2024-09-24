@@ -9,8 +9,11 @@ import os
 
 option = webdriver.ChromeOptions()
 service = Service(ChromeDriverManager().install())
+option.add_argument('--disable-cache') # 캐시 비활성화
+option.add_argument('--disk-cache-size=0')
 
 driver = webdriver.Chrome(service=service, options=option)
+driver.set_page_load_timeout(30) # 페이지 타임아웃을 시간을 30초로 설정
 # file_path = 영화 목록 파일
 # 영화 목록 파일이 있는 경로만 복사 해서 변경 해주면 된다.
 file_path = os.path.join(os.getcwd(),'src/filmelier/Crawling/crawling/movieList4_4.txt')
