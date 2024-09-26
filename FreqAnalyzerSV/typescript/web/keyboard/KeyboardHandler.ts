@@ -3,6 +3,7 @@ import MoviePanelHandler from "../movie/MoviePanelHandler.js";
 import MovieList from "../movie/MovieList.js";
 
 import Console from "../console/Console.js";
+import Search from "../search/Search.js";
 
 class KeyboardHandler{
     public onkeydown(event){
@@ -76,6 +77,10 @@ class KeyboardHandler{
 
                 Console.getInstance.toggle();
 
+                break;
+            }
+            case 'Enter': {
+                new Search().submit(event.target);
                 break;
             }
             default : {
