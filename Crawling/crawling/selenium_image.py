@@ -16,13 +16,14 @@ option.add_argument("--headless")
 driver = webdriver.Chrome(service=service, options=option)
 # file_path = 영화 목록 파일
 # 영화 목록 파일이 있는 경로만 복사 해서 변경 해주면 된다.
-file_path = os.path.join(os.getcwd(),'src/filmelier/Crawling/crawling/movie_list.txt')
+file_path = os.path.join(os.getcwd(), 'src/filmelier/Crawling/crawling/movie_list.txt')
 # default_url = 영화 검색 url
 # 영화 리뷰 {} 라고 쓰여 있고, {} 부분에 title 을 하나씩 넣는다
 default_url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EC%98%81%ED%99%94%20{}"
 # file_path 에서 텍스트를 한 줄씩 읽어 movie_title 에 저장
 with open(file_path, "r", encoding="utf-8") as file:
     movie_title = file.read().split('\n')
+
 
 def download_image(img_url, file_path):
     try:
@@ -35,6 +36,8 @@ def download_image(img_url, file_path):
             print(f"이미지 다운 실패 : {img_url}")
     except Exception as e:
         print(f"이미지 다운 오류 발생 : {str(e)}")
+
+
 # 영화 검색 코드
 def process_movie(title):
     """
@@ -62,10 +65,11 @@ def process_movie(title):
 
     # 블로그 링크를 가져오는 코드
     try:
-        images = WebDriverWait(driver, 10).until(ec.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.detail_info > a > img')))
+        images = WebDriverWait(driver, 10).until(
+            ec.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.detail_info > a > img')))
         for i, img in enumerate(images):
             img_url = img.get_attribute('src')
-            #print(f"이미지 url : {img_url}")
+            # print(f"이미지 url : {img_url}")
             reset_title = (title
                            .replace('/', '_')
                            .replace('\\', '_')
@@ -81,6 +85,7 @@ def process_movie(title):
     except Exception as e:
         print(f"검색 도중 오류발생{title}:{str(e)}")
         return
+
 
 # 위의 movie_title 을 가져와 process_movie 의 title 에 전달
 for titles in movie_title:

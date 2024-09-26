@@ -13,7 +13,7 @@ option.add_argument('--disable-cache') # 캐시 비활성화
 option.add_argument('--disk-cache-size=0')
 
 driver = webdriver.Chrome(service=service, options=option)
-driver.set_page_load_timeout(30) # 페이지 타임아웃을 시간을 30초로 설정
+driver.set_page_load_timeout(60) # 페이지 타임아웃을 시간을 60초로 설정
 # file_path = 영화 목록 파일
 # 영화 목록 파일이 있는 경로만 복사 해서 변경 해주면 된다.
 file_path = os.path.join(os.getcwd(),'src/filmelier/Crawling/crawling/movieList4_4.txt')
@@ -76,12 +76,11 @@ def process_movie(title):
 
     # 가져온 블로그 링크에 접속하여 내부의 텍스트를 가져오는 코드
     for i, blog_url in enumerate(blog_links):
-        driver.get(blog_url)
-
-        time.sleep(5)
-
-        # p태그만 가져오되, 세번째 문단에서부터 가져옴
         try:
+            driver.get(blog_url)
+            time.sleep(5)
+
+            # p태그만 가져오되, 세번째 문단에서부터 가져옴
             WebDriverWait(driver,10).until(ec.frame_to_be_available_and_switch_to_it("mainFrame"))
 
             p_tags = driver.find_elements(By.CSS_SELECTOR, "p")

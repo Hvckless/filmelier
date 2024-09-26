@@ -64,7 +64,7 @@ def exclude_words():
     불용어 파일을 가져오는 함수.
     :return:
     """
-    with open('src/filmelier/stopword_filter/save_name.txt', 'r', encoding='utf-8') as file:
+    with open('src/filmelier/stopword_filter/save_name1.txt', 'r', encoding='utf-8') as file:
         return [line.strip() for line in file if line.strip()]
 
 # kiwi 로 형태소 분석
@@ -285,8 +285,8 @@ def process_reviews(movie_names, model, kiwi, category_file):
 
         text_dic, exclude_dic = morpheme_kiwi(review, kiwi)
         # 리뷰 형태소 경로
-        word_freq_file = f'src/filmelier/wordFile/word_dic/{movie_name}_review_dic_filter.txt'
-        word_ex_file = f'src/filmelier/wordFile/word_dic/{movie_name}_review_dic_ex.txt'
+        word_freq_file = f'src/filmelier/wordFile/ignore/word_dic/{movie_name}_review_dic_filter1.txt'
+        word_ex_file = f'src/filmelier/wordFile/ignore/word_dic/{movie_name}_review_dic_ex.txt'
         save_morpheme(text_dic, exclude_dic, word_freq_file, word_ex_file)
 
         morpheme_words, word_frequencies = load_morpheme(word_freq_file)
@@ -295,7 +295,7 @@ def process_reviews(movie_names, model, kiwi, category_file):
         sorted_categories = sorted(category_count.items(),
                                    key=lambda x: (x[1] if x[1] > 0 else 0), reverse=True)
         # csv 파일의 경로
-        csv_file = f'src/filmelier/wordFile/csvfile/{movie_name}_categorized_words_filter.csv'
+        csv_file = f'src/filmelier/wordFile/ignore/csvfile/{movie_name}_categorized_words_filter1.csv'
         save_csv(results, sorted_categories, category_weighted_count, category_sum, csv_file)
 
         print(f"{movie_name} csv 저장완료")

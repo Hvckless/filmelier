@@ -4,7 +4,7 @@
 // import db from "../config/mysql";
 import fs from "fs";
 import path from "path";
-import Mysql from "./mysql.js";
+import Mysql from "./config/mysql";
 //import db from "../config/mysql.js";
 let db = new Mysql();
 //const fs = require("fs");
