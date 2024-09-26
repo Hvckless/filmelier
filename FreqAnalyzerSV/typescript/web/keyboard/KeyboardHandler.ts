@@ -3,6 +3,7 @@ import MoviePanelHandler from "../movie/MoviePanelHandler.js";
 import MovieList from "../movie/MovieList.js";
 
 import Console from "../console/Console.js";
+import Search from "../search/Search.js";
 
 class KeyboardHandler{
     public onkeydown(event){
@@ -13,6 +14,9 @@ class KeyboardHandler{
 
         switch(event.code){
             case 'KeyC': {
+                /**
+                 * 영화 목록을 받아오는 코드
+                 */
                 (
                     async ()=>{
                         let sometext:string = await new FileHandler().readTextFile();
@@ -73,6 +77,10 @@ class KeyboardHandler{
 
                 Console.getInstance.toggle();
 
+                break;
+            }
+            case 'Enter': {
+                new Search().submit(event.target);
                 break;
             }
             default : {

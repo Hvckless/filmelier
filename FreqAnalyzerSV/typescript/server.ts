@@ -13,7 +13,7 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
 
 
     const sendFile = (res:http.ServerResponse<http.IncomingMessage>, filepath:string):void=>{
-        fs.readFile(filepath, 'utf-8', (error:NodeJS.ErrnoException, data:Buffer)=>{
+        fs.readFile(filepath, (error:NodeJS.ErrnoException, data:Buffer)=>{
 
             if (error) {
                 console.error("Failed to read file:", error);

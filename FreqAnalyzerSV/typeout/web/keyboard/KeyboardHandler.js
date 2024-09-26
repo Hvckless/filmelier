@@ -11,11 +11,15 @@ import FileHandler from "../file/FileHandler.js";
 import MoviePanelHandler from "../movie/MoviePanelHandler.js";
 import MovieList from "../movie/MovieList.js";
 import Console from "../console/Console.js";
+import Search from "../search/Search.js";
 class KeyboardHandler {
     onkeydown(event) {
         let movieHandler = new MoviePanelHandler();
         switch (event.code) {
             case 'KeyC': {
+                /**
+                 * 영화 목록을 받아오는 코드
+                 */
                 (() => __awaiter(this, void 0, void 0, function* () {
                     let sometext = yield new FileHandler().readTextFile();
                     let textsplit = sometext.split("\r\n");
@@ -54,6 +58,10 @@ class KeyboardHandler {
             case 'KeyQ': {
                 //콘솔 토글
                 Console.getInstance.toggle();
+                break;
+            }
+            case 'Enter': {
+                new Search().submit(event.target);
                 break;
             }
             default: {

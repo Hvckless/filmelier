@@ -8,7 +8,7 @@ const server = http.createServer((req, res) => {
         return;
     }
     const sendFile = (res, filepath) => {
-        fs.readFile(filepath, 'utf-8', (error, data) => {
+        fs.readFile(filepath, (error, data) => {
             if (error) {
                 console.error("Failed to read file:", error);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
