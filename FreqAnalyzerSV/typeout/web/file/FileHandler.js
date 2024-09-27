@@ -40,6 +40,30 @@ class FileHandler {
             });
         });
     }
+    readImageFile() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                let file = document.createElement('input');
+                let reader = new FileReader();
+                file.type = "file";
+                file.accept = ".jpg, .png";
+                file.onchange = (event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                        reader.readAsArrayBuffer(event.target.files[0]);
+                    }
+                };
+                reader.onload = () => {
+                    if (reader.result instanceof ArrayBuffer) {
+                        resolve(reader.result);
+                    }
+                };
+                reader.onerror = () => {
+                    reject(new Error("an Error occured while reading file"));
+                };
+                file.click();
+            });
+        });
+    }
     uploadFile() {
     }
     uploadDirectory() {

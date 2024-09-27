@@ -37,6 +37,33 @@ class FileHandler{
             file.click();
         });
     }
+    public async readImageFile():Promise<ArrayBuffer>{
+        return new Promise((resolve, reject)=>{
+            let file:HTMLInputElement = document.createElement('input');
+            let reader:FileReader = new FileReader();
+            file.type = "file";
+            file.accept = ".jpg, .png";
+
+            file.onchange = (event) => {
+                if(event.target instanceof HTMLInputElement){
+                    reader.readAsArrayBuffer(event.target.files[0]);
+                }
+            };
+
+            reader.onload = ()=>{
+
+                if(reader.result instanceof ArrayBuffer){
+                    resolve(reader.result);
+                }
+            }
+
+            reader.onerror = ()=>{
+                reject(new Error("an Error occured while reading file"));
+            }
+
+            file.click();
+        });
+    }
     public uploadFile():void{
 
     }
