@@ -1,12 +1,15 @@
 class FilmAnimation{
+    private loadingStates:Array<string> = ["Loading.", "Loading..", "Loading..."];
     public startSearhFieldLoading(element:HTMLInputElement):NodeJS.Timeout{
-        console.log("START ANIMATION!");
 
-        let kokowork:NodeJS.Timeout = setInterval(()=>{
-            console.log("animating...");
-        }, 1000);
+        let index = 0;
+        
+        let animation:NodeJS.Timeout = setInterval(() => {
+            element.placeholder = this.loadingStates[index];
+            index = (index + 1) % this.loadingStates.length;
+        }, 333);
 
-        return kokowork;
+        return animation
     }
 }
 
