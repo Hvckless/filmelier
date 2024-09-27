@@ -1,10 +1,5 @@
-class MySQLayer{
-    public queryMovie(moviename){
-
-        console.log(moviename);
-
-        return "A";
-    }
+interface MySQLayer{
+    queryMovie(searchContext:string):Buffer;
 }
 
 export default MySQLayer;
