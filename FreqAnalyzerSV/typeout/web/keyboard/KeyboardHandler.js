@@ -61,7 +61,9 @@ class KeyboardHandler {
                 break;
             }
             case 'Enter': {
-                new Search().submit(event.target);
+                if (event.key == "Enter") {
+                    new Search().submit(event.target);
+                }
                 break;
             }
             default: {
