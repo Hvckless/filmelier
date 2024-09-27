@@ -1,14 +1,35 @@
-const mysql = require('mysql');
-let connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '3131',
-    database: 'movie_db'
+// import fs from "fs";
+// import path from "path";
+// @ts-ignore
+// import db from "../config/mysql";
+import fs from "fs";
+import path from "path";
+import Mysql from "./mysql.js";
+//import db from "../config/mysql.js";
+let db = new Mysql();
+//const fs = require("fs");
+//const path = require("path");
+//const db = require("../config/mysql.js");
+const conn = db.init();
+//
+// const movieNamePath = path.resolve(__dirname, "../../Crawling/crawling/movie_list.txt");
+// const imagesDir = path.resolve(__dirname, "../../Crawling/crawling/image");
+const movieNamePath = "../Crawling/crawling/movie_list.txt";
+const imagesDir = "../Crawling/crawling/image";
+const movieNames = fs.readFileSync(movieNamePath, 'utf-8').split('\n').map((name) => name.trim());
+movieNames.forEach((movieNames) => {
+    const imagePath = path.join(imagesDir, `${movieNames}.jpg`);
+    if (fs.existsSync(imagePath)) {
+        const image = fs.readFileSync(imagePath);
+        const sql = 'insert into movie_info(movie_name,movie_image) values (?, ?)';
+        conn.query(sql, [movieNames, image], (err, result) => {
+            if (err)
+                throw err;
+            console.log(`${movieNames} 데이터 업로드 완료`);
+        });
+    }
+    else {
+        console.log(`${movieNames} 가 존재하지 않습니다`);
+    }
 });
-connection.connect();
-connection.query('SELECT movie_name from movie_info', function (error, results, fields) {
-    if (error)
-        throw error;
-    console.log('The solution is: ', results);
-});
-connection.end();
+conn.end();

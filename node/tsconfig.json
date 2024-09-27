@@ -4,6 +4,7 @@
     "module": "ESNext",
     "rootDir": "./typescript",
     "outDir": "./typeout",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "esModuleInterop": true
   }
 }
