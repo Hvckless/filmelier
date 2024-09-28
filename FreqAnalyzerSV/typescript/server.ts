@@ -74,7 +74,8 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
          * 아직 완전하지 않은 기능. protected로 요청하지 마시오
          */
         if(urlResolver.isValid(url)){
-            sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
+            //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
+            sendFile(res, "./src/html/fallback/nourl.html");
             return;
         }
 
