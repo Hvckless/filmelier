@@ -5,8 +5,17 @@
  * @author Hvckless
  */
 class URLResolver {
-    isValid(url) {
-        if (url.split("/")[1] == "protected") {
+    constructor() {
+        this.protectedDOC = "protected";
+    }
+    isRequest(url) {
+        if (url.split("/")[1] == this.protectedDOC) {
+            return true;
+        }
+        return false;
+    }
+    isProtected(url) {
+        if (url.split("/").includes(this.protectedDOC)) {
             return true;
         }
         return false;
@@ -15,6 +24,7 @@ class URLResolver {
         let queryString = url.split("/")[2];
         console.log("쿼리 스트링 출력");
         console.log(queryString);
+        console.log(param);
         return null;
     }
 }
