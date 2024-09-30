@@ -91,7 +91,7 @@ app = Main()
 
 # 설정 시작
 
-app.setReviewFolderpath("../../csvback/")
+app.setReviewFolderpath("../../csvfile/")
 app.setCSVFormat(CSVFormat.V1)
 
 # 설정 종료
@@ -107,7 +107,7 @@ print(sorted_dictionary)
 
 
 
-number = 0
-for movie_score in sorted_dictionary:
-    print(f"{number}위 : {sorted_dictionary[movie_score]} | 값 : {movie_score}")
-    number = number + 1
+#number = 0
+#for movie_score in sorted_dictionary:
+#    print(f"{number}위 : {sorted_dictionary[movie_score]} | 값 : {movie_score}")
+#    number = number + 1

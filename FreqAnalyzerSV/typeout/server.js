@@ -63,7 +63,13 @@ const server = http.createServer((req, res) => {
          */
         if (urlResolver.isRequest(url)) {
             //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
-            urlResolver.resolveData(res, url, param);
+            urlResolver.resolveData(res, url, param)
+                .then((data) => {
+                console.log("리졸버 응답 : " + data);
+            })
+                .catch((error) => {
+                console.error(error);
+            });
             sendFile(res, "./src/html/fallback/nourl.html");
             return;
         }
