@@ -3,7 +3,9 @@ import * as fs from "fs";
 import * as mime from "mime-types";
 import URLRedirector from "./utils/url/URLRedirector.js";
 import URLResolver from "./utils/url/URLResolver.js";
+import ParameterResolver from "./utils/url/ParameterResolver.js";
 const urlResolver = new URLResolver();
+const parameterResolver = new ParameterResolver();
 const server = http.createServer((req, res) => {
     if (req.url == "/") {
         new URLRedirector().redirect(res, '/src/html/index.html');
@@ -47,16 +49,29 @@ const server = http.createServer((req, res) => {
     };
     let urlstruct = req.url.split("?");
     let url = urlstruct[0];
+    /**
+     *
+     * 파레메터는 키:값 JSON의 배열이다
+     */
     let param = null;
     if (urlstruct.length > 1) {
-        param = urlstruct[1];
+        param = parameterResolver.resolveParameter(urlstruct[1]);
     }
     fs.stat("." + url, (error, stats) => {
         /**
          * 아직 완전하지 않은 기능. protected로 요청하지 마시오
          */
-        if (urlResolver.isValid(url)) {
-            sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
+        if (urlResolver.isRequest(url)) {
+            //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
+            urlResolver.resolveData(res, url, param);
+            sendFile(res, "./src/html/fallback/nourl.html");
+            return;
+        }
+        /**
+         * 사용자가 protected된 리소스에 요청하려 할 때 요청을 드랍합니다
+         */
+        if (urlResolver.isProtected(url)) {
+            sendFile(res, "./src/html/fallback/requesterr.html");
             return;
         }
         if (stats == undefined) {

@@ -15,7 +15,7 @@ class Search{
 
         setTimeout(()=>{
             clearInterval(timer);
-            element.placeholder = "Done! now you can search another one!"
+            element.placeholder = "Done! now you can search another one!";
         }, 5000);
 
 

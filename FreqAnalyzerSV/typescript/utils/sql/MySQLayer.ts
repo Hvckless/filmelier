@@ -1,5 +1,6 @@
 interface MySQLayer{
-    queryMovie(searchContext:string):Buffer;
+    searchMovies(context:string):Array<string>;
+    getMoviePoster(moviename:string):Buffer;
 }
 
 export default MySQLayer;

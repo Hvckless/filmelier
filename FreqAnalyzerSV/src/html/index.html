@@ -1,8 +1,10 @@
-<html onkeydown="keyboard.onkeydown(event)">
+<html onkeydown="keyboard.onkeydown(event)" style="display: none;">
     <head>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Project - Filmelier</title>
 
 
         <script>
@@ -11,6 +13,8 @@
             let keyboard; //키보드 핸들러 전용 핸들러
 
             let eventhandler;
+
+            let transition;
 
             //let file;
         </script>
@@ -24,8 +28,12 @@
 
             import EventHandler from "../../typeout/web/event/EventHandler.js";
 
+            import TransitionHandler from "../../typeout/web/style/TransitionHandler.js";
+
             keyboard = new KeyboardHandler(); //키보드 핸들러를 자바스크립트 keyboard에 assign
             eventhandler = new EventHandler();
+
+            transition = new TransitionHandler();
             
             //file = new FileHandler();
 
@@ -41,6 +49,9 @@
                 
 
                 devcaller["moviehandler"] = new MoviePanelHandler();
+
+                transition.applyTransition(); // 트랜지션 적용
+                document.querySelector("html").style.display = "block";
                 
                 //devcaller.moviehandler.createMoviePanel(100);
             }
@@ -49,10 +60,11 @@
         <style>
             html, body{
                 margin: 0px;
-
-                background-color: black;
-
-                width: 100%; height: 100%;
+                overflow: hidden;
+                
+            }
+            html{
+                background-color: #182837;
             }
         </style>
     </head>
@@ -61,11 +73,12 @@
 
 
         <div id="wrapper" class="relative">
+            <div id="wallpaper" class="float"></div>
             <div id="release" class="wrapper"></div>
             <div id="navigationPanel" class="wrapper">
                 <div id="topNavigation">
-                    <div class="navComponent"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/blob/main/README.md">About Us</a></div>
-                    <div class="navComponent"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/issues">Report Issue</a> <img src="../image/svg/github-mark-white.svg"></div>
+                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/blob/main/README.md">About Us</a></div>
+                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/issues">Report Issue</a> <img src="../image/svg/github-mark-white.svg"></div>
                 </div>
             </div>
             <div id="moviePanel" class="wrapper">
@@ -82,15 +95,15 @@
 
                 <article>
                     <div id="searchBar">
-                        <div id="searchField" class="notfilled" onclick="this.classList = 'fullfilled'">
-                            <input id="searchInput" type="search" placeholder="Find some interesting movies...">
+                        <div id="searchField" class="notfilled trans-WidthHeight waitTransition" onclick="this.classList.remove('notfilled'); this.classList.add('fullfilled');">
+                            <input id="searchInput" class="trans-WidthHeight waitTransition" type="search" placeholder="Find some interesting movies...">
                         </div>
                     </div>
                     <div id="contentPanel">
                         <span style="color: white;">10</span>
                         <button onclick="eventhandler.increaseCounter()">+</button>
 
-                        <div style="height: 1000px; width: 100px; background-color: red;"></div>
+                        <div style="height: 1500px; width: 100px; background-color: red;"></div>
                         <button onclick="eventhandler.printBuffer()">Hello World!</button>
                     </div>
                 </article>

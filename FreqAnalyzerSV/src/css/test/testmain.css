@@ -2,10 +2,33 @@
     height: 100%;
     width: 100%;
 
-    background-image: url(../../image/background.webp);
+    overflow-y: scroll;
+}
+
+@keyframes rotateAnimation {
+    0% {
+        transform: scale(2.2) rotate(0deg);
+    }
+    100% {
+        transform: scale(2.2) rotate(360deg);
+    }
+}
+
+#wallpaper{
+
+    width: 100%;
+    height: 100%;
+    
+    background-image: url(../../image/background2.webp);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+
+    z-index: -1;
+
+    transform: scale(2) rotate(0deg);
+
+    animation: rotateAnimation 1200s linear infinite;
 }
 
 
@@ -24,9 +47,13 @@
 }
 
 nav{
-    width: 100%; height: 200px;
-    
+    width: 100%;
+    height: fit-content;
     /* background-color: #ff7f500a; */
+}
+
+#logoPanel{
+    height: 200px;
 }
 
 article{
@@ -42,9 +69,6 @@ article{
 
     justify-content: center;
     align-items: flex-start;
-}
-#searchField{
-    transition-duration: 0.7s;
 }
 .notfilled{
     width: 70%;
@@ -70,8 +94,6 @@ article{
     padding-left: 1em;
     padding-right: 1em;
     outline: none;
-
-    transition-duration: 0.7s;
 }
 
 #searchInput:focus{
@@ -119,8 +141,6 @@ div#logo{
 
     cursor: pointer;
 
-    transition-duration: 0.4s;
-
     user-select: none;
     -webkit-user-drag: none;
 
@@ -145,4 +165,15 @@ div#logo{
 .officialLink{
     color: white;
     text-decoration: none;
+}
+
+
+.transition-WidthHeight{
+    
+    transition: width 0.7s, height 0.7s, box-shadow 0.7s;
+
+}
+
+.transition-navigation{
+    transition: filter 0.4s;
 }
