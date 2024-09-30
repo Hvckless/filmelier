@@ -31,6 +31,8 @@ movieNames.forEach((movieNames: string) => {
     const imagePath = path.join(imagesDir, `${movieNames}.jpg`);
     if (fs.existsSync(imagePath)){
         const image = fs.readFileSync(imagePath);
+        const imageBase64 = image.toString('base64');
+
         const sql = 'insert into movie_info(movie_name,movie_image) values (?, ?)';
         conn.query(sql, [movieNames, image], (err: Error, result: any) =>{
             if (err) throw err;

@@ -2,8 +2,7 @@ import fs from "fs";
 import path from "path";
 
 import Mysql from "./config/mysql.js";
-
-interface movieCallback {(err: Error | null, result ?: any):void}
+import {buffer} from "node:stream/consumers";
 
 class GetMovie {
     private conn: any;
@@ -13,33 +12,61 @@ class GetMovie {
         this.conn = db.init();
     }
 
-    public getMovieInfo(movieName: string, callback:movieCallback):void {
-        const sql = 'select movie_name, movie_image from movie_info where movie_name like ?';
-        const queryParam = `%${movieName}%`; // 부분 일치 검색
+    /**
+     * 영화 제목을 받아서 영화 이름과 사진 dataBuffer를 JSON으로 반환하는 함수
+     * @param movieName
+     */
+    public getMovieInfo(movieName: string){
+        return new Promise((resolve, reject)=>{
+            const sql = 'select movie_name, movie_image from movie_info where movie_name like ?';
+            const queryParam:string = `%${movieName}%`; // 부분 일치 검색
 
-        this.conn.query(sql, queryParam, (err: Error, results: any) =>{
-            if (err) {
-                return callback(err); // 오류 발생 시 콜백 으로 전달
-            }
+            this.conn.query(sql, queryParam, (err: Error, results: any) =>{
+                if (err) {
+                    return reject(err); // 오류 발생 시 reject 로 전달
+                }
 
-            if (results.length > 0 ) {
-                // 영화 이름과 이미지를 객체 배열로 생성
-                const moviesInfo = results.map((row: any) =>({
-                    name: row.movie_name,
-                    image: row.movie_image,
-                }));
+                if (results.length > 0 ) {
+                    // 영화 이름과 이미지를 객체 배열로 생성
+                    const moviesInfo = results.map((row: any) =>({
+                        name: row.movie_name,
+                        image: Buffer.from(row.movie_image, 'base64').toString('utf-8'),
+                    }));
 
-                // 객체 배열을 콜백으로 전달
-                callback(null, moviesInfo); // [{ name: "마션", image: "마션.jsp"}...]
-            } else {
-                callback(new Error("해당하는 영화를 찾을 수 없습니다"));
-            }
-
-        })
+                    // 객체 배열을 콜백으로 전달
+                    resolve(moviesInfo); // [{ name: "마션", image: "마션.jsp"}...]
+                } else {
+                    // 영화가 없을 경우 Promise 거부
+                    reject(new Error("해당하는 영화를 찾을 수 없습니다"));
+                }
+            });
+        });
     }
 
+    public getSimilarMovieInfo(movieKeys:string[]){
+        return new Promise((resolve, reject) =>{
+            const sql = 'select movie_name, movie_image from movie_info where movie_name in (?)'
 
+            this.conn.query(sql, [movieKeys], (err:Error, results: any) =>{
+                if (err){
+                    return reject(err);
+                }
+
+                if (results.length > 0) {
+                    const movieInfo = results.map((row:any)=> ({
+                        name : row.movie_name,
+                        image: Buffer.from(row.movie_image, 'base64').toString('utf-8'),
+                    }));
+
+                    resolve(movieInfo);
+                }else {
+                    reject(new Error("해당하는 영화를 찾을 수 없습니다"));
+                }
+            });
+        });
+    }
 }
+
 
 export default GetMovie;
 
