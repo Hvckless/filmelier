@@ -4,6 +4,7 @@ import Protect from "../protected/Protect";
 
 import ResolvedData from "../type/ResolvedData";
 import { Parameter } from "../type/Parameter";
+import JSONObject from "../type/JSONObject";
 
 /**
  * 
@@ -37,7 +38,20 @@ class URLResolver{
         }
         return false;
     }
-    public async resolveData(res:http.ServerResponse<http.IncomingMessage>, url:string, param?:Parameter):Promise<string>{
+    /**
+     * /protected/somemethod.do?hello=world
+     * 
+     *  -> somemethod.ts의 initial이 실행됨
+     * 
+     * 요청을 실행하여 Promise로 반환하는 함수
+     * 
+     * 
+     * @param res 응답받을 response client 데이터. 사용되지 않음
+     * @param url 요청 URL
+     * @param param 요청 parameter
+     * @returns JSON 객체
+     */
+    public async resolveData(res:http.ServerResponse<http.IncomingMessage>, url:string, param?:Parameter):Promise<JSONObject>{
 
         return new Promise(async (resolve, reject)=>{
 
@@ -55,13 +69,11 @@ class URLResolver{
                 const moduleinstance = new module.default();
 
                 if(typeof moduleinstance.initial === 'function'){
-                    moduleinstance.initial(param);
+                    resolve(await moduleinstance.initial(param));
                 }else{
                     reject(new Error("requested method is not prot only"));
                 }
             }
-
-            resolve(extension);
         });
     }
 

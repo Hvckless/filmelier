@@ -7,6 +7,7 @@ import URLResolver from "./utils/url/URLResolver.js";
 import ParameterResolver from "./utils/url/ParameterResolver.js";
 
 import { Parameter } from "./utils/type/Parameter.js";
+import JSONObject from "./utils/type/JSONObject.js";
 
 const urlResolver:URLResolver = new URLResolver();
 const parameterResolver:ParameterResolver = new ParameterResolver();
@@ -53,14 +54,14 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
      * @param res 
      * @param buffer 
      */
-    const sendBuffer = (res:http.ServerResponse<http.IncomingMessage>, buffer:Buffer):void=>{
+    const sendBuffer = (res:http.ServerResponse<http.IncomingMessage>, json:JSONObject):void=>{
         res.writeHead(200,
             {
-                'Content-Type': 'image/jpeg',
                 'Cache-Control': 'no-cache'
             }
         )
-        res.end(buffer);
+        res.write(JSON.stringify(json));
+        res.end();
     }
 
     let urlstruct:Array<string> = req.url.split("?");
@@ -86,12 +87,13 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
             //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
             urlResolver.resolveData(res, url, param)
                 .then((data)=>{
-                    console.log("리졸버 응답 : " + data);
+                    sendBuffer(res, data);
                 })
                 .catch((error)=>{
                     console.error(error);
+                    sendFile(res, "./src/html/fallback/nourl.html");
                 });
-            sendFile(res, "./src/html/fallback/nourl.html");
+            
             return;
         }
 

@@ -41,6 +41,19 @@ class URLResolver {
         }
         return false;
     }
+    /**
+     * /protected/somemethod.do?hello=world
+     *
+     *  -> somemethod.ts의 initial이 실행됨
+     *
+     * 요청을 실행하여 Promise로 반환하는 함수
+     *
+     *
+     * @param res 응답받을 response client 데이터. 사용되지 않음
+     * @param url 요청 URL
+     * @param param 요청 parameter
+     * @returns JSON 객체
+     */
     resolveData(res, url, param) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
@@ -54,13 +67,12 @@ class URLResolver {
                     const module = yield import(`../protected/${modulename}.js`);
                     const moduleinstance = new module.default();
                     if (typeof moduleinstance.initial === 'function') {
-                        moduleinstance.initial(param);
+                        resolve(yield moduleinstance.initial(param));
                     }
                     else {
                         reject(new Error("requested method is not prot only"));
                     }
                 }
-                resolve(extension);
             }));
         });
     }

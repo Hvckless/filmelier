@@ -1,5 +1,7 @@
 # import start
 
+import json
+
 from typing import Any
 
 from similar.parameter.parameterhandler import ParameterHandler
@@ -105,6 +107,7 @@ sorted_dictionary:SortedScoreMovieList = dict(sorted(score_dictionary.items(), k
 
 print(sorted_dictionary)
 
+print(json.loads(json.dumps(sorted_dictionary)))
 
 
 #number = 0
