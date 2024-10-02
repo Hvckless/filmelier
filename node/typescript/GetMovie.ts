@@ -18,6 +18,7 @@ class GetMovie {
      */
     public getMovieInfo(movieName: string){
         return new Promise((resolve, reject)=>{
+            // 영화 검색
             const sql = 'select movie_name, movie_image from movie_info where movie_name like ?';
             const queryParam:string = `%${movieName}%`; // 부분 일치 검색
 
@@ -43,8 +44,13 @@ class GetMovie {
         });
     }
 
+    /**
+     * 파이썬 에서 추천된 영화들을 받고 DB 에서 가져와 dataBuffer 를 Json으로 반환하는 함수.
+     * @param movieKeys
+     */
     public getSimilarMovieInfo(movieKeys:string[]){
         return new Promise((resolve, reject) =>{
+            // 영화 검색
             const sql = 'select movie_name, movie_image from movie_info where movie_name in (?)'
 
             this.conn.query(sql, [movieKeys], (err:Error, results: any) =>{
@@ -52,12 +58,15 @@ class GetMovie {
                     return reject(err);
                 }
 
+                // DB 에서 검색된 영화를 객체 배열로 생성
                 if (results.length > 0) {
                     const movieInfo = results.map((row:any)=> ({
-                        name : row.movie_name,
+                        name : row.movie_name, // 영화 이름
+                        // 영화 포스터를 base64로 바꾸어 가져옴
                         image: Buffer.from(row.movie_image, 'base64').toString('utf-8'),
                     }));
 
+                    // 객체 배열을 콜백으로 전달
                     resolve(movieInfo);
                 }else {
                     reject(new Error("해당하는 영화를 찾을 수 없습니다"));
