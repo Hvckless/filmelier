@@ -17,65 +17,65 @@ class KeyboardHandler{
                 /**
                  * 영화 목록을 받아오는 코드
                  */
-                (
-                    async ()=>{
-                        let sometext:string = await new FileHandler().readTextFile();
-                        let textsplit:string[] = sometext.split("\r\n");
+                // (
+                //     async ()=>{
+                //         let sometext:string = await new FileHandler().readTextFile();
+                //         let textsplit:string[] = sometext.split("\r\n");
                         
-                        movieHandler.createMoviePanel(textsplit.length, textsplit);
-                    }
-                )();
+                //         movieHandler.createMoviePanel(textsplit.length, textsplit);
+                //     }
+                // )();
                 break;
             }
             case 'KeyV': {
-                (
-                    async ()=>{
-                        let filelist:FileList = await new FileHandler().uploadDirectory();
+                // (
+                //     async ()=>{
+                //         let filelist:FileList = await new FileHandler().uploadDirectory();
 
-                        MovieList.getInstance.movieReviewList = filelist;
+                //         MovieList.getInstance.movieReviewList = filelist;
 
                         
 
-                        Array.from(filelist).forEach((file)=>{
-                            let filename:string = file.name.split(".")[0];
+                //         Array.from(filelist).forEach((file)=>{
+                //             let filename:string = file.name.split(".")[0];
 
-                            MovieList.getInstance.movieDictionary[filename] = false;
-                        });
+                //             MovieList.getInstance.movieDictionary[filename] = false;
+                //         });
 
-                        movieHandler.createMoviePanel(filelist.length, Object.keys(MovieList.getInstance.movieDictionary));
-                    }
-                )();
+                //         movieHandler.createMoviePanel(filelist.length, Object.keys(MovieList.getInstance.movieDictionary));
+                //     }
+                // )();
 
                 break;
             }
             case 'KeyB': {
-                let worker = new Worker("../../typeout/web/worker/MovieAnalyzer.js");
+                // let worker = new Worker("../../typeout/web/worker/MovieAnalyzer.js");
 
-                worker.postMessage([MovieList.getInstance.movieDictionary, MovieList.getInstance.movieReviewList])
+                // worker.postMessage([MovieList.getInstance.movieDictionary, MovieList.getInstance.movieReviewList])
 
 
 
-                worker.onmessage = (event)=>{
+                // worker.onmessage = (event)=>{
 
-                    //콘솔 로그
-                    Console.getInstance.sendLog(event.data);
+                //     //콘솔 로그
+                //     Console.getInstance.sendLog(event.data);
 
-                    //최하단으로 스크롤
-                    let consoleDiv = document.querySelector("#console") as HTMLDivElement;
-                    consoleDiv.scrollTo(0, consoleDiv.scrollHeight);
+                //     //최하단으로 스크롤
+                //     let consoleDiv = document.querySelector("#console") as HTMLDivElement;
+                //     consoleDiv.scrollTo(0, consoleDiv.scrollHeight);
 
-                }
+                // }
 
                 break;
             }
             case 'KeyZ': {
-                console.log(MovieList.getInstance.movieDictionary);
+                // console.log(MovieList.getInstance.movieDictionary);
                 break;
             }
             case 'KeyQ': {
                 //콘솔 토글
 
-                Console.getInstance.toggle();
+                // Console.getInstance.toggle();
 
                 break;
             }

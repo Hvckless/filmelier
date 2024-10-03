@@ -57,6 +57,7 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
     const sendBuffer = (res:http.ServerResponse<http.IncomingMessage>, json:JSONObject):void=>{
         res.writeHead(200,
             {
+                'Content-Type':'text/json; charset=utf-8',
                 'Cache-Control': 'no-cache'
             }
         )

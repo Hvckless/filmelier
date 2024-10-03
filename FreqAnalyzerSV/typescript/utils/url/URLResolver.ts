@@ -64,14 +64,19 @@ class URLResolver{
             const extension:string = queryString.split(".")[1];
 
             if(extension == "do"){
-                const module = await import(`../protected/${modulename}.js`);
 
-                const moduleinstance = new module.default();
+                try{
+                    const module = await import(`../protected/${modulename}.js`);
 
-                if(typeof moduleinstance.initial === 'function'){
-                    resolve(await moduleinstance.initial(param));
-                }else{
-                    reject(new Error("requested method is not prot only"));
+                    const moduleinstance = new module.default();
+
+                    if(typeof moduleinstance.initial === 'function'){
+                        resolve(await moduleinstance.initial(param));
+                    }else{
+                        resolve({"resMsg":"The request does not exist"});
+                    }
+                }catch(e){
+                    resolve({"resMsg":"The request does not exist"});
                 }
             }
         });
