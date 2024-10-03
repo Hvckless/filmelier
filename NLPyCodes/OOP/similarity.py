@@ -1,5 +1,7 @@
 # import start
 
+import json
+
 from typing import Any
 
 from similar.parameter.parameterhandler import ParameterHandler
@@ -91,7 +93,7 @@ app = Main()
 
 # 설정 시작
 
-app.setReviewFolderpath("../../csvback/")
+app.setReviewFolderpath("../../csvfile/")
 app.setCSVFormat(CSVFormat.V1)
 
 # 설정 종료
@@ -105,9 +107,10 @@ sorted_dictionary:SortedScoreMovieList = dict(sorted(score_dictionary.items(), k
 
 print(sorted_dictionary)
 
+print(json.loads(json.dumps(sorted_dictionary)))
 
 
-number = 0
-for movie_score in sorted_dictionary:
-    print(f"{number}위 : {sorted_dictionary[movie_score]} | 값 : {movie_score}")
-    number = number + 1
+#number = 0
+#for movie_score in sorted_dictionary:
+#    print(f"{number}위 : {sorted_dictionary[movie_score]} | 값 : {movie_score}")
+#    number = number + 1

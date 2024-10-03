@@ -40,12 +40,12 @@ const server = http.createServer((req, res) => {
      * @param res
      * @param buffer
      */
-    const sendBuffer = (res, buffer) => {
+    const sendBuffer = (res, json) => {
         res.writeHead(200, {
-            'Content-Type': 'image/jpeg',
             'Cache-Control': 'no-cache'
         });
-        res.end(buffer);
+        res.write(JSON.stringify(json));
+        res.end();
     };
     let urlstruct = req.url.split("?");
     let url = urlstruct[0];
@@ -63,8 +63,14 @@ const server = http.createServer((req, res) => {
          */
         if (urlResolver.isRequest(url)) {
             //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
-            urlResolver.resolveData(res, url, param);
-            sendFile(res, "./src/html/fallback/nourl.html");
+            urlResolver.resolveData(res, url, param)
+                .then((data) => {
+                sendBuffer(res, data);
+            })
+                .catch((error) => {
+                console.error(error);
+                sendFile(res, "./src/html/fallback/nourl.html");
+            });
             return;
         }
         /**
