@@ -1,3 +1,4 @@
+import Vars from "../global/Vars.js";
 class MovieContentHandler {
     createMoviePanel(movie_json) {
         let movie_panel = document.querySelector("#movieContents");
@@ -7,7 +8,7 @@ class MovieContentHandler {
 
                     <div class="movie_content">
                         <image src="data:image/jpeg;base64,${movie[movie_name]}">
-                        <div>
+                        <div onclick="MovieContentHandler.insertContent(${movie_name})">
                             <span>${movie_name}</span>
                         </div>
                     </div>
@@ -27,6 +28,9 @@ class MovieContentHandler {
         //     `;
         //     movie_panel.innerHTML += object_string;
         // });
+    }
+    static insertContent(movie_name) {
+        Vars.SelectedMovies[movie_name] = true;
     }
 }
 export default MovieContentHandler;
