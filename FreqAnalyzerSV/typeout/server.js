@@ -42,6 +42,7 @@ const server = http.createServer((req, res) => {
      */
     const sendBuffer = (res, json) => {
         res.writeHead(200, {
+            'Content-Type': 'text/json; charset=utf-8',
             'Cache-Control': 'no-cache'
         });
         res.write(JSON.stringify(json));

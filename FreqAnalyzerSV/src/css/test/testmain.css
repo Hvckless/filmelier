@@ -71,11 +71,11 @@ article{
     align-items: flex-start;
 }
 .notfilled{
-    width: 70%;
+    width: 55%;
     height: 55%;
 }
 .fullfilled{
-    width: 80%;
+    width: 70%;
     height: 70%;
 }
 
@@ -176,4 +176,9 @@ div#logo{
 
 .transition-navigation{
     transition: filter 0.4s;
+}
+
+img{
+    border-radius: 10px;
+    box-shadow: 0 0 20px 4px #746edf4a;
 }
