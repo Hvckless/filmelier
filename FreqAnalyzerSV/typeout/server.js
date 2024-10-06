@@ -7,6 +7,7 @@ import ParameterResolver from "./utils/url/ParameterResolver.js";
 const urlResolver = new URLResolver();
 const parameterResolver = new ParameterResolver();
 const server = http.createServer((req, res) => {
+    console.log(req.method);
     if (req.url == "/") {
         new URLRedirector().redirect(res, '/src/html/index.html');
         return;

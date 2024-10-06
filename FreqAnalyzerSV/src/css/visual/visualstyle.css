@@ -2,12 +2,20 @@
     display: none;
 }
 
+.showflex{
+    display: flex;
+}
+
 .wrapper{
     position: absolute;
 }
 
 .relative{
     position: relative;
+}
+
+.absolute{
+    position: absolute;
 }
 
 .float{

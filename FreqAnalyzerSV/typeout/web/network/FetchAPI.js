@@ -24,5 +24,24 @@ class FetchAPI {
             });
         });
     }
+    static postJSON(url, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(data)
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                    if (data instanceof Object) {
+                        resolve(data);
+                    }
+                    else {
+                        reject({ "resMsg": "reponse is not JSON Object" });
+                    }
+                });
+            });
+        });
+    }
 }
 export default FetchAPI;
