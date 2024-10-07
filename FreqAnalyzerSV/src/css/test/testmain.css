@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
 
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 @keyframes rotateAnimation {
@@ -19,7 +19,7 @@
     width: 100%;
     height: 100%;
     
-    background-image: url(../../image/background2.webp);
+    background-image: url(../../image/background3.webp);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -178,14 +178,18 @@ div#logo{
     transition: filter 0.4s;
 }
 
-img{
+.movie_content_img_panel{
     border-radius: 10px;
+    overflow: hidden;
+}
+
+.movie_content_img_panel > img{
     box-shadow: 0 0 20px 4px #746edf4a;
 
     transition: box-shadow, 0.7s;
 }
 
-img:hover{
+.movie_content_img_panel > img:hover{
     box-shadow: 0 0 20px 4px #5f5aa9c7;
 }
 
@@ -193,7 +197,7 @@ img:hover{
 #movieContents{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: center;
     background-color: #e5e5e5;
 
     border-radius: 20px 20px 0px 0px;
@@ -231,5 +235,89 @@ img:hover{
 
 .searchlog{
     color: white;
+    cursor: pointer;
+}
+
+.movie_content_img_panel{
+    height: 251px;
+    width: 176px;
+}
+
+.movie_content_img_star{
+    opacity: 0%;
+
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+
+    display: flex;
+
+    background-color: #000000ad;
+
+    justify-content: center;
+    align-items: center;
+
+
+}
+.movie_content_img_star:hover{
+    opacity: 100%;
+}
+
+
+
+#controlPanel{
+    width: 100%; height: 120px;
+
+    display: flex;
+
+    justify-content: center; align-items: center;
+}
+
+#sendAnalysticsButton{
+    height: 50%; width: 25%;
+
+    border-radius: 10px;
+
+    justify-content: center; align-items: center;
+    
+    color: white;
+
+    font-size: 1.3em;
+
+    background: linear-gradient(0.25turn, #a9a9a9, #7f7f7f);
+
+    cursor: not-allowed;
+
+
+
+    position: relative;
+
+    z-index: 2;
+}
+
+#sendAnalysticsButton::before{
+
+    position: absolute;
+    
+    background: linear-gradient(0.25turn, #3f6ce1, #763bdf);
+    
+    border-radius: 10px;
+    content: "Analyze Data";
+    cursor: not-allowed;
+
+    width: 100%; height: 100%;
+
+    opacity: 0;
+
+    transition: opacity 0.5s linear;
+    z-index: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#sendAnalysticsButton[isBlocked="false"]::before{
+    opacity: 1;
     cursor: pointer;
 }

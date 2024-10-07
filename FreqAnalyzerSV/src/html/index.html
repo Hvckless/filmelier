@@ -63,9 +63,9 @@
                 devcaller["moviehandler"] = new MoviePanelHandler();
                 devcaller["search"] = new Search(); //릴리즈시 삭제
                 
-                for(let i = 0; i < 11; i++){
-                    devcaller["search"].submit(document.querySelector("#searchInput"));
-                }
+                // for(let i = 0; i < 11; i++){
+                //     devcaller["search"].submit(document.querySelector("#searchInput"));
+                // }
 
                 transition.applyTransition(); // 트랜지션 적용
                 document.querySelector("html").style.display = "block";
@@ -109,23 +109,13 @@
                     <div id="searchBar">
                         <div id="searchField" class="notfilled trans-WidthHeight waitTransition" onclick="this.classList.remove('notfilled'); this.classList.add('fullfilled');">
                             <input id="searchInput" class="trans-WidthHeight waitTransition" type="search" placeholder="Find some interesting movies...">
-                            <div id="searchLog">
-                                <div>
-                                    <span class="searchlog">주토피아</span>
-                                    <div class="ssearchLogRemover">X</div>
-                                </div>
-                                <div>
-                                    <span class="searchlog">마션</span>
-                                    <div class="ssearchLogRemover">X</div>
-                                </div>
-                                <div>
-                                    <span class="searchlog">인터스텔라</span>
-                                    <div class="ssearchLogRemover">X</div>
-                                </div>
-                            </div>
+                            <div id="searchLog"></div>
                         </div>
                     </div>
                     <div id="contentPanel">
+                        <div id="controlPanel">
+                            <div id="sendAnalysticsButton" class="invisible">Analyze Data</div>
+                        </div>
                         <div id="movieContents"></div>
                     </div>
                 </article>
@@ -155,6 +145,7 @@
             <link rel="stylesheet" href="../css/movie.css">
             <link rel="stylesheet" href="../css/console.css">
             <link rel="stylesheet" href="../css/visual/visualstyle.css">
+            <link rel="stylesheet" href="../css/star/star.css">
 
             <link rel="stylesheet" href="../css/test/testmain.css">
         </footstyle>

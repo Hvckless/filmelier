@@ -17,6 +17,28 @@ class FetchAPI{
         });
 
     }
+
+    static async postJSON(url:string, data:JSONObject):Promise<JSONObject>{
+        return new Promise((resolve, reject)=>{
+
+            fetch(url, {
+
+                method: "POST",
+                body: JSON.stringify(data)
+
+                })
+                .then((response)=>response.json()
+                )
+                .then((data)=>{
+                    if(data instanceof Object){
+                        resolve(data as JSONObject);
+                    }else{
+                        reject({"resMsg":"reponse is not JSON Object"});
+                    }
+                });
+
+        });
+    }
 }
 
 

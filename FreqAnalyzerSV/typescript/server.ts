@@ -14,6 +14,8 @@ const parameterResolver:ParameterResolver = new ParameterResolver();
 
 const server:http.Server = http.createServer((req:http.IncomingMessage, res:http.ServerResponse<http.IncomingMessage>)=>{
 
+    console.log(req.method);
+
     if(req.url == "/"){
         new URLRedirector().redirect(res, '/src/html/index.html');
         return;

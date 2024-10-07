@@ -13,6 +13,7 @@ import FilmAnimation from "../style/FilmAnimation.js";
 class Search {
     submit(element) {
         return __awaiter(this, void 0, void 0, function* () {
+            document.querySelector("#movieContents").innerHTML = ""; //이전 검색 삭제
             element.blur(); //포커스 상태 취소
             this.searchContext = element.value; //searchContext에 검색 내용 저장
             console.log(this.searchContext);
@@ -23,7 +24,9 @@ class Search {
                 .then((data) => {
                 clearInterval(timer);
                 element.placeholder = "Done! now you can search another one!";
-                new MovieContentHandler().createMoviePanel(data);
+                MovieContentHandler.getInstance.createMoviePanel(data);
+                document.querySelector("#sendAnalysticsButton").classList.remove("invisible");
+                document.querySelector("#sendAnalysticsButton").classList.add("showflex");
             })
                 .catch((err) => {
                 console.error(err);
