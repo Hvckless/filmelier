@@ -2,7 +2,7 @@ import MySQLayer from "../sql/MySQLayer";
 import Protect from "./Protect";
 import JSONObject from "../type/JSONObject";
 
-import MySQL from "../sql/MySQL";
+import MySQL from "../sql/MySQL.js";
 
 import { Parameter } from "../type/Parameter";
 import MovieJSON from "../type/MovieJSON";

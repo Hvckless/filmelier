@@ -75,7 +75,7 @@ class URLResolver {
                         }
                     }
                     catch (e) {
-                        resolve({ "resMsg": "The request does not exist" });
+                        resolve({ "resMsg": "The request does not exist" + e });
                     }
                 }
             }));

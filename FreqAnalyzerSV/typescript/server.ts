@@ -16,6 +16,10 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
 
     console.log(req.method);
 
+    if(req.method == "POST"){
+        console.log("포스트 트래픽 발생");
+    }
+
     if(req.url == "/"){
         new URLRedirector().redirect(res, '/src/html/index.html');
         return;
