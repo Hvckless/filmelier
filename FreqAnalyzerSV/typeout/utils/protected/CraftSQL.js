@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import MySQL from "../sql/MySQL";
+import MySQL from "../sql/MySQL.js";
 class CraftSQL {
     searchDataList(context) {
         throw new Error("Method not implemented.");
@@ -26,6 +26,7 @@ class CraftSQL {
                         const movieInfo = results.map((row) => ({
                             name: row.movie_name,
                             image: Buffer.from(row.movie_image).toString("base64"),
+                            //image: row.movie_image,
                         }));
                         resolve(movieInfo);
                     }

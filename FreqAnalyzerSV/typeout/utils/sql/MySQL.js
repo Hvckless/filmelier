@@ -3,7 +3,7 @@ class MySQL {
     constructor() {
         this.connection = null;
         this.db_info = {
-            host: 'localhost',
+            host: '192.168.0.61',
             user: 'root',
             password: '3131',
             database: 'movie_db'

@@ -105,8 +105,6 @@ mvlist_review:MovieList = app.getMovieListFromReviews() #영화 파일 목록
 score_dictionary:ScoredMovieList = app.getWeightListBetweenMovies(mvlist_param, mvlist_review, app.getWeightListFromMovieList(mvlist_param))
 sorted_dictionary:SortedScoreMovieList = dict(sorted(score_dictionary.items(), key=lambda item: item[0], reverse=True))
 
-print(sorted_dictionary)
-
 print(json.loads(json.dumps(sorted_dictionary)))
 
 

@@ -20,93 +20,104 @@ class MovieContentHandler{
      * 영화 JSONObject를 기반으로 영화 목록 UI 생성 함수
      * @param movie_json 영화 데이터가 들어있는 JSONObject
      */
-    createMoviePanel(movie_json:JSONObject){
+    createMoviePanel(movie_json:Array<JSONObject>){
         let movie_panel:HTMLDivElement = document.querySelector("#movieContents");
 
-        movie_json.forEach((movie)=>{
-            Object.keys(movie).forEach((movie_name)=>{
+        for(let movie of movie_json){
+
+            let movie_name:string = movie["name"];
+            let movie_image:string = movie["image"];
 
 
-                let mv_content = document.createElement('div');
-                mv_content.classList.add('movie_content');
-
-                let mv_content_image_div = document.createElement('div');
-                mv_content_image_div.classList.add('movie_content_img_panel');
-                mv_content_image_div.classList.add('relative');
+            
 
 
-                let mv_content_image_star = document.createElement('div');
-                mv_content_image_star.classList.add('movie_content_img_star');
-                mv_content_image_star.classList.add('absolute');
-                mv_content_image_star.setAttribute("mvname", `${movie_name}`);
+            let mv_content = document.createElement('div');
+            mv_content.classList.add('movie_content');
 
-                mv_content_image_star.onmouseleave = (ev:MouseEvent)=>{
+            let mv_content_image_div = document.createElement('div');
+            mv_content_image_div.classList.add('movie_content_img_panel');
+            mv_content_image_div.classList.add('relative');
+
+
+            let mv_content_image_star = document.createElement('div');
+            mv_content_image_star.classList.add('movie_content_img_star');
+            mv_content_image_star.classList.add('absolute');
+            mv_content_image_star.setAttribute("mvname", `${movie_name}`);
+
+            mv_content_image_star.onmouseleave = (ev:MouseEvent)=>{
+                if(ev.target instanceof HTMLDivElement){
+                    ev.target.removeAttribute("starnum");
+                }
+            }
+
+            let starcounter:string = Vars.SelectedMovies[`${movie_name}`];
+            if(starcounter != undefined){
+                mv_content_image_star.setAttribute("starsel", starcounter);
+            }
+
+            for(let i = 0; i < 5; i++){
+                let mv_content_image_realstar = document.createElement('div');
+                mv_content_image_realstar.classList.add('emptystar');
+                mv_content_image_realstar.classList.add('starlight');
+                mv_content_image_realstar.setAttribute("starnum", i+"");
+
+
+
+                mv_content_image_realstar.onmouseenter = (ev:MouseEvent)=>{
+
                     if(ev.target instanceof HTMLDivElement){
-                        ev.target.removeAttribute("starnum");
+                        ev.target.parentElement.setAttribute("starnum", ev.target.getAttribute("starnum"));
+                    }
+
+                }
+                mv_content_image_realstar.onmousedown = (ev:MouseEvent)=>{
+                    if(ev.target instanceof HTMLDivElement){
+                        ev.target.parentElement.setAttribute("starsel", ev.target.getAttribute("starnum"));
+                        MovieContentHandler.getInstance.insertContent(`${movie_name}`, ev.target.getAttribute("starnum"));
                     }
                 }
 
-                let starcounter:string = Vars.SelectedMovies[`${movie_name}`];
-                if(starcounter != undefined){
-                    mv_content_image_star.setAttribute("starsel", starcounter);
-                }
-
-                for(let i = 0; i < 5; i++){
-                    let mv_content_image_realstar = document.createElement('div');
-                    mv_content_image_realstar.classList.add('emptystar');
-                    mv_content_image_realstar.classList.add('starlight');
-                    mv_content_image_realstar.setAttribute("starnum", i+"");
+                mv_content_image_star.append(mv_content_image_realstar);
+            }
 
 
 
-                    mv_content_image_realstar.onmouseenter = (ev:MouseEvent)=>{
-
-                        if(ev.target instanceof HTMLDivElement){
-                            ev.target.parentElement.setAttribute("starnum", ev.target.getAttribute("starnum"));
-                        }
-
-                    }
-                    mv_content_image_realstar.onmousedown = (ev:MouseEvent)=>{
-                        if(ev.target instanceof HTMLDivElement){
-                            ev.target.parentElement.setAttribute("starsel", ev.target.getAttribute("starnum"));
-                            MovieContentHandler.getInstance.insertContent(`${movie_name}`, ev.target.getAttribute("starnum"));
-                        }
-                    }
-
-                    mv_content_image_star.append(mv_content_image_realstar);
-                }
+            let mv_content_image = document.createElement('img');
+            let movie_image_decoded:string = window.atob(`${movie_image}`)
+            mv_content_image.setAttribute('src', `data:image/jpeg;base64,${movie_image_decoded}`);
+            mv_content_image.classList.add('absolute');
 
 
 
-                let mv_content_image = document.createElement('img');
-                mv_content_image.setAttribute('src', `data:image/jpeg;base64,${movie[movie_name]}`);
-                mv_content_image.classList.add('absolute');
+            let mv_content_button_div = document.createElement('div');
+            mv_content_button_div.classList.add("movie_text_div");
+
+            //하단 코드는 릴리즈시 삭제
+            mv_content_button_div.onclick = (ev:MouseEvent):any=>{
+                MovieContentHandler.getInstance.showList();
+            }
+
+            let mv_content_button_text = document.createElement('span');
+            mv_content_button_text.textContent = `${movie_name}`
 
 
+            mv_content_button_div.append(mv_content_button_text);
 
-                let mv_content_button_div = document.createElement('div');
+            mv_content_image_div.append(mv_content_image);
+            mv_content_image_div.append(mv_content_image_star);
 
-                //하단 코드는 릴리즈시 삭제
-                mv_content_button_div.onclick = (ev:MouseEvent):any=>{
-                    MovieContentHandler.getInstance.showList();
-                }
+            mv_content.append(mv_content_image_div);
+            mv_content.append(mv_content_button_div);
 
-                let mv_content_button_text = document.createElement('span');
-                mv_content_button_text.textContent = `${movie_name}`
+            movie_panel.append(mv_content);
 
+        }
 
-                mv_content_button_div.append(mv_content_button_text);
-
-                mv_content_image_div.append(mv_content_image);
-                mv_content_image_div.append(mv_content_image_star);
-
-                mv_content.append(mv_content_image_div);
-                mv_content.append(mv_content_button_div);
-
-                movie_panel.append(mv_content);
-
-            });
-        });
+        // movie_json.forEach((movie)=>{
+        //     Object.keys(movie).forEach((movie_name)=>{
+        //     });
+        // });
 
     }
 
@@ -198,10 +209,13 @@ class MovieContentHandler{
     }
 
 
-    async sendMovieData(){
-        await FetchAPI.postJSON("/protected/SendMovieData.do", Vars.SelectedMovies)
+    async AnalyzeMovieData(){
+        await FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
             .then((data:JSONObject)=>{
                 console.log(data);
+
+                console.log(JSON.parse(data["reqMsg"].replaceAll("'", '"')));
+
             })
             .catch((err)=>{
                 console.error(err);

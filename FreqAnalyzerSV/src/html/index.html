@@ -16,6 +16,8 @@
 
             let transition;
 
+            let movie_content_handler;
+
             //let file;
         </script>
 
@@ -41,10 +43,14 @@
 
             import TransitionHandler from "../../typeout/web/style/TransitionHandler.js";
 
+            import MovieContentHandler from "../../typeout/web/movie/MovieContentHandler.js";
+
             keyboard = new KeyboardHandler(); //키보드 핸들러를 자바스크립트 keyboard에 assign
             eventhandler = new EventHandler();
 
             transition = new TransitionHandler();
+
+            movie_content_handler = MovieContentHandler;
             
             //file = new FileHandler();
 
@@ -114,7 +120,7 @@
                     </div>
                     <div id="contentPanel">
                         <div id="controlPanel">
-                            <div id="sendAnalysticsButton" class="invisible">Analyze Data</div>
+                            <div id="sendAnalysticsButton" class="invisible" onclick="movie_content_handler.getInstance.AnalyzeMovieData()">Analyze Data</div>
                         </div>
                         <div id="movieContents"></div>
                     </div>

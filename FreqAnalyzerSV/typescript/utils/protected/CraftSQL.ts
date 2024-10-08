@@ -2,7 +2,7 @@ import MySQLayer from "../sql/MySQLayer";
 import Protect from "./Protect";
 import JSONObject from "../type/JSONObject";
 
-import MySQL from "../sql/MySQL";
+import MySQL from "../sql/MySQL.js";
 
 import { Parameter } from "../type/Parameter";
 import MovieJSON from "../type/MovieJSON";
@@ -27,6 +27,7 @@ class CraftSQL implements Protect, MySQLayer{
                     const movieInfo = results.map((row:any)=>({
                         name: row.movie_name,
                         image: Buffer.from(row.movie_image).toString("base64"),
+                        //image: row.movie_image,
                     }));
 
                     resolve(movieInfo);

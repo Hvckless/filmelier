@@ -20,8 +20,8 @@ class Search{
         let timer:NodeJS.Timeout = new FilmAnimation().startSearhFieldLoading(element); 
 
 
-        await FetchAPI.getJSON("/protected/FakeSQL.do?hello=world")
-            .then((data:JSONObject)=>{
+        await FetchAPI.getJSON("/protected/CraftSQL.do?moviename="+this.searchContext)
+            .then((data:Array<JSONObject>)=>{
                 clearInterval(timer);
                 element.placeholder = "Done! now you can search another one!";
 
