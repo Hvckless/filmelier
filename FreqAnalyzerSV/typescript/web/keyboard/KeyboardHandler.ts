@@ -10,8 +10,6 @@ class KeyboardHandler{
 
         let movieHandler:MoviePanelHandler = new MoviePanelHandler();
 
-
-
         switch(event.code){
             case 'KeyC': {
                 /**
@@ -89,7 +87,23 @@ class KeyboardHandler{
                 console.log("YOU PRESSED UNKNOWN KEY");
             }
         }
+
+        //for android
+        if(event.code == ""){
+            switch(event.key){
+                case 'Enter': {
+                    new Search().submit(event.target);
+                    break;
+                }
+                default : {
+                    console.log("ANDROID : YOU PRESSED UNKNOWN KEY");
+                    break;
+                }
+            }
+        }
     }
+
+
 }
 
 export default KeyboardHandler;

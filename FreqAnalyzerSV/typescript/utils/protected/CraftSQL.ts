@@ -27,6 +27,7 @@ class CraftSQL implements Protect, MySQLayer{
                     const movieInfo = results.map((row:any)=>({
                         name: row.movie_name,
                         image: Buffer.from(row.movie_image).toString("base64"),
+                        //image: row.movie_image,
                     }));
 
                     resolve(movieInfo);

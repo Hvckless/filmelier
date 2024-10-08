@@ -14,12 +14,6 @@ const parameterResolver:ParameterResolver = new ParameterResolver();
 
 const server:http.Server = http.createServer((req:http.IncomingMessage, res:http.ServerResponse<http.IncomingMessage>)=>{
 
-    console.log(req.method);
-
-    if(req.method == "POST"){
-        console.log("포스트 트래픽 발생");
-    }
-
     if(req.url == "/"){
         new URLRedirector().redirect(res, '/src/html/index.html');
         return;
@@ -85,48 +79,80 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
         param = parameterResolver.resolveParameter(urlstruct[1]);
     }
 
-    fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
+    let body:string = "";
 
-        /**
-         * 아직 완전하지 않은 기능. protected로 요청하지 마시오
-         */
-        if(urlResolver.isRequest(url)){
-            //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
-            urlResolver.resolveData(res, url, param)
-                .then((data)=>{
-                    sendBuffer(res, data);
-                })
-                .catch((error)=>{
-                    console.error(error);
+    if(req.method == "POST"){
+        req.on('data',(data)=>{
+            body += data;
+        });
+        req.on('end', ()=>{
+            console.log("포스트 데이터 : " + body);
+            param = JSON.parse(body);
+
+            fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
+                if(urlResolver.isRequest(url)){
+                    urlResolver.resolveData(res, url, param)
+                        .then((data)=>{
+                            sendBuffer(res, data);
+                        })
+                        .catch((error)=>{
+                            console.error(error);
+                            sendFile(res, "./src/html/fallback/nourl.html");
+                        });
+                    
+                    return;
+                }else{
                     sendFile(res, "./src/html/fallback/nourl.html");
-                });
-            
-            return;
-        }
+                    return;
+                }
+            });
+        });
+    }
 
-        /**
-         * 사용자가 protected된 리소스에 요청하려 할 때 요청을 드랍합니다
-         */
-        if(urlResolver.isProtected(url)){
-            sendFile(res, "./src/html/fallback/requesterr.html");
-            return;
-        }
+    if(req.method == "GET"){
+        fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
 
-
-
-        if(stats == undefined){
-            console.log("NO FILE : " + url);
-            sendFile(res, "./src/html/fallback/nourl.html");
-        }else{
-            if(stats.isFile()){
-                sendFile(res, "."+url);
-            }else{
+            /**
+             * 아직 완전하지 않은 기능. protected로 요청하지 마시오
+             */
+            if(urlResolver.isRequest(url)){
+                //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
+                urlResolver.resolveData(res, url, param)
+                    .then((data)=>{
+                        sendBuffer(res, data);
+                    })
+                    .catch((error)=>{
+                        console.error(error);
+                        sendFile(res, "./src/html/fallback/nourl.html");
+                    });
+                
+                return;
+            }
+    
+            /**
+             * 사용자가 protected된 리소스에 요청하려 할 때 요청을 드랍합니다
+             */
+            if(urlResolver.isProtected(url)){
+                sendFile(res, "./src/html/fallback/requesterr.html");
+                return;
+            }
+    
+    
+    
+            if(stats == undefined){
                 console.log("NO FILE : " + url);
                 sendFile(res, "./src/html/fallback/nourl.html");
+            }else{
+                if(stats.isFile()){
+                    sendFile(res, "."+url);
+                }else{
+                    console.log("NO FILE : " + url);
+                    sendFile(res, "./src/html/fallback/nourl.html");
+                }
             }
-        }
-
-    });
+    
+        });
+    }
 
 
 

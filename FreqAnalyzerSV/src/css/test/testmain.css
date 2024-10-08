@@ -178,6 +178,19 @@ div#logo{
     transition: filter 0.4s;
 }
 
+.movie_text_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 171px;
+    padding-top: 6px;
+}
+.movie_text_div > span{
+    word-break: keep-all;
+    text-align: center;
+}
+
 .movie_content_img_panel{
     border-radius: 10px;
     overflow: hidden;

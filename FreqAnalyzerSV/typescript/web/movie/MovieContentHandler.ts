@@ -84,12 +84,14 @@ class MovieContentHandler{
 
 
             let mv_content_image = document.createElement('img');
-            mv_content_image.setAttribute('src', `data:image/jpeg;base64,${movie_image}`);
+            let movie_image_decoded:string = window.atob(`${movie_image}`)
+            mv_content_image.setAttribute('src', `data:image/jpeg;base64,${movie_image_decoded}`);
             mv_content_image.classList.add('absolute');
 
 
 
             let mv_content_button_div = document.createElement('div');
+            mv_content_button_div.classList.add("movie_text_div");
 
             //하단 코드는 릴리즈시 삭제
             mv_content_button_div.onclick = (ev:MouseEvent):any=>{
@@ -211,6 +213,9 @@ class MovieContentHandler{
         await FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
             .then((data:JSONObject)=>{
                 console.log(data);
+
+                console.log(JSON.parse(data["reqMsg"].replaceAll("'", '"')));
+
             })
             .catch((err)=>{
                 console.error(err);

@@ -26,6 +26,7 @@ class CraftSQL {
                         const movieInfo = results.map((row) => ({
                             name: row.movie_name,
                             image: Buffer.from(row.movie_image).toString("base64"),
+                            //image: row.movie_image,
                         }));
                         resolve(movieInfo);
                     }
