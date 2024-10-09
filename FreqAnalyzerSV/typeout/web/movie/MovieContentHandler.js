@@ -20,8 +20,9 @@ class MovieContentHandler {
      * 영화 JSONObject를 기반으로 영화 목록 UI 생성 함수
      * @param movie_json 영화 데이터가 들어있는 JSONObject
      */
-    createMoviePanel(movie_json) {
-        let movie_panel = document.querySelector("#movieContents");
+    createMoviePanel(movie_json, target_panel) {
+        console.log(movie_json);
+        let movie_panel = target_panel; //document.querySelector("#movieContents");
         for (let movie of movie_json) {
             let movie_name = movie["name"];
             let movie_image = movie["image"];
@@ -146,16 +147,39 @@ class MovieContentHandler {
     showList() {
         console.log(Vars.SelectedMovies);
     }
-    AnalyzeMovieData() {
+    AnalyzeMovieData(obj) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
-                .then((data) => {
-                console.log(data);
-                console.log(JSON.parse(data["reqMsg"].replaceAll("'", '"')));
-            })
-                .catch((err) => {
-                console.error(err);
-            });
+            if (obj instanceof HTMLDivElement) {
+                let analyzeBTN = document.querySelector("#sendAnalysticsButton");
+                if ((Object.keys(Vars.SelectedMovies).length > 0) && (analyzeBTN.getAttribute("isBlocked") == "false")) {
+                    analyzeBTN.setAttribute("isBlocked", "true");
+                    let ct_panel = document.querySelector("#movieContents");
+                    ct_panel.innerHTML = "";
+                    let loading_panel = document.querySelector("#loading");
+                    loading_panel.classList.remove("invisible");
+                    loading_panel.classList.add("showflex");
+                    yield FetchAPI.postJSON("/protected/FakeMovieData.do", Vars.SelectedMovies)
+                        .then((data) => {
+                        console.log(data);
+                        console.log(JSON.parse(data["reqMsg"].replaceAll("'", '"')));
+                        loading_panel.classList.remove("showflex");
+                        loading_panel.classList.add("invisible");
+                        document.querySelector("#ranking").classList.remove("invisible");
+                        let originObject = JSON.parse(data["reqMsg"].replaceAll("'", '"'));
+                        let sendMap = [];
+                        Object.keys(originObject).forEach((key) => {
+                            let _json = {};
+                            _json["name"] = originObject[key];
+                            _json["image"] = "unknown";
+                            sendMap.push(_json);
+                        });
+                        MovieContentHandler.getInstance.createMoviePanel(sendMap, document.querySelector("#ranking_toprank"));
+                    })
+                        .catch((err) => {
+                        console.error(err);
+                    });
+                }
+            }
         });
     }
 }
