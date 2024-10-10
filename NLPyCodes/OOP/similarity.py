@@ -99,13 +99,23 @@ app.setCSVFormat(CSVFormat.V1)
 # 설정 종료
 
 
-mvlist_param:MovieList = app.getMovieListFromParameter() #영화 파라메터 목록
-mvlist_review:MovieList = app.getMovieListFromReviews() #영화 파일 목록
+mvlist_param: MovieList = app.getMovieListFromParameter()  # 영화 파라메터 목록
+mvlist_review: MovieList = app.getMovieListFromReviews()    # 영화 파일 목록
 
-score_dictionary:ScoredMovieList = app.getWeightListBetweenMovies(mvlist_param, mvlist_review, app.getWeightListFromMovieList(mvlist_param))
-sorted_dictionary:SortedScoreMovieList = dict(sorted(score_dictionary.items(), key=lambda item: item[0], reverse=True))
+score_dictionary: ScoredMovieList = app.getWeightListBetweenMovies(
+    mvlist_param,
+    mvlist_review,
+    app.getWeightListFromMovieList(mvlist_param)
+)
 
-print(json.loads(json.dumps(sorted_dictionary)))
+# 점수로 정렬
+sorted_dictionary: SortedScoreMovieList = dict(sorted(score_dictionary.items(), key=lambda item: item[0], reverse=True))
+
+# 상위 10개 항목만 추출
+top_10 = {score: name for score, name in list(sorted_dictionary.items())[:10]}
+
+# 결과 출력
+print(json.loads(json.dumps(top_10)))
 
 
 #number = 0
