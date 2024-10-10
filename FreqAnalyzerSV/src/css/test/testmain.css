@@ -170,7 +170,7 @@ div#logo{
 
 .transition-WidthHeight{
     
-    transition: width 0.7s, height 0.7s, box-shadow 0.7s;
+    transition: width 0.7s, height 0.7s, box-shadow 0.7s, font-size 0.7s;
 
 }
 
@@ -185,6 +185,8 @@ div#logo{
 
     width: 171px;
     padding-top: 6px;
+
+    margin:auto;
 }
 .movie_text_div > span{
     word-break: keep-all;
@@ -234,6 +236,8 @@ div#logo{
 
 #searchLog{
     display: flex;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #searchLog > div{
@@ -318,7 +322,7 @@ div#logo{
     background: linear-gradient(0.25turn, #3f6ce1, #763bdf);
     
     border-radius: 10px;
-    content: "Analyze Data";
+    content: "영화 추천 받기";
     cursor: not-allowed;
 
     width: 100%; height: 100%;
@@ -348,7 +352,7 @@ div#logo{
     animation: rotate 1s linear infinite;
 
     margin: 120px auto;
-  }
+}
   .loader::before {
     content: "";
     box-sizing: border-box;
@@ -357,21 +361,82 @@ div#logo{
     border-radius: 50%;
     border: 7px solid #5b54e0;
     animation: prixClipFix 2s linear infinite ;
-  }
+}
 
-  @keyframes rotate {
+@keyframes rotate {
     100%   {transform: rotate(360deg)}
-  }
+}
 
-  @keyframes prixClipFix {
-      0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
-      25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
-      50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
-      75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
-      100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
-  }
+@keyframes prixClipFix {
+    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+}
 
 
-  #loading{
+#loading{
     width: 100%;
-  }
+}
+
+
+
+
+
+#ranking{
+    flex-direction: column;
+}
+
+.rankingPoster{
+    display:flex;
+}
+
+.poster{
+    height: fit-content;
+}
+
+.poster > .movie_content_img_panel {
+    width: 100%;
+    height: 100%;
+}
+
+.poster > .movie_content_img_panel > img {
+    width: 100%;
+}
+
+.topposter{
+    width: 26.66%;
+    padding-left: 5%;
+    padding-top: 5%;
+}
+
+.underposter{
+    width: 13.14%;
+
+    padding-left: 1%;
+    padding-top: 1%;
+}
+
+
+#ranking_toprank > div > .movie_content_img_panel > img{
+    border-width: 10px;
+    border-style: solid;
+    
+    box-sizing: border-box;
+}
+#ranking_toprank > div.topposter:nth-child(1) > .movie_content_img_panel > img{
+    border-color: gold;
+    border-top-color: #fff6c8;
+    border-left-color: #fff6c8;
+}
+#ranking_toprank > div.topposter:nth-child(2) > .movie_content_img_panel > img{
+    border-color: silver;
+    border-top-color: #d9d9d9;
+    border-left-color: #d9d9d9;
+}
+#ranking_toprank > div.topposter:nth-child(3) > .movie_content_img_panel > img{
+    border-color: #B87333;
+    border-top-color: #d59e6c;
+    border-left-color: #d59e6c;
+}

@@ -8,7 +8,7 @@ class MySQL{
     private connection:mysql.Connection = null;
 
     private db_info = {
-        host        : '192.168.0.61',
+        host        : 'localhost',
         user        : 'root',
         password    : '3131',
         database    : 'movie_db'

@@ -1,4 +1,4 @@
-<html onkeydown="keyboard.onkeydown(event)" style="display: none;">
+<html lang="ko" onkeydown="keyboard.onkeydown(event)" style="display: none;">
     <head>
 
         <meta charset="utf-8">
@@ -75,6 +75,8 @@
 
                 transition.applyTransition(); // 트랜지션 적용
                 document.querySelector("html").style.display = "block";
+
+                //document.querySelector("#searchInput").focus();
                 
                 //devcaller.moviehandler.createMoviePanel(100);
             }
@@ -114,24 +116,22 @@
                 <article>
                     <div id="searchBar">
                         <div id="searchField" class="notfilled trans-WidthHeight waitTransition" onclick="this.classList.remove('notfilled'); this.classList.add('fullfilled');">
-                            <input id="searchInput" class="trans-WidthHeight waitTransition" type="search" placeholder="Find some interesting movies...">
+                            <input id="searchInput" class="trans-WidthHeight waitTransition" type="search" placeholder="최고의 영화를 찾아봅시다...">
                             <div id="searchLog"></div>
                         </div>
                     </div>
                     <div id="contentPanel">
                         <div id="controlPanel">
-                            <div id="sendAnalysticsButton" class="invisible" onclick="movie_content_handler.getInstance.AnalyzeMovieData(this)">Analyze Data</div>
+                            <div id="sendAnalysticsButton" class="invisible" onclick="movie_content_handler.getInstance.AnalyzeMovieData(this)">영화 추천 받기</div>
                         </div>
                         <div id="movieContents" class="movieContentClass"></div>
                         <div id="loading" class="invisible movieContentClass">
                             <span class="loader"></span>
                         </div>
-                        <div id="ranking" class="invisible movieContentClass">
-                            <div id="ranking_toprank">
-
+                        <div id="ranking" class="showflex movieContentClass">
+                            <div id="ranking_toprank" class="rankingPoster">
                             </div>
-                            <div id="ranking_underrank">
-                                
+                            <div id="ranking_underrank" class="rankingPoster">
                             </div>
                         </div>
                     </div>

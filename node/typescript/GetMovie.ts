@@ -60,6 +60,7 @@ class GetMovie {
 
                 // DB 에서 검색된 영화를 객체 배열로 생성
                 if (results.length > 0) {
+                    console.log("영화가 검색되었다!!!!!!!!!!!!!!");
                     const movieInfo = results.map((row:any)=> ({
                         name : row.movie_name, // 영화 이름
                         // 영화 포스터를 base64로 바꾸어 가져옴

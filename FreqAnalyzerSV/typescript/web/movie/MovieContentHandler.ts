@@ -225,31 +225,25 @@ class MovieContentHandler{
                 loading_panel.classList.remove("invisible");
                 loading_panel.classList.add("showflex");
 
-                await FetchAPI.postJSON("/protected/FakeMovieData.do", Vars.SelectedMovies)
+                await FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
                     .then((data:JSONObject)=>{
-                        console.log(data);
-        
-                        console.log(JSON.parse(data["reqMsg"].replaceAll("'", '"')));
-
                         loading_panel.classList.remove("showflex");
                         loading_panel.classList.add("invisible");
                         
                         document.querySelector("#ranking").classList.remove("invisible");
 
                         let originObject:JSONObject = JSON.parse(data["reqMsg"].replaceAll("'", '"'));
-                        let sendMap:Array<JSONObject> = [];
+                        //let sendMap:Array<JSONObject> = [];
+
+                        let sendData:Array<string> = [];
 
                         Object.keys(originObject).forEach((key)=>{
-                            let _json:JSONObject = {};
-
-                            _json["name"] = originObject[key];
-                            _json["image"] = "unknown";
-
-                            sendMap.push(_json);
+                            sendData.push(originObject[key]);
                         });
 
-                        MovieContentHandler.getInstance.createMoviePanel(sendMap, document.querySelector("#ranking_toprank"));
-        
+                        analyzeBTN.classList.remove("showflex");
+                        analyzeBTN.classList.add("invisible");
+                        MovieContentHandler.getInstance.getMoviePoster(sendData);
                     })
                     .catch((err)=>{
                         console.error(err);
@@ -258,6 +252,73 @@ class MovieContentHandler{
         }
 
         
+    }
+
+    async getMoviePoster(param:JSONObject){
+        await FetchAPI.postJSON("/protected/RankSQL.do", param)
+            .then((data:Array<JSONObject>)=>{
+                console.log(data);
+
+                document.querySelector("#sendAnalysticsButton").classList.remove("showflex");
+
+                MovieContentHandler.getInstance.createPosterPanel(data, document.querySelector("#ranking_toprank"));
+            })
+            .catch((err)=>{
+                console.error(err);
+            });
+
+    }
+
+    createPosterPanel(movie_json:Array<JSONObject>, target_panel:HTMLDivElement){
+
+        let movie_panel:HTMLDivElement = target_panel;//document.querySelector("#movieContents");
+
+        for(let i = 0; i < movie_json.length; i++){
+
+            let movie = movie_json[i];
+
+            let movie_name:string = movie["name"];
+            let movie_image:string = movie["image"];
+
+            let poster_top = document.createElement('div');
+
+
+
+            let poster_image_div = document.createElement('div');
+            let poster_image = document.createElement('img');
+
+            poster_image_div.classList.add("movie_content_img_panel");
+
+            let movie_image_decoded:string = window.atob(`${movie_image}`)
+            poster_image.setAttribute('src', `data:image/jpeg;base64,${movie_image_decoded}`);
+
+            poster_image_div.append(poster_image);
+
+            let poster_title_div = document.createElement('div');
+            let poster_title = document.createElement('span');
+
+            poster_title_div.classList.add("movie_text_div");
+            poster_title.textContent = movie_name;
+
+            poster_title_div.append(poster_title);
+
+            poster_top.append(poster_image_div);
+            poster_top.append(poster_title_div);
+
+            poster_top.classList.add("poster");
+            if(i < 3){
+                poster_top.classList.add("topposter");
+                movie_panel.append(poster_top);
+            }else{
+                poster_top.classList.add("underposter");
+                document.querySelector("#ranking_underrank").append(poster_top);
+            }
+
+
+
+
+
+        }
     }
 }
 
