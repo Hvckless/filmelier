@@ -1,3 +1,5 @@
+import server_settings from "../../config/server_settings.js";
+import { SV_STAT } from "../../config/variable/SV_STAT.js";
 import JSONObject from "../../utils/type/JSONObject.js";
 import Vars from "../global/Vars.js";
 import MovieContentHandler from "../movie/MovieContentHandler.js";
@@ -26,6 +28,21 @@ class Search{
         if(ranking_panel.classList.contains("showflex")){
             ranking_panel.classList.remove("showflex");
             ranking_panel.classList.add("invisible");
+        }
+
+        let requestURL:string;
+
+        switch(server_settings.getInstance().server_stat_type){
+            case SV_STAT.DEV:{
+
+            }
+            case SV_STAT.DEV_NOPYTHON:{
+
+            }
+            case SV_STAT.BINARY:{
+
+            }
+
         }
         
 

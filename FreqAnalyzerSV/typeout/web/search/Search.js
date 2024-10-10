@@ -7,6 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import server_settings from "../../config/server_settings.js";
+import { SV_STAT } from "../../config/variable/SV_STAT.js";
 import Vars from "../global/Vars.js";
 import MovieContentHandler from "../movie/MovieContentHandler.js";
 import FetchAPI from "../network/FetchAPI.js";
@@ -26,6 +28,15 @@ class Search {
             if (ranking_panel.classList.contains("showflex")) {
                 ranking_panel.classList.remove("showflex");
                 ranking_panel.classList.add("invisible");
+            }
+            let requestURL;
+            switch (server_settings.getInstance().server_stat_type) {
+                case SV_STAT.DEV: {
+                }
+                case SV_STAT.DEV_NOPYTHON: {
+                }
+                case SV_STAT.BINARY: {
+                }
             }
             yield FetchAPI.getJSON("/protected/CraftSQL.do?moviename=" + this.searchContext)
                 .then((data) => {
