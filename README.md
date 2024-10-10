@@ -16,4 +16,4 @@
 영화 리뷰 : 네이버 블로그
 형태소 분석 : Kiwi
 임베딩 : Fasttext
-홈페이지 배경 사진 : Pexels의 Philippe Donn 님의 사진 https://www.pexels.com/ko-kr/photo/1169754/
+홈페이지 배경 사진 : Pexels의 Philippe Donn 님의 사진 [https://www.pexels.com/ko-kr/photo/1169754/](https://www.pexels.com/ko-kr/photo/1169754/)
