@@ -20,11 +20,11 @@ class Search {
             element.value = ""; //원본 input 내용 삭제
             //로딩 애니메이션용 JavaScript
             let timer = new FilmAnimation().startSearhFieldLoading(element);
-            yield FetchAPI.getJSON("/protected/CraftSQL.do?moviename=" + this.searchContext)
+            yield FetchAPI.getJSON("/protected/FakeSQL.do?moviename=" + this.searchContext)
                 .then((data) => {
                 clearInterval(timer);
                 element.placeholder = "Done! now you can search another one!";
-                MovieContentHandler.getInstance.createMoviePanel(data);
+                MovieContentHandler.getInstance.createMoviePanel(data, document.querySelector("#movieContents"));
                 document.querySelector("#sendAnalysticsButton").classList.remove("invisible");
                 document.querySelector("#sendAnalysticsButton").classList.add("showflex");
             })

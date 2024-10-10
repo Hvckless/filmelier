@@ -3,8 +3,17 @@ import { Parameter } from "../type/Parameter";
 import Protect from "./Protect";
 import * as path from "path";
 import { spawn } from "child_process";
+import PythonRunner from "../process/PythonRunner";
 
-class AnalyzeMovieData implements Protect{
+class AnalyzeMovieData implements Protect, PythonRunner{
+    async execute(param: Parameter): Promise<string> {
+        return new Promise((resolve, reject)=>{
+
+            let newdata:string = "HELLo";
+
+            resolve(newdata);
+        });
+    }
     async initial(param: Parameter): Promise<JSONObject> {
         return new Promise(async (resolve, reject)=>{
 

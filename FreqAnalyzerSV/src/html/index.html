@@ -120,9 +120,20 @@
                     </div>
                     <div id="contentPanel">
                         <div id="controlPanel">
-                            <div id="sendAnalysticsButton" class="invisible" onclick="movie_content_handler.getInstance.AnalyzeMovieData()">Analyze Data</div>
+                            <div id="sendAnalysticsButton" class="invisible" onclick="movie_content_handler.getInstance.AnalyzeMovieData(this)">Analyze Data</div>
                         </div>
-                        <div id="movieContents"></div>
+                        <div id="movieContents" class="movieContentClass"></div>
+                        <div id="loading" class="invisible movieContentClass">
+                            <span class="loader"></span>
+                        </div>
+                        <div id="ranking" class="invisible movieContentClass">
+                            <div id="ranking_toprank">
+
+                            </div>
+                            <div id="ranking_underrank">
+                                
+                            </div>
+                        </div>
                     </div>
                 </article>
 

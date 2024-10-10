@@ -20,8 +20,9 @@ class MovieContentHandler{
      * 영화 JSONObject를 기반으로 영화 목록 UI 생성 함수
      * @param movie_json 영화 데이터가 들어있는 JSONObject
      */
-    createMoviePanel(movie_json:Array<JSONObject>){
-        let movie_panel:HTMLDivElement = document.querySelector("#movieContents");
+    createMoviePanel(movie_json:Array<JSONObject>, target_panel:HTMLDivElement){
+        console.log(movie_json);
+        let movie_panel:HTMLDivElement = target_panel;//document.querySelector("#movieContents");
 
         for(let movie of movie_json){
 
@@ -209,17 +210,54 @@ class MovieContentHandler{
     }
 
 
-    async AnalyzeMovieData(){
-        await FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
-            .then((data:JSONObject)=>{
-                console.log(data);
+    async AnalyzeMovieData(obj:any){
 
-                console.log(JSON.parse(data["reqMsg"].replaceAll("'", '"')));
+        if(obj instanceof HTMLDivElement){
 
-            })
-            .catch((err)=>{
-                console.error(err);
-            })
+            let analyzeBTN = document.querySelector("#sendAnalysticsButton");
+
+            if((Object.keys(Vars.SelectedMovies).length > 0) && (analyzeBTN.getAttribute("isBlocked") == "false")){
+
+                analyzeBTN.setAttribute("isBlocked", "true");
+                let ct_panel = document.querySelector("#movieContents") as HTMLDivElement;
+                ct_panel.innerHTML = "";
+                let loading_panel = document.querySelector("#loading") as HTMLDivElement;
+                loading_panel.classList.remove("invisible");
+                loading_panel.classList.add("showflex");
+
+                await FetchAPI.postJSON("/protected/FakeMovieData.do", Vars.SelectedMovies)
+                    .then((data:JSONObject)=>{
+                        console.log(data);
+        
+                        console.log(JSON.parse(data["reqMsg"].replaceAll("'", '"')));
+
+                        loading_panel.classList.remove("showflex");
+                        loading_panel.classList.add("invisible");
+                        
+                        document.querySelector("#ranking").classList.remove("invisible");
+
+                        let originObject:JSONObject = JSON.parse(data["reqMsg"].replaceAll("'", '"'));
+                        let sendMap:Array<JSONObject> = [];
+
+                        Object.keys(originObject).forEach((key)=>{
+                            let _json:JSONObject = {};
+
+                            _json["name"] = originObject[key];
+                            _json["image"] = "unknown";
+
+                            sendMap.push(_json);
+                        });
+
+                        MovieContentHandler.getInstance.createMoviePanel(sendMap, document.querySelector("#ranking_toprank"));
+        
+                    })
+                    .catch((err)=>{
+                        console.error(err);
+                    })
+            }
+        }
+
+        
     }
 }
 

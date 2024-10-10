@@ -10,6 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import * as path from "path";
 import { spawn } from "child_process";
 class AnalyzeMovieData {
+    execute(param) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                let newdata = "HELLo";
+                resolve(newdata);
+            });
+        });
+    }
     initial(param) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
