@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./typeout/server.js",
-    "binary": "nodemon ./typeout/BinaryServer.js"
+    "dev": "nodemon --env-file=.env ./typeout/server.js",
+    "binary": "nodemon --env-file=.env ./typeout/BinaryServer.js"
   },
   "author": "",
   "license": "ISC",
