@@ -1,6 +1,6 @@
 class FilmAnimation {
     constructor() {
-        this.loadingStates = ["Loading.", "Loading..", "Loading..."];
+        this.loadingStates = ["검색중.", "검색중..", "검색중..."];
     }
     startSearhFieldLoading(element) {
         let index = 0;

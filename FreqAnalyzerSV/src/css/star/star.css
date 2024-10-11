@@ -1,0 +1,151 @@
+.emptystar{
+    background-image: url(../../image/stars/preempty.png);
+    height: 30px;
+    width: 30px;
+
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.starlight{
+    cursor: pointer;
+}
+
+
+.movie_content_img_star[starnum="0"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+
+.movie_content_img_star[starnum="1"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="1"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+
+.movie_content_img_star[starnum="2"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="2"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="2"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+
+.movie_content_img_star[starnum="3"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="3"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="3"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="3"] > .starlight[starnum="3"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+
+.movie_content_img_star[starnum="4"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="4"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="4"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="4"] > .starlight[starnum="3"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+.movie_content_img_star[starnum="4"] > .starlight[starnum="4"]{
+    background-image: url(../../image/stars/prestar.png);
+}
+
+
+
+
+
+
+
+
+.movie_content_img_star[starsel="0"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="0"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/empty.png);
+}
+.movie_content_img_star[starsel="0"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/empty.png);
+}
+.movie_content_img_star[starsel="0"] > .starlight[starnum="3"]{
+    background-image: url(../../image/stars/empty.png);
+}
+.movie_content_img_star[starsel="0"] > .starlight[starnum="4"]{
+    background-image: url(../../image/stars/empty.png);
+}
+
+.movie_content_img_star[starsel="1"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="1"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="1"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/empty.png);
+}
+.movie_content_img_star[starsel="1"] > .starlight[starnum="3"]{
+    background-image: url(../../image/stars/empty.png);
+}
+.movie_content_img_star[starsel="1"] > .starlight[starnum="4"]{
+    background-image: url(../../image/stars/empty.png);
+}
+
+.movie_content_img_star[starsel="2"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="2"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="2"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="2"] > .starlight[starnum="3"]{
+    background-image: url(../../image/stars/empty.png);
+}
+.movie_content_img_star[starsel="2"] > .starlight[starnum="4"]{
+    background-image: url(../../image/stars/empty.png);
+}
+
+.movie_content_img_star[starsel="3"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="3"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="3"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="3"] > .starlight[starnum="3"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="3"] > .starlight[starnum="4"]{
+    background-image: url(../../image/stars/empty.png);
+}
+
+.movie_content_img_star[starsel="4"] > .starlight[starnum="0"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="4"] > .starlight[starnum="1"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="4"] > .starlight[starnum="2"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="4"] > .starlight[starnum="3"]{
+    background-image: url(../../image/stars/star.png);
+}
+.movie_content_img_star[starsel="4"] > .starlight[starnum="4"]{
+    background-image: url(../../image/stars/star.png);
+}

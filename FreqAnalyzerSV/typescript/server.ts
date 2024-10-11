@@ -7,6 +7,7 @@ import URLResolver from "./utils/url/URLResolver.js";
 import ParameterResolver from "./utils/url/ParameterResolver.js";
 
 import { Parameter } from "./utils/type/Parameter.js";
+import JSONObject from "./utils/type/JSONObject.js";
 
 const urlResolver:URLResolver = new URLResolver();
 const parameterResolver:ParameterResolver = new ParameterResolver();
@@ -53,14 +54,15 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
      * @param res 
      * @param buffer 
      */
-    const sendBuffer = (res:http.ServerResponse<http.IncomingMessage>, buffer:Buffer):void=>{
+    const sendBuffer = (res:http.ServerResponse<http.IncomingMessage>, json:JSONObject):void=>{
         res.writeHead(200,
             {
-                'Content-Type': 'image/jpeg',
+                'Content-Type':'text/json; charset=utf-8',
                 'Cache-Control': 'no-cache'
             }
         )
-        res.end(buffer);
+        res.write(JSON.stringify(json));
+        res.end();
     }
 
     let urlstruct:Array<string> = req.url.split("?");
@@ -77,41 +79,80 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
         param = parameterResolver.resolveParameter(urlstruct[1]);
     }
 
-    fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
+    let body:string = "";
 
-        /**
-         * 아직 완전하지 않은 기능. protected로 요청하지 마시오
-         */
-        if(urlResolver.isRequest(url)){
-            //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
-            urlResolver.resolveData(res, url, param);
-            sendFile(res, "./src/html/fallback/nourl.html");
-            return;
-        }
+    if(req.method == "POST"){
+        req.on('data',(data)=>{
+            body += data;
+        });
+        req.on('end', ()=>{
+            console.log("포스트 데이터 : " + body);
+            param = JSON.parse(body);
 
-        /**
-         * 사용자가 protected된 리소스에 요청하려 할 때 요청을 드랍합니다
-         */
-        if(urlResolver.isProtected(url)){
-            sendFile(res, "./src/html/fallback/requesterr.html");
-            return;
-        }
+            fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
+                if(urlResolver.isRequest(url)){
+                    urlResolver.resolveData(res, url, param)
+                        .then((data)=>{
+                            sendBuffer(res, data);
+                        })
+                        .catch((error)=>{
+                            console.error(error);
+                            sendFile(res, "./src/html/fallback/nourl.html");
+                        });
+                    
+                    return;
+                }else{
+                    sendFile(res, "./src/html/fallback/nourl.html");
+                    return;
+                }
+            });
+        });
+    }
 
+    if(req.method == "GET"){
+        fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
 
-
-        if(stats == undefined){
-            console.log("NO FILE : " + url);
-            sendFile(res, "./src/html/fallback/nourl.html");
-        }else{
-            if(stats.isFile()){
-                sendFile(res, "."+url);
-            }else{
+            /**
+             * 아직 완전하지 않은 기능. protected로 요청하지 마시오
+             */
+            if(urlResolver.isRequest(url)){
+                //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
+                urlResolver.resolveData(res, url, param)
+                    .then((data)=>{
+                        sendBuffer(res, data);
+                    })
+                    .catch((error)=>{
+                        console.error(error);
+                        sendFile(res, "./src/html/fallback/nourl.html");
+                    });
+                
+                return;
+            }
+    
+            /**
+             * 사용자가 protected된 리소스에 요청하려 할 때 요청을 드랍합니다
+             */
+            if(urlResolver.isProtected(url)){
+                sendFile(res, "./src/html/fallback/requesterr.html");
+                return;
+            }
+    
+    
+    
+            if(stats == undefined){
                 console.log("NO FILE : " + url);
                 sendFile(res, "./src/html/fallback/nourl.html");
+            }else{
+                if(stats.isFile()){
+                    sendFile(res, "."+url);
+                }else{
+                    console.log("NO FILE : " + url);
+                    sendFile(res, "./src/html/fallback/nourl.html");
+                }
             }
-        }
-
-    });
+    
+        });
+    }
 
 
 

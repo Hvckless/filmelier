@@ -1,4 +1,4 @@
-<html onkeydown="keyboard.onkeydown(event)" style="display: none;">
+<html lang="ko" onkeydown="keyboard.onkeydown(event)" style="display: none;">
     <head>
 
         <meta charset="utf-8">
@@ -16,12 +16,25 @@
 
             let transition;
 
+            let movie_content_handler;
+
             //let file;
         </script>
 
         <script type="module">
-            import Hello from '../../typeout/hello.js';
+            //import Hello from '../../typeout/hello.js';
             import MoviePanelHandler from '../../typeout/web/movie/MoviePanelHandler.js';
+
+            /*
+            릴리즈시 삭제 START
+            */
+
+            import Search from "../../typeout/web/search/Search.js";
+
+            /*
+            릴리즈시 삭제 END
+            */
+
 
             import KeyboardHandler from '../../typeout/web/keyboard/KeyboardHandler.js';
             import FileHandler from '../../typeout/web/file/FileHandler.js';
@@ -30,14 +43,19 @@
 
             import TransitionHandler from "../../typeout/web/style/TransitionHandler.js";
 
+            import MovieContentHandler from "../../typeout/web/movie/MovieContentHandler.js";
+
             keyboard = new KeyboardHandler(); //키보드 핸들러를 자바스크립트 keyboard에 assign
             eventhandler = new EventHandler();
 
             transition = new TransitionHandler();
+
+            movie_content_handler = MovieContentHandler;
             
             //file = new FileHandler();
 
             let globalone;
+
 
             window.onload = ()=>{
                 /*
@@ -49,9 +67,16 @@
                 
 
                 devcaller["moviehandler"] = new MoviePanelHandler();
+                devcaller["search"] = new Search(); //릴리즈시 삭제
+                
+                // for(let i = 0; i < 11; i++){
+                //     devcaller["search"].submit(document.querySelector("#searchInput"));
+                // }
 
                 transition.applyTransition(); // 트랜지션 적용
                 document.querySelector("html").style.display = "block";
+
+                //document.querySelector("#searchInput").focus();
                 
                 //devcaller.moviehandler.createMoviePanel(100);
             }
@@ -75,12 +100,7 @@
         <div id="wrapper" class="relative">
             <div id="wallpaper" class="float"></div>
             <div id="release" class="wrapper"></div>
-            <div id="navigationPanel" class="wrapper">
-                <div id="topNavigation">
-                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/blob/main/README.md">About Us</a></div>
-                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/issues">Report Issue</a> <img src="../image/svg/github-mark-white.svg"></div>
-                </div>
-            </div>
+
             <div id="moviePanel" class="wrapper">
 
                 <!--동적으로 생성되는 페이지로 변경할 것-->
@@ -96,21 +116,38 @@
                 <article>
                     <div id="searchBar">
                         <div id="searchField" class="notfilled trans-WidthHeight waitTransition" onclick="this.classList.remove('notfilled'); this.classList.add('fullfilled');">
-                            <input id="searchInput" class="trans-WidthHeight waitTransition" type="search" placeholder="Find some interesting movies...">
+                            <input id="searchInput" class="trans-WidthHeight waitTransition" type="search" placeholder="최고의 영화를 찾아봅시다...">
+                            <div id="searchLog"></div>
                         </div>
                     </div>
                     <div id="contentPanel">
-                        <span style="color: white;">10</span>
-                        <button onclick="eventhandler.increaseCounter()">+</button>
-
-                        <div style="height: 1500px; width: 100px; background-color: red;"></div>
-                        <button onclick="eventhandler.printBuffer()">Hello World!</button>
+                        <div id="controlPanel">
+                            <div id="sendAnalysticsButton" class="invisible" onclick="movie_content_handler.getInstance.AnalyzeMovieData(this)">영화 추천 받기</div>
+                        </div>
+                        <div id="movieContents" class="movieContentClass"></div>
+                        <div id="loading" class="invisible movieContentClass">
+                            <span class="loader"></span>
+                        </div>
+                        <div id="ranking" class="showflex movieContentClass">
+                            <div id="ranking_toprank" class="rankingPoster">
+                            </div>
+                            <div id="ranking_underrank" class="rankingPoster">
+                            </div>
+                        </div>
                     </div>
                 </article>
 
 
 
             </div>
+
+            <div id="navigationPanel" class="wrapper"></div>
+                <div id="topNavigation">
+                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/blob/main/README.md">About Us</a></div>
+                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/CinemaOnMidSummer/filmelier/issues">Report Issue</a> <img src="../image/svg/github-mark-white.svg"></div>
+                </div>
+            </div>
+
             <div id="movieWrapper" class="wrapper">
             </div>
 
@@ -125,6 +162,7 @@
             <link rel="stylesheet" href="../css/movie.css">
             <link rel="stylesheet" href="../css/console.css">
             <link rel="stylesheet" href="../css/visual/visualstyle.css">
+            <link rel="stylesheet" href="../css/star/star.css">
 
             <link rel="stylesheet" href="../css/test/testmain.css">
         </footstyle>

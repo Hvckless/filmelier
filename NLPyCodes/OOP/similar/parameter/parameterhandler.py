@@ -14,7 +14,7 @@ class ParameterHandler:
         movielist:MovieList = []
         try:
             for arg in sys.argv[1][1:len(sys.argv[1])-1].split(","):
-               movielist.append(arg.replace("*", " "))
+               movielist.append(arg.replace("'", "").replace("*", " "))
         except:
             print(error)
         finally:

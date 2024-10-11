@@ -1,5 +1,5 @@
 class FilmAnimation{
-    private loadingStates:Array<string> = ["Loading.", "Loading..", "Loading..."];
+    private loadingStates:Array<string> = ["검색중.", "검색중..", "검색중..."];
     public startSearhFieldLoading(element:HTMLInputElement):NodeJS.Timeout{
 
         let index = 0;

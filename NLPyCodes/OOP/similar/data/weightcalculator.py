@@ -97,7 +97,7 @@ class WeightCalculator:
             
             weightpoints = self.getWeightFromMovieElement(filepath, format, weightpoints)
 
-            print(f"{movie_name} 완료")
+            #print(f"{movie_name} 완료")
             
         weightpointsV2:WeightList = self.getWeightFromMovieWithDistance(weightpoints)
 
@@ -147,7 +147,7 @@ class WeightCalculator:
                 weightlist[category] = []
             weightlist[category].append((category_index, similarity_final_multiplier))
 
-            print(f"{COLOR[color_index]}{category} : {category_avg_map[category]:.3f}\t| {category_cnt} \t {percentage_multiplier} \t {similarity_final_multiplier}")
+            #print(f"{COLOR[color_index]}{category} : {category_avg_map[category]:.3f}\t| {category_cnt} \t {percentage_multiplier} \t {similarity_final_multiplier}")
 
         return weightlist
         """

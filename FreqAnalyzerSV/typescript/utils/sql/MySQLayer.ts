@@ -1,6 +1,7 @@
+import MovieJSON from "../type/MovieJSON";
+
 interface MySQLayer{
-    searchMovies(context:string):Array<string>;
-    getMoviePoster(moviename:string):Buffer;
+    searchDataList(context:string):MovieJSON;
 }
 
 export default MySQLayer;
