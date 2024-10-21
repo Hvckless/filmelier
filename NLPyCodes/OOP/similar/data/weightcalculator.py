@@ -42,7 +42,7 @@ class WeightCalculator:
         scorelist:ScoredMovieList = {}
 
         #리뷰 == 영화, review == movie
-        for review in mvlist_review:
+        for index, review in enumerate(mvlist_review):
             #리뷰가 입력된 파라메터에 없다면 -> 비교 대상 영화
             if review not in mvlist_param:
 
@@ -70,6 +70,8 @@ class WeightCalculator:
 
                     
                 scorelist[score] = review
+
+                print(f"영화 {review} 비교 완료 ({index}/{len(mvlist_review)})")
 
         return scorelist
     
@@ -127,7 +129,12 @@ class WeightCalculator:
 
         for category in df2["Category"]:
             #"Category"의 평균. 쉬운 접근을 위해 만들었다. 싫으면 df1.loc[df["Category"] == category]["Similarity"].sum()으로 접근하던지.
-            category_avg_map[category] = df1.loc[df1["Category"] == category]["Similarity"].mean()
+            #category_avg_map[category] = df1.loc[df1["Category"] == category]["Similarity"].mean()
+
+            #original_data = df1.loc[df1["Category"] == category]["Similarity"].mean()
+            category_avg_map[category] = df2.loc[df2["Category"] == category]["average"].iloc[0]
+
+            #print(f"가중치 비교 {original_data} : {category_avg_map[category]}")
 
             #적절한 색 값을 입히기 위해 만든 인덱스. 알고리즘상으로 의미는 없다. 그냥 보기 편하라고.
             color_index = math.floor(category_avg_map[category]*10)
