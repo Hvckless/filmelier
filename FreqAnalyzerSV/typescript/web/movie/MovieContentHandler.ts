@@ -255,7 +255,7 @@ class MovieContentHandler{
     }
 
     async getMoviePoster(param:JSONObject){
-        await FetchAPI.postJSON("/protected/RankSQL.do", param)
+        await FetchAPI.postJSON("/protected/FakeRankSQL.do", param)
             .then((data:Array<JSONObject>)=>{
                 console.log(data);
 

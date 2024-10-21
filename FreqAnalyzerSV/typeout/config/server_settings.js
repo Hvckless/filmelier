@@ -1,4 +1,4 @@
-import { SV_STAT } from "./variable/SV_STAT";
+import { SV_STAT } from "./variable/SV_STAT.js";
 class server_settings {
     constructor() {
         //옵션 세팅 START

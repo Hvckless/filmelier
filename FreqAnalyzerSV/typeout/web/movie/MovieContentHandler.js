@@ -182,7 +182,7 @@ class MovieContentHandler {
     }
     getMoviePoster(param) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield FetchAPI.postJSON("/protected/RankSQL.do", param)
+            yield FetchAPI.postJSON("/protected/FakeRankSQL.do", param)
                 .then((data) => {
                 console.log(data);
                 document.querySelector("#sendAnalysticsButton").classList.remove("showflex");
