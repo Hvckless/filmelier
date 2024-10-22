@@ -11,7 +11,7 @@ from similar.data.movie import MovieList
 
 from similar.data.weight import WeightList
 from similar.csv.csv import CSVList
-from similar.csv.csv import CSVFormat
+from similar.enum.CSVFormat import CSVFormat
 
 class Main:
 
