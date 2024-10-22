@@ -1,6 +1,7 @@
 # import start
 
 import json
+import time
 
 from typing import Any
 
@@ -86,7 +87,7 @@ class Main:
 
 
 
-
+start_time = time.time()
 
 app = Main()
 
@@ -116,6 +117,8 @@ top_10 = {score: name for score, name in list(sorted_dictionary.items())[:10]}
 
 # 결과 출력
 print(json.loads(json.dumps(top_10)))
+
+print(f"elapse time : {time.time() - start_time}")
 
 
 #number = 0
