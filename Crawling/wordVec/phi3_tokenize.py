@@ -48,7 +48,31 @@ def loadCategory(category_file):
     with open(category_file, 'r', encoding='utf-8') as file:
         return [line.strip() for line in file if line.strip()] # 공백이 아닌 라인만 반환.
     
+# Phi3 모델 설정 및 로드
+def getSimFormPhi3(morph_word, category):
+    messages = [
+    {"role": "system", "content": "You are a helpful AI assistant."},
+    {"role": "user", "content": "Read the passage below and indicate the degree to which the two sentences match using a real number between 0 and 1 Never explain about sentence, just answer with real numbers.\n\nSentence 1 : play overwatch now!\nSentence 2 : game play"},
+    {"role": "assistant", "content": "Similarity : 0.7231562"},
+    {"role": "user", "content": f"Sentence 1 : {morph_word}\nSentence 2 : {category}"},
+    ]
 
+    pipe = pipeline(
+        "text-generation",
+        model=model,
+        tokenizer=tokenizer,
+    )
+
+    generation_args = {
+        "max_new_tokens": 500,
+        "return_full_text": False,
+        "temperature": 0.0,
+        "do_sample": False,
+    }
+
+    output = pipe(messages, **generation_args)
+    print(output[0]['generated_text'])
+    return output[0]['generated_text']
 
 # 각 형태소 단어를 가장 유사한 카테고리에 할당 -> 각 문장을 가장 유사한 카테고리에 할당. 여기에서 phi3사용해야함
 def categoryWords(sentence_list, categories):
@@ -78,31 +102,7 @@ def categoryWords(sentence_list, categories):
     return results, category_count, category_sum
 
 
-# Phi3 모델 설정 및 로드
-def getSimFormPhi3(morph_word, category):
-    messages = [
-    {"role": "system", "content": "You are a helpful AI assistant."},
-    {"role": "user", "content": "Read the passage below and indicate the degree to which the two sentences match using a real number between 0 and 1 Never explain about sentence, just answer with real numbers.\n\nSentence 1 : play overwatch now!\nSentence 2 : game play"},
-    {"role": "assistant", "content": "Similarity : 0.7231562"},
-    {"role": "user", "content": f"Sentence 1 : {morph_word}\nSentence 2 : {category}"},
-    ]
 
-    pipe = pipeline(
-        "text-generation",
-        model=model,
-        tokenizer=tokenizer,
-    )
-
-    generation_args = {
-        "max_new_tokens": 500,
-        "return_full_text": False,
-        "temperature": 0.0,
-        "do_sample": False,
-    }
-
-    output = pipe(messages, **generation_args)
-    print(output[0]['generated_text'])
-    return output[0]['generated_text']
 
 
 
@@ -152,7 +152,7 @@ def processReviews(movie_names, category_file):
 
 def main():
     nltk.download('punkt')
-    movie_file = 'src/filmelier/Crawling/crawling/movie_list.txt'
+    movie_file = 'src/filmelier/Crawling/crawling/movie_filterList.txt'
     category_file = 'category.txt'
     
     movie_names = loadMovie(movie_file)
