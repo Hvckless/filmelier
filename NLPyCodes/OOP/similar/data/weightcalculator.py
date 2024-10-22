@@ -1,4 +1,5 @@
 import math
+import time
 
 import numpy as np
 
@@ -46,9 +47,13 @@ class WeightCalculator:
             #리뷰가 입력된 파라메터에 없다면 -> 비교 대상 영화
             if review not in mvlist_param:
 
+                start_time = time.time()
+
                 score:float = 0
 
                 target_movie_weightlist:WeightList = self.getWeightFromMovieElement(review_folderpath+review+"_categorized_words.csv", format, {})
+
+                print(f"파일 읽기 : {time.time() - start_time}")
 
                 for category in target_movie_weightlist.keys():
                     distance_multiplier:float = 0
@@ -72,6 +77,7 @@ class WeightCalculator:
                 scorelist[score] = review
 
                 print(f"영화 {review} 비교 완료 ({index}/{len(mvlist_review)})")
+                print(f"비교 경과 시간 {time.time() - start_time}")
 
         return scorelist
     
