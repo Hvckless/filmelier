@@ -5,6 +5,7 @@ import csv
 import torch
 import nltk
 import re
+import os
 
 
 
@@ -39,8 +40,12 @@ def loadReviews(movie_name):
 
 # 리뷰 텍스트를 문장별로 잘라서 리스트 반환
 def makeSentence(review):
-    sentence_list = sent_tokenize(review) # sent_tokenize는 리스트를 반환함 
-    return sentence_list
+     if not isinstance(review, str):
+        return []
+     
+     else:
+        sentence_list = sent_tokenize(review) # sent_tokenize는 리스트를 반환함 
+        return sentence_list
 
 
 # 카테고리 파일 로드
@@ -153,7 +158,7 @@ def processReviews(movie_names, category_file):
 def main():
     nltk.download('punkt')
     movie_file = 'src/filmelier/Crawling/crawling/movie_filterList.txt'
-    category_file = 'category.txt'
+    category_file = 'src/filmelier/Crawling/category/category.txt'
     
     movie_names = loadMovie(movie_file)
     processReviews(movie_names, category_file)
