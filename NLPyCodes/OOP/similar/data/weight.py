@@ -4,3 +4,4 @@ WeightList = dict[str, list[tuple[float, float]]]
 {"키 문자열" : [(위치:float,유사도:float),((위치:float,유사도:float))]}\n
 위 형식으로 구현되어있음
 """
+MovieWeightList = dict[str, WeightList]

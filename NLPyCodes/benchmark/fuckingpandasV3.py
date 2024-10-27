@@ -40,7 +40,11 @@ class FuckingPandas:
                 results_dict[k] = v
 
 
-        print(f"{results_dict['마션']}")
+        # for movie in movielist:
+        #     self.testwork(movie)
+
+
+        #print(f"{results_dict['마션']}")
         
         print(f"elapsed time : {(time.time() - start_time)}")
 
