@@ -19,3 +19,13 @@ class ParameterHandler:
             print(error)
         finally:
             return movielist
+        
+    def getListFromInput(self, input_string:str)->MovieList:
+        movielist:MovieList = []
+        try:
+            for arg in input_string[1:len(input_string)-1].split(","):
+               movielist.append(arg.replace("'", "").replace("*", " "))
+        except:
+            print(error)
+        finally:
+            return movielist

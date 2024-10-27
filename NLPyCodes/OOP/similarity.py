@@ -35,6 +35,9 @@ class Main:
     def getMovieListFromParameter(self) -> MovieList:
         return ParameterHandler().getListFromParameter()
     
+    def getMovieListFromInput(self, input_string:str)->MovieList:
+        return ParameterHandler().getListFromInput(input_string)
+    
     def getMovieListFromReviews(self) -> MovieList:
         return FileReader().getMovieListFromReview(self.reviewFolderpath)
     
@@ -60,6 +63,39 @@ class Main:
         산출한 WeightList와 모든 영화의 WeightList를 비교해서 최종 Score 산출
         """
         return self.weightcalculator.compareAllMovieWeightList(avg_weightlist, mvlist_param, mvlist_review)
+    
+    def makeResult(self):
+
+        movielist_string:str = input()
+
+        if movielist_string == "end":
+            return
+
+        #mvlist_param: MovieList = app.getMovieListFromParameter()  # 영화 파라메터 목록
+
+        mvlist_param: MovieList = self.getMovieListFromInput(movielist_string)  # 영화 파라메터 목록
+
+        start_time = time.time()
+
+
+        score_dictionary: ScoredMovieList = self.getWeightListBetweenMovies(
+            mvlist_param,
+            mvlist_review,
+            self.getWeightListFromMovieList(mvlist_param)
+        )
+
+        # 점수로 정렬
+        sorted_dictionary: SortedScoreMovieList = dict(sorted(score_dictionary.items(), key=lambda item: item[0], reverse=True))
+
+        # 상위 10개 항목만 추출
+        top_10 = {score: name for score, name in list(sorted_dictionary.items())[:10]}
+
+        # 결과 출력
+        print(json.loads(json.dumps(top_10)))
+
+        print(f"elapse time : {time.time() - start_time}")
+
+        self.makeResult()
 
     
 
@@ -109,50 +145,13 @@ if __name__ == "__main__":
     # 설정 종료
 
 
-    mvlist_param: MovieList = app.getMovieListFromParameter()  # 영화 파라메터 목록
+    
     mvlist_review: MovieList = app.getMovieListFromReviews()    # 영화 파일 목록
 
     hello_list:MovieWeightList = app.readAllMovieWeightList(mvlist_review)
 
-    #print(len(hello_list))
+
+    app.makeResult()
+
     
-    # for hello in hello_list.keys():
-    #     #print(hello)
-    #     for category in hello_list[hello]:
-    #         print(category)
-    #         print(hello_list[hello][category])
 
-    #     break
-        #print(len(hello_list[hello]))
-        # for key in hello.keys():
-        #     print("영화 : " + key)
-
-    #print(hello_list[0])
-
-    #print(app.getWeightListFromMovieList(mvlist_param))
-
-    #print(f"elapsed time : {(time.time() - start_time)}")
-
-    start_time = time.time()
-    score_dictionary: ScoredMovieList = app.getWeightListBetweenMovies(
-        mvlist_param,
-        mvlist_review,
-        app.getWeightListFromMovieList(mvlist_param)
-    )
-
-    # 점수로 정렬
-    sorted_dictionary: SortedScoreMovieList = dict(sorted(score_dictionary.items(), key=lambda item: item[0], reverse=True))
-
-    # 상위 10개 항목만 추출
-    top_10 = {score: name for score, name in list(sorted_dictionary.items())[:10]}
-
-    # 결과 출력
-    print(json.loads(json.dumps(top_10)))
-
-    print(f"elapse time : {time.time() - start_time}")
-
-
-#number = 0
-#for movie_score in sorted_dictionary:
-#    print(f"{number}위 : {sorted_dictionary[movie_score]} | 값 : {movie_score}")
-#    number = number + 1
