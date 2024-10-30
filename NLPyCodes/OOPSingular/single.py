@@ -3,9 +3,9 @@ from os import error
 import sys
 import os
 import time
+import math
 import json
-from enum import Enum
-import numpy as np
+#import numpy as np
 class FileReader:
     def __init__(self):
         self.initial = 1
@@ -44,11 +44,11 @@ class FormulaCalculator:
     def __init__(self):
         self.initial = 1
     def getWeightFromGapBetweenWeight(self, x):
-        return (-2 / np.pi) * np.arctan(2 * x - 2) + 1
+        return (-2 / math.pi) * math.atan(2 * x - 2) + 1
     def getWeightFromGapBetweenDistance(self, x, maxdistance, max, min):
         if x > 10:
             x = 10
-        return ((max-min)/2) * np.cos(x * (np.pi/maxdistance))+((max+min)/2)
+        return ((max - min) / 2) * math.cos(x * (math.pi / maxdistance)) + ((max + min) / 2)
 class WeightCalculator:
     filepath = None
     filereader = FileReader()
@@ -84,8 +84,8 @@ class WeightCalculator:
                     similarity = weightlist[category][0][1]
                     target_distance = target_movie_weightlist[category][0][0]
                     target_similarity = target_movie_weightlist[category][0][1]
-                    distance_multiplier = self.formulacalculator.getWeightFromGapBetweenDistance(np.abs(distance - target_distance), 10, 2, 0.2)
-                    similarity_multiplier = self.formulacalculator.getWeightFromGapBetweenWeight(np.abs(similarity - target_similarity))
+                    distance_multiplier = self.formulacalculator.getWeightFromGapBetweenDistance(abs(distance - target_distance), 10, 2, 0.2)
+                    similarity_multiplier = self.formulacalculator.getWeightFromGapBetweenWeight(abs(similarity - target_similarity))
                     score = score + (similarity * distance_multiplier * similarity_multiplier)
                 scorelist[score] = review
         return scorelist

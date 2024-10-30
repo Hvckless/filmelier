@@ -5,16 +5,16 @@ import time
 from multiprocessing import Pool
 #from functools import reduce
 
-import numpy as np
+#import numpy as np
 
 from similar.data.formula import FormulaCalculator
 from similar.file.filereader import FileReader
-from similar.file.file import File
-from similar.csv.csv import CSV
-from similar.csv.csv import CSVList
+#from similar.file.file import File
+#from similar.csv.csv import CSV
+#from similar.csv.csv import CSVList
 
 from similar.enum.CSVFormat import CSVFormat
-from similar.data.color import COLOR
+#from similar.data.color import COLOR
 
 from similar.data.weight import WeightList
 from similar.data.weight import MovieWeightList
@@ -101,8 +101,8 @@ class WeightCalculator:
                     target_distance:float = target_movie_weightlist[category][0][0]
                     target_similarity:float = target_movie_weightlist[category][0][1]
 
-                    distance_multiplier:float = FormulaCalculator().getWeightFromGapBetweenDistance(np.abs(distance - target_distance), 10, 2, 0.2)
-                    similarity_multiplier:float = FormulaCalculator().getWeightFromGapBetweenWeight(np.abs(similarity - target_similarity))
+                    distance_multiplier:float = FormulaCalculator().getWeightFromGapBetweenDistance(abs(distance - target_distance), 10, 2, 0.2)
+                    similarity_multiplier:float = FormulaCalculator().getWeightFromGapBetweenWeight(abs(similarity - target_similarity))
 
                     score = score + (similarity * distance_multiplier * similarity_multiplier)
 

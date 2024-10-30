@@ -7,7 +7,6 @@ A=None
 from multiprocessing import Pool
 from os import error as F
 import sys,os,time as I,json as J
-from enum import Enum
 import numpy as B
 class K:
 	def __init__(A):A.initial=1
