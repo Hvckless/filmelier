@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket 클라이언트</title>
+</head>
+<body>
+  <h1>WebSocket 메시지 테스트</h1>
+  <input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
+  <button onclick="sendMessage()">메시지 보내기</button>
+  <ul id="messages"></ul>
+
+  <script>
+    
+    const Request = {
+        GET : "GET",
+        GET_ALL : "GET_ALL", //모든 영화 데이터를 동기화 할 때 사용.
+        PATCH : "PATCH", //특정 영역 데이터를 바꿨음을 알릴 때 사용
+    }
+
+    const PatchCode = {
+        UPDATE : "UPDATE", //일부 수정된 경우에 사용
+        DELETE : "DELETE", //삭제된 경우
+        CREATE : "CREATE", //생성되는 경우
+    }
+    const PatchPosition = {
+      MOVIENAME : "MOVIENAME",
+      MOVIE_REVIEW_LINE : "MOVIE_REVIEW_LINE",
+      MOVIE_REVIEW_CATEGORY : "MOVIE_REVIEW_CATEGORY",
+    }
+
+    const Response = {
+        MESSAGE_NOT_VALID : "MESSAGE_NOT_VALID",
+        MOVIE_NOT_EXIST : "MOVIE_NOT_EXIST",
+        MOVIE_EXIST : "MOVIE_EXIST",
+        INTERNAL_SERVER_ERROR : "INTERNAL_SERVER_ERROR",
+    }
+
+
+    class ReviewPatcher{
+        constructor(){}
+
+        getMovie(moviedata){
+            console.log(moviedata);
+
+
+            
+            // moviedata.forEach((key)=>{
+            //     console.log(key);
+            // });
+        }
+    }
+
+    const reviewpatcher = new ReviewPatcher();
+
+
+    const socket = new WebSocket('ws://localhost:8080');
+
+    // 서버로부터 메시지를 수신할 때 호출되는 함수
+    socket.onmessage = (event) => {
+      const messages = document.getElementById('messages');
+      const messageItem = document.createElement('li');
+      messageItem.textContent = `수신: ${event.data}`;
+      messages.appendChild(messageItem);
+
+
+      message = event.data;
+
+      json_message = JSON.parse(message);
+
+      switch(json_message["msg"]){
+        case Response.MOVIE_EXIST:{
+            reviewpatcher.getMovie(json_message["moviedata"]);
+            break;
+        }
+        default:{
+            break;
+        }
+      }
+    };
+
+    // 서버에 메시지 전송하는 함수
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const message = input.value;
+      socket.send(message);
+      input.value = ''; // 입력 필드 초기화
+    }
+  </script>
+</body>
+</html>
