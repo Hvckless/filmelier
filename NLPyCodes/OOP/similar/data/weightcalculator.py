@@ -1,33 +1,65 @@
+import os
 import math
 import time
 
-import numpy as np
+from multiprocessing import Pool
+#from functools import reduce
+
+#import numpy as np
 
 from similar.data.formula import FormulaCalculator
 from similar.file.filereader import FileReader
-from similar.file.file import File
-from similar.csv.csv import CSV
-from similar.csv.csv import CSVList
+#from similar.file.file import File
+#from similar.csv.csv import CSV
+#from similar.csv.csv import CSVList
 
 from similar.enum.CSVFormat import CSVFormat
-from similar.data.color import COLOR
+#from similar.data.color import COLOR
 
 from similar.data.weight import WeightList
+from similar.data.weight import MovieWeightList
 from similar.data.movie import MovieList
 from similar.data.movie import ScoredMovieList
 
 
 class WeightCalculator:
+
+    filepath:str
+    format:CSVFormat
+    filereader:FileReader = FileReader()
+    movie_weight_map:MovieWeightList
+
     def __init__(self):
         self.initial = 1
 
+        
+
+
+    def readAllMovieWeightList(self, reviewpath:str, movielist:MovieList, format:CSVFormat)->MovieWeightList:
+        some_movie_weightlist:MovieWeightList = {}
+        
+        self.filepath = reviewpath
+        self.format = format
+
+        with Pool(os.cpu_count()) as pool:
+            results = pool.map(self.getWeightFromMovieElement, movielist)
+
+        for result in results:
+            for k, v in result.items():
+                some_movie_weightlist[k] = v
+
+        # some_movie_weightlist = reduce(lambda x, y: x | y, results)
+
+        self.movie_weight_map = some_movie_weightlist
+
+        return some_movie_weightlist
     
     def getWeightBetweenMovies(self)->WeightList:
         result:WeightList = {}
 
         return result
     
-    def compareAllMovieWeightList(self, review_folderpath:str, weightlist:WeightList, mvlist_param:MovieList, mvlist_review:MovieList, format:CSVFormat)->ScoredMovieList:
+    def compareAllMovieWeightList(self, weightlist:WeightList, mvlist_param:MovieList, mvlist_review:MovieList)->ScoredMovieList:
         """
         평균 가중치와 개별 영화의 가중치를 비교하는 함수
 
@@ -47,13 +79,14 @@ class WeightCalculator:
             #리뷰가 입력된 파라메터에 없다면 -> 비교 대상 영화
             if review not in mvlist_param:
 
-                start_time = time.time()
+                #start_time = time.time()
 
                 score:float = 0
 
-                target_movie_weightlist:WeightList = self.getWeightFromMovieElement(review_folderpath+review+"_categorized_words.csv", format, {})
+                target_movie_weightlist:WeightList = self.movie_weight_map[review]
+                #target_movie_weightlist:WeightList = self.getWeightFromMovieElement(review)
 
-                print(f"파일 읽기 : {time.time() - start_time}")
+                #print(f"파일 읽기 : {time.time() - start_time}")
 
                 for category in target_movie_weightlist.keys():
                     distance_multiplier:float = 0
@@ -68,16 +101,16 @@ class WeightCalculator:
                     target_distance:float = target_movie_weightlist[category][0][0]
                     target_similarity:float = target_movie_weightlist[category][0][1]
 
-                    distance_multiplier:float = FormulaCalculator().getWeightFromGapBetweenDistance(np.abs(distance - target_distance), 10, 2, 0.2)
-                    similarity_multiplier:float = FormulaCalculator().getWeightFromGapBetweenWeight(np.abs(similarity - target_similarity))
+                    distance_multiplier:float = FormulaCalculator().getWeightFromGapBetweenDistance(abs(distance - target_distance), 10, 2, 0.2)
+                    similarity_multiplier:float = FormulaCalculator().getWeightFromGapBetweenWeight(abs(similarity - target_similarity))
 
                     score = score + (similarity * distance_multiplier * similarity_multiplier)
 
                     
                 scorelist[score] = review
 
-                print(f"영화 {review} 비교 완료 ({index}/{len(mvlist_review)})")
-                print(f"비교 경과 시간 {time.time() - start_time}")
+                #print(f"영화 {review} 비교 완료 ({index}/{len(mvlist_review)})")
+                # print(f"비교 경과 시간 {time.time() - start_time}")
 
         return scorelist
     
@@ -99,79 +132,147 @@ class WeightCalculator:
         1. 영화 목록 가져오기
 
         """
-        weightpoints:WeightList = {}
-        for movie_name in mvlist_param:
-            filepath:str = reviewpath+movie_name+"_categorized_words.csv"
+        # weightpoints:WeightList = {}
+        # for movie_name in mvlist_param:
+        #     filepath:str = reviewpath+movie_name+"_categorized_words.csv"
             
-            weightpoints = self.getWeightFromMovieElement(filepath, format, weightpoints)
+        #     weightpoints = self.getWeightFromMovieElement(filepath, format, weightpoints)
+        something_like_this:WeightList = {}
+        for movie in mvlist_param:
+            mvweight:WeightList = self.movie_weight_map[movie]
+            for category in mvweight:
+                
+                # if category == "부도덕":
+                #     print(movie)
+                #     print(self.movie_weight_map[movie][category][0][0])
+                #print(self.movie_weight_map[movie][category][0][0] + self.movie_weight_map[movie][category][0][1])
+                mvweight_index = mvweight[category][0][0]
+                mvweight_weight = mvweight[category][0][1]
 
-            #print(f"{movie_name} 완료")
-            
-        weightpointsV2:WeightList = self.getWeightFromMovieWithDistance(weightpoints)
+                if something_like_this.get(category) == None:
+                    something_like_this[category] = []
+                something_like_this[category].append((mvweight_index, mvweight_weight))
+            #print(movie)
+
+
+
+            # print(self.movie_weight_map[movie])
+
+        
+
+
+
+        # with Pool(os.cpu_count()) as pool:
+        #     results = pool.map(self.getWeightFromMovieElement, mvlist_param)
+
+        # result_dict:dict = {}
+        # for result in results:
+        #     for k, v in result.items():
+        #         result_dict[k] = v
+
+        # print(len(results))
+
+
+
+        # some:dict = {}
+        # for movie in mvlist_param:
+        #     self.getWeightFromMovieElement(movie)
+
+
+        # for movie in mvlist_param:
+        #     _dict:dict = self.getWeightFromMovieElement(movie)
+        #     for key in _dict:
+        #         some[key] = _dict[key]
+
+        # print(len(some))
+
+        
+        #print(some['마션'])
+        
+        weightpointsV2:WeightList = something_like_this
+        # weightpointsV2:WeightList = self.getWeightFromMovieWithDistance(weightpoints)
 
         return weightpointsV2
+        #return weightpointsV2
     
-    def getWeightFromMovieElement(self, filepath:str, format:CSVFormat, originalWeightList:WeightList)->WeightList:
+    def getWeightFromMovieElement(self, args)->dict[str, WeightList]:
         """
         파일에서 실제 가중치 목록(WeightList)을 불러와 기존 가중치 목록과 합치는 함수.
 
-        :filepath: (str) 파일 경로
-        :format: (CSVFormat) 파일 구조의 버전
-        :originalWeightList: (WeightList) 기존의 WeightList가 없다면 {}으로 설정.
+        :args: 영화 이름
 
         return (WeightList) 결과물 가중치
         """
-        csv_table:CSVList = FileReader().readCSVTables(filepath, format)
+        csv_table:list[str] = self.filereader.readCSVTables(self.filepath+args+"_categorized_words.csv", self.format)
 
-        df1 = csv_table[0].getDataFrame()
-        df2 = csv_table[1].getDataFrame()
+        # df1 = csv_table[0]
+        # one_data_list = df1.split("\n")
 
-        category_avg_map:dict[str,float] = {}
-        weightlist:WeightList = originalWeightList
+        # tot_cnt = 0
+        # for i in range(1, len(one_data_list)-1):
+        #     one_data_list_split = one_data_list[i].split(",")
 
+        #     if(one_data_list_split[1] == "만화"):
+        #         tot_cnt += int(one_data_list_split[3])
+        #         print(one_data_list_split[0])
+
+        # print(tot_cnt)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        df2 = csv_table[1]
+        data_list = df2.split("\n")
+
+        read_data_map:WeightList = {}
+        output_data_map:WeightList = {}
+
+
+        sum_of_mrpheme:float = 0
+
+        for i in range(1, len(data_list)-1):
+            data_list_split = data_list[i].split(",")
+            sum_of_mrpheme += float(data_list_split[1])
+            try:
+                read_data_map[data_list_split[0]] = [(float(data_list_split[1]),float(data_list_split[2]))]
+            except:
+                continue
 
         #Count의 모든 값은 결국 모든 형태소의 갯수와 같다
-        morphemeCNT:int = df2["Count"].sum()
+        morphemeCNT:float = sum_of_mrpheme
+        read_data_map_keys = read_data_map.keys()
+        read_data_map_length = len(read_data_map_keys)
+        read_data_map_list = list(read_data_map_keys)
 
-        for category in df2["Category"]:
-            #"Category"의 평균. 쉬운 접근을 위해 만들었다. 싫으면 df1.loc[df["Category"] == category]["Similarity"].sum()으로 접근하던지.
-            #category_avg_map[category] = df1.loc[df1["Category"] == category]["Similarity"].mean()
+        # print(read_data_map_list)
 
-            #original_data = df1.loc[df1["Category"] == category]["Similarity"].mean()
-            category_avg_map[category] = df2.loc[df2["Category"] == category]["average"].iloc[0]
-
-            #print(f"가중치 비교 {original_data} : {category_avg_map[category]}")
-
-            #적절한 색 값을 입히기 위해 만든 인덱스. 알고리즘상으로 의미는 없다. 그냥 보기 편하라고.
-            color_index = math.floor(category_avg_map[category]*10)
-
+        for category in read_data_map_keys:
             #카테고리에 포함되는 형태소 갯수를 의미한다.
-            category_cnt:int = df2.loc[df2["Category"] == category]["Count"].iloc[0]
+            category_avg:float = read_data_map[category][0][1]
+            category_cnt:float = read_data_map[category][0][0]
 
             morph_cate_ratio:float = category_cnt / morphemeCNT
 
 
-            percentage_multiplier:float = morph_cate_ratio * df2.count().iloc[1]
-            similarity_final_multiplier:float = category_avg_map[category] * percentage_multiplier
+            percentage_multiplier:float = morph_cate_ratio * read_data_map_length
+            similarity_final_multiplier:float = category_avg * percentage_multiplier
 
-            category_index:int = df2[df2["Category"] == category].index[0]
+            category_index:int = read_data_map_list.index(category)
 
-            if weightlist.get(category) == None:
-                weightlist[category] = []
-            weightlist[category].append((category_index, similarity_final_multiplier))
-
-            #print(f"{COLOR[color_index]}{category} : {category_avg_map[category]:.3f}\t| {category_cnt} \t {percentage_multiplier} \t {similarity_final_multiplier}")
-
-        return weightlist
-        """
-        category_avg_map의 key는 사실 df2["Category"]의 category기 때문에
-        아래 코드는 쓸데 없는 반복이다.
-        """
-           
-        """
-        for category in category_avg_map.keys():
-            print(category)
-        """
+            if output_data_map.get(category) == None:
+                output_data_map[category] = []
+            output_data_map[category].append((category_index, similarity_final_multiplier))
+        return {args:output_data_map}
 
     def getWeightFromMovieWithDistance(self, weightlist:WeightList)->WeightList:
         """

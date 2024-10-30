@@ -22,22 +22,16 @@ class FileReader:
         return movielist
     
 
-    def readCSVTables(self, filepath:str, format:CSVFormat)->CSVList:
+    def readCSVTables(self, filepath:str, format:CSVFormat)->list[str]:
         """
         CSV 테이블 리스트를 반환하는함수.
         :return: 테이블 리스트는 최소 1개에서 여러개(2개 이상)일 수 있다.
         """
-        tables:CSVList = []
+
+        tables:list[str] = []
 
         if format == CSVFormat.V1:
             with open(filepath, 'r', encoding="utf-8") as file:
-                content:str = file.read()
-
-            for table_content in content.split("\n\n"):
-                csv:CSV = CSV()
-                csv.setDataFrame(pd.read_csv(StringIO(table_content)))
-                tables.append(csv)
-        
-
-        return tables
+                tables = file.read().split("\n\n")
             
+        return tables

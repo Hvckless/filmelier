@@ -18,6 +18,8 @@ class Main:
     reviewFolderpath:str = "../../csvfile/"
     format:CSVFormat = CSVFormat.V1
 
+    total_time:float = 0
+
     def __init__(self):
         if __name__ == "__main__":
             self.initial = 1
@@ -32,8 +34,11 @@ class Main:
             with Pool(os.cpu_count()) as pool:
                 results = pool.map(self.testwork, hello_movie_list)
 
+
+
             #print(len(results))
             print(f"elapsed time : {(time.time() - start_time)}")
+            print(f"파일 읽고 csv 생성 시간 {self.total_time}")
 
     def testwork(self, arg):
         target_movie_weightlist:WeightList = self.getWeightFromMovieElement(self.reviewFolderpath+arg+"_categorized_words.csv", self.format, {})
@@ -55,14 +60,24 @@ class Main:
         #df1 = csv_table[0].getDataFrame()
         df2 = csv_table[1].getDataFrame()
 
+        
+
+
+
+        #print(f"데이터 테이블 생성까지 {time.time() - setup_time} 소요")
+
         #category_avg_map:dict[str,float] = {}
         weightlist:WeightList = originalWeightList
+
+        ###weightlist["time"].append((time.time()-setup_time, 0))
 
         # df2를 카테고리별로 그룹화하여 평균과 카운트 계산
         category_stats = df2.groupby("Category").agg({
             "average": "mean",
             "Count": "sum"
         }).reset_index()
+
+        
 
         # 카테고리 통계를 dictionary로 변환
         category_avg_map = dict(zip(category_stats["Category"], category_stats["average"]))
@@ -72,6 +87,8 @@ class Main:
         categories_list = list(category_count_map.keys())
 
         summary_of_category_counts:int = 0
+
+        
 
         for category in categories_list:
             summary_of_category_counts += category_count_map[category]
@@ -100,7 +117,6 @@ class Main:
                 weightlist[category] = []
 
             weightlist[category].append((category_index, similarity_final_multiplier))
-
         return weightlist
 
 
