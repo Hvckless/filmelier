@@ -6,6 +6,28 @@ import { spawn } from "child_process";
 import PythonRunner from "../process/PythonRunner";
 
 class AnalyzeMovieData implements Protect, PythonRunner{
+    private python_process: any;
+
+    constructor() {
+        // 서버 시작 시 파이썬 프로세스 생성
+        const python_exec:string = path.resolve(process.cwd(), "../NLPyCodes/OOP/venv/bin/python");
+        const pcs_path:string = path.resolve(process.cwd(), '../NLPyCodes/OOP/similarity.py');
+
+        this.python_process = spawn(python_exec, [pcs_path], {
+            cwd: path.resolve(process.cwd(), '../NLPyCodes/OOP'),
+            stdio: ['pipe','pipe','pipe']
+        });
+
+        // 에러 발생 시 처리
+        this.python_process.stderr.on('data', (data) => {
+            console.error(`파이썬 에러: ${data.toString()}`);
+        });
+
+        // 종료시 처리
+        this.python_process.on('close', (code) => {
+            console.log(`파이썬 프로세스 종료 ${code}`);
+        });
+    }
     async execute(param: Parameter): Promise<string> {
         return new Promise((resolve, reject)=>{
 
@@ -31,13 +53,14 @@ class AnalyzeMovieData implements Protect, PythonRunner{
             movie_name_list += "]";
 
             if(obj_keys.length > 0){
+                // 파이썬 프로세스에 데이터 전송
+                this.python_process.stdin.write(`${movie_name_list}\n`);
 
-                const python_exec:string = path.resolve(process.cwd(), "../NLPyCodes/OOP/venv/bin/python");
-                const pcs_path:string = path.resolve(process.cwd(), '../NLPyCodes/OOP/similarity.py');
-                const python_process = spawn(python_exec, [pcs_path, movie_name_list], {
-                    cwd: path.resolve(process.cwd(), '../NLPyCodes/OOP'),
-                    stdio: 'pipe'
+                // 파이썬 프로세스의 출력값 수신
+                this.python_process.stdout.on('data', (data)=>{
+                    resolve({"regMsg": `${data.toString()}`});
                 });
+
                 //console.log(python_exec + " : " + pcs_path + " : " + movie_name_list);
 
                 // python_process.stdout.on('data', (data)=>{
@@ -57,13 +80,6 @@ class AnalyzeMovieData implements Protect, PythonRunner{
                 // python_process.on('close',(data)=>{
                 //     resolve({"reqMsg":data});
                 // });
-
-                python_process.stdout.on('data', (data) => {
-                    //console.log(`Output: ${data.toString()}`);
-
-                    resolve({"reqMsg":`${data.toString()}`});
-                });
-
                 //resolve({"reqMsg":"hello world!"});
 
             }else{
@@ -71,7 +87,7 @@ class AnalyzeMovieData implements Protect, PythonRunner{
             }
         });
     }
-    
+
 }
 
 export default AnalyzeMovieData;
