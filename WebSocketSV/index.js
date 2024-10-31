@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 
-// WebSocket 서버 생성 (포트 8080)
+// WebSocket 서버 생성 (포트 8080?)
 const wss = new WebSocket.Server({ port: 8080 });
 
 console.log('WebSocket 서버가 8080 포트에서 실행 중입니다.');
