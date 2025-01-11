@@ -38,7 +38,7 @@ class Search {
                 case SV_STAT.BINARY: {
                 }
             }
-            yield FetchAPI.getJSON("/protected/FakeSQL.do?moviename=" + this.searchContext)
+            yield FetchAPI.getJSON("/protected/CraftSQL.do?moviename=" + this.searchContext)
                 .then((data) => {
                 clearInterval(timer);
                 element.placeholder = "검색 완료!";

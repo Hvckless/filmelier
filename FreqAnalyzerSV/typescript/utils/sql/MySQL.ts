@@ -1,4 +1,4 @@
-import * as mysql from "mysql";
+import * as mysql from "mysql2";
 
 class MySQL{
     public static instance:MySQL = new MySQL();
@@ -8,9 +8,10 @@ class MySQL{
     private connection:mysql.Connection = null;
 
     private db_info = {
-        host        : 'localhost',
+        host        : '192.168.0.11',
+        port        : 3306,
         user        : 'root',
-        password    : '3131',
+        password    : '1234',
         database    : 'movie_db'
     }
 

@@ -158,7 +158,7 @@ class MovieContentHandler {
                     let loading_panel = document.querySelector("#loading");
                     loading_panel.classList.remove("invisible");
                     loading_panel.classList.add("showflex");
-                    yield FetchAPI.postJSON("/protected/FakeMovieData.do", Vars.SelectedMovies)
+                    yield FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
                         .then((data) => {
                         loading_panel.classList.remove("showflex");
                         loading_panel.classList.add("invisible");

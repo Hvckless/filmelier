@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --env-file=.env ./typeout/server.js",
-    "binary": "nodemon --env-file=.env ./typeout/BinaryServer.js"
+    "binary": "nodemon --env-file=.env ./typeout/BinaryServer.js",
+    "testsv": "nodemon --env-file=.env ./typeout/test_server.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +15,8 @@
   "dependencies": {
     "@types/node": "^22.1.0",
     "mime-types": "^2.1.35",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^3.12.0"
   },
   "devDependencies": {
     "@types/mime-types": "^2.1.4",

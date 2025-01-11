@@ -1,0 +1,17 @@
+#review {
+    width: 100%;
+}
+
+.review {
+    height: 10vh;
+    font-size: 4em;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.review > span {
+    margin-left: 3%;
+    margin-right: 3%;
+    width: 94%;
+}

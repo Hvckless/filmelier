@@ -1,0 +1,23 @@
+{
+    "name": "Project - Filmelier",
+    "short_name": "Filmelier",
+    "description": "This is a web app that works like a native app.",
+    "start_url": "/src/html/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "\/src\/image\/film-slate.png",
+            "sizes": "512x512",
+            "type": "image\/png",
+            "density": "5.0"
+        },
+        {
+            "src": "\/src\/image\/film-slate-192px.png",
+            "sizes": "192x192",
+            "type": "image\/png",
+            "density": "4.0"
+        }
+    ]
+}

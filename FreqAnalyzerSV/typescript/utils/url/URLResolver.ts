@@ -54,7 +54,6 @@ class URLResolver{
     public async resolveData(res:http.ServerResponse<http.IncomingMessage>, url:string, param?:Parameter):Promise<JSONObject>{
 
         return new Promise(async (resolve, reject)=>{
-
             const queryString:string = url.split("/")[2];
             if(queryString.split(".").length != 2){
                 reject(new Error("request method is incorrect"));

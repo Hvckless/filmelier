@@ -169,7 +169,7 @@ class Main:
         movielist_string = input()
         if movielist_string == "end":
             return
-        start_time = time.time()
+        #start_time = time.time()
         mvlist_param = self.getMovieListFromInput(movielist_string)
         score_dictionary = self.getWeightListBetweenMovies(
             mvlist_param,
@@ -179,7 +179,7 @@ class Main:
         sorted_dictionary = dict(sorted(score_dictionary.items(), key=lambda item: item[0], reverse=True))
         top_10 = {score: name for score, name in list(sorted_dictionary.items())[:10]}
         print(json.loads(json.dumps(top_10)))
-        print(f"elapse time : {time.time() - start_time}")
+        #print(f"elapse time : {time.time() - start_time}")
         self.makeResult()
     def setReviewFolderpath(self, filepath):
         self.reviewFolderpath = filepath

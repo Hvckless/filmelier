@@ -46,7 +46,7 @@ class Search{
         }
         
 
-        await FetchAPI.getJSON("/protected/FakeSQL.do?moviename="+this.searchContext)
+        await FetchAPI.getJSON("/protected/CraftSQL.do?moviename="+this.searchContext)
             .then((data:Array<JSONObject>)=>{
                 clearInterval(timer);
                 element.placeholder = "검색 완료!";

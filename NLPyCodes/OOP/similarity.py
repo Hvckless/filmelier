@@ -3,6 +3,9 @@
 import json
 import time
 
+import sys
+import io
+
 from typing import Any
 
 from similar.parameter.parameterhandler import ParameterHandler
@@ -20,6 +23,9 @@ from similar.csv.csv import CSVFormat
 
 # import end
 
+sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stdout.flush()
 
 # similarity changes
 
@@ -75,7 +81,7 @@ class Main:
 
         mvlist_param: MovieList = self.getMovieListFromInput(movielist_string)  # 영화 파라메터 목록
 
-        start_time = time.time()
+        #start_time = time.time()
 
 
         score_dictionary: ScoredMovieList = self.getWeightListBetweenMovies(
@@ -91,9 +97,10 @@ class Main:
         top_10 = {score: name for score, name in list(sorted_dictionary.items())[:10]}
 
         # 결과 출력
-        print(json.loads(json.dumps(top_10)))
+        #print(json.loads(json.dumps(top_10, ensure_ascii=False)))
+        print(json.dumps(top_10, ensure_ascii=False))
 
-        print(f"elapse time : {time.time() - start_time}")
+        #print(f"elapse time : {time.time() - start_time}")
 
         self.makeResult()
 
@@ -132,7 +139,6 @@ class Main:
 
 
 if __name__ == "__main__":
-    
 
     app = Main()
 
@@ -147,7 +153,6 @@ if __name__ == "__main__":
 
     
     mvlist_review: MovieList = app.getMovieListFromReviews()    # 영화 파일 목록
-
     hello_list:MovieWeightList = app.readAllMovieWeightList(mvlist_review)
 
 

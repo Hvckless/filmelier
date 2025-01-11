@@ -1,0 +1,36 @@
+#imageSlot{
+    display: none;
+}
+
+@media(max-width: 890px){
+    #imageSlot{
+
+        display: block;
+
+        width: 100%;
+        height: 350px;
+    
+        background-color: rgb(203, 203, 203);
+        background-attachment:initial;
+
+        /* display: flex;*/
+        overflow: hidden;
+    }
+
+    #imageSlider{
+        height: 100%;
+        display: flex;
+
+        transform: translate(-500px, 0px);
+        transition-duration: 0.5s;
+        transition-property: transform;
+        transition-timing-function: ease-in-out;
+    }
+
+    .imageSlider_imageSlot{
+        height: 100%;
+        width: 500px;
+
+        object-fit: cover;
+    }
+}

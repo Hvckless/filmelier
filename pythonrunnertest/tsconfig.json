@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "rootDir": "./typescript",
+    "outDir": "./typeout",
+    "moduleResolution": "Node",
+    "esModuleInterop": true
+  }
+}

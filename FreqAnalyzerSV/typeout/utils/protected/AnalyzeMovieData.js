@@ -7,9 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import * as path from "path";
-import { spawn } from "child_process";
+import PythonProcess from "../process/PythonProcess.js";
 class AnalyzeMovieData {
+    constructor() {
+        this.python_process = PythonProcess.instance.python_process;
+    }
     execute(param) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
@@ -24,39 +26,32 @@ class AnalyzeMovieData {
                 let obj_keys = Object.keys(param);
                 let movie_name_list = "[";
                 for (let i = 0; i < obj_keys.length; i++) {
-                    movie_name_list += `'${obj_keys[i]}'`;
+                    movie_name_list += `'${decodeURIComponent(obj_keys[i])}'`;
                     if (i != (obj_keys.length - 1)) {
                         movie_name_list += ',';
                     }
                 }
                 movie_name_list += "]";
                 if (obj_keys.length > 0) {
-                    const python_exec = path.resolve(process.cwd(), "../NLPyCodes/OOP/venv/bin/python");
-                    const pcs_path = path.resolve(process.cwd(), '../NLPyCodes/OOP/similarity.py');
-                    const python_process = spawn(python_exec, [pcs_path, movie_name_list], {
-                        cwd: path.resolve(process.cwd(), '../NLPyCodes/OOP'),
-                        stdio: 'pipe'
+                    console.log(`Python으로 전송: ${movie_name_list}`);
+                    this.python_process.stdin.write(`${movie_name_list}\n`, 'utf-8', (err) => {
+                        if (err) {
+                            console.error("데이터 전송 에러:", err);
+                        }
+                        else {
+                            console.log("데이터 전송 완료:", movie_name_list);
+                        }
                     });
-                    //console.log(python_exec + " : " + pcs_path + " : " + movie_name_list);
-                    // python_process.stdout.on('data', (data)=>{
-                    //     try{
-                    //         const parse_data:JSONObject = JSON.parse(data.toString());
-                    //         resolve(parse_data);
-                    //     }catch(error){
-                    //         reject({"reqMsg":`EM : ${error.message}`});
-                    //     }
-                    // });
-                    // python_process.stderr.on('data', (data)=>{
-                    //     reject({"reqMsg":`${data}`});
-                    // })
-                    // python_process.on('close',(data)=>{
-                    //     resolve({"reqMsg":data});
-                    // });
-                    python_process.stdout.on('data', (data) => {
-                        //console.log(`Output: ${data.toString()}`);
-                        resolve({ "reqMsg": `${data.toString()}` });
+                    this.python_process.stdout.on('data', (data) => {
+                        try {
+                            const result = JSON.parse(data.toString('utf-8').trim());
+                            resolve(result);
+                        }
+                        catch (err) {
+                            console.error(`결과 파싱 에러: ${err}`);
+                            reject({ "reqMsg": `파싱 에러: ${err}` });
+                        }
                     });
-                    //resolve({"reqMsg":"hello world!"});
                 }
                 else {
                     reject({ "reqMsg": "parameter does not exist" });

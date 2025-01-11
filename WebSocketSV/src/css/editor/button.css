@@ -1,0 +1,58 @@
+/*
+    버튼 기본 CSS
+*/
+input[type="button"]{
+    min-height: 3vh;
+    min-width: 2vw;
+    max-height: 70px;
+    border-radius: 10px;
+    border: 0px;margin: 3px;
+}
+
+
+
+
+/*버튼 색 스타일 (활성화)*/
+input[type="button"]:not(.helloworld){
+    cursor: pointer;
+    background-color: #CBDCEB;
+    color: #133E87;
+}
+/*버튼 호버 스타일 (활성화)*/
+input[type="button"]:hover:not(.helloworld){
+    background-color: #608BC1;
+    color: #D7E7F5;
+}
+
+
+
+/*버튼 색 스타일 (DISABLED)*/
+input[type="button"].helloworld{
+    background-color: #a9b2b9;
+    color: #5e6777;
+}
+
+
+
+#editor-movielist-addBTN{
+    background-image: url("../../image/plusmv.png");
+    height: 2.5vh;
+    width: 2.5vh;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-left: 3vh;
+    margin-top: 1.5vh;
+    cursor: pointer;
+}
+.editor-movielist-movie-deleteBTN {
+    width: 2vh;
+    height: 2vh;
+    margin-left: 1.3vh;
+    margin-top: 1.5vh;
+    background-image: url("../../image/minusmv.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor:pointer;
+}

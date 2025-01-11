@@ -1,0 +1,105 @@
+html,body{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    position: relative;
+
+    background-color: var(--complete-wallpaper-color);
+}
+
+
+
+#wrapper{
+    width: 70%; height: 100%;
+    margin:auto;
+    position: relative;
+    background-color: var(--review-background-color);
+}
+
+fieldset > fieldset {
+    max-width: 25vw;
+    min-width: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    height: fit-content;
+    align-content: stretch;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: row;
+}
+
+fieldset {
+    border-radius: 10px;
+
+    background-color : #F8F8E5;
+
+    border-width: 0.1vw;
+    border-style: solid;
+    border-color: #133E87;
+
+    /* border-color: #133E87; */
+}
+fieldset.middle{
+    max-width: 9vw !important;
+}
+
+.field-top{
+    display: flex;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+
+    /* max-width: 50%;
+    min-width: 40%; */
+}
+
+form{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.field-top > fieldset{
+    max-width: 25vw;
+    min-width: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    height: fit-content;
+    align-content: stretch;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: row;
+}
+.field-top > fieldset > fieldset{
+    max-width: 9vw;
+    min-width: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    height: fit-content;
+    align-content: stretch;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: row;
+}
+
+legend{
+    color: #0d2855;
+    background-color: #F8F8E5;
+    border-radius: 5px;
+
+    font-size: 1.2vh;
+}
+
+
+
+/* dialog{
+    display: flex;
+} */
+
+dialog:modal{
+    display: flex;
+    flex-direction: column;
+}
