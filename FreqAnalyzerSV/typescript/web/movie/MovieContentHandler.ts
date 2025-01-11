@@ -225,7 +225,7 @@ class MovieContentHandler{
                 loading_panel.classList.remove("invisible");
                 loading_panel.classList.add("showflex");
 
-                await FetchAPI.postJSON("/protected/FakeMovieData.do", Vars.SelectedMovies)
+                await FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
                     .then((data:JSONObject)=>{
                         loading_panel.classList.remove("showflex");
                         loading_panel.classList.add("invisible");

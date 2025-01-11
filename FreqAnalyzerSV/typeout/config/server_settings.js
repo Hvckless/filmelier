@@ -7,9 +7,23 @@ class server_settings {
          * @see SV_STAT
          */
         this.server_stat_type = SV_STAT.DEV;
-        this.mysql_ip = "192.168.0.61";
-        this.sql_search_movie_type = "CraftSQL.do";
-        this.sql_search_rank_type = "AnalyzeMovieSend.do";
+        switch (this.server_stat_type) {
+            case SV_STAT.DEV: {
+                this.mysql_ip = "192.168.0.61";
+                this.sql_search_movie_type = "FakeSQL.do";
+                this.sql_search_rank_type = "FakeMovieData.do";
+            }
+            case SV_STAT.DEV_NOPYTHON: {
+                this.mysql_ip = "192.168.0.61";
+                this.sql_search_movie_type = "CraftSQL.do";
+                this.sql_search_rank_type = "FakeMovieData.do";
+            }
+            case SV_STAT.RELEASE: {
+                this.mysql_ip = "external-ip";
+                this.sql_search_movie_type = "CraftSQL.do";
+                this.sql_search_rank_type = "AnalyzeMovieData.do";
+            }
+        }
     }
     static getInstance() {
         return this.instance;

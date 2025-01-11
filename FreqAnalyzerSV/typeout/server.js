@@ -1,4 +1,4 @@
-import * as http from "http";
+import * as https from "https";
 import * as fs from "fs";
 import * as mime from "mime-types";
 import URLRedirector from "./utils/url/URLRedirector.js";
@@ -6,7 +6,9 @@ import URLResolver from "./utils/url/URLResolver.js";
 import ParameterResolver from "./utils/url/ParameterResolver.js";
 const urlResolver = new URLResolver();
 const parameterResolver = new ParameterResolver();
-const server = http.createServer((req, res) => {
+const key = fs.readFileSync('./src/protected/privkey.pem');
+const cert = fs.readFileSync('./src/protected/fullchain.pem');
+const server = https.createServer({ key: key, cert: cert }, (req, res) => {
     if (req.url == "/") {
         new URLRedirector().redirect(res, '/src/html/index.html');
         return;
@@ -125,4 +127,4 @@ const server = http.createServer((req, res) => {
         });
     }
 });
-server.listen(5000);
+server.listen(443);

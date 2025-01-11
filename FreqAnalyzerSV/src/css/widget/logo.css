@@ -1,0 +1,19 @@
+#logoPanel{
+    height: 200px;
+}
+
+#logo{
+    background-image: url(../../image/svg/hello.svg);
+    height: 100%;
+    width: 100%;
+    filter: invert(91%) sepia(4%) saturate(11%) hue-rotate(330deg) brightness(92%) contrast(94%) drop-shadow(0 0 1em #000);
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: center;
+}
+
+@media(max-width: 890px){
+    #logoPanel{
+        height: 0px;
+    }
+}

@@ -1,4 +1,5 @@
 import * as http from "http";
+import * as https from "https";
 import * as fs from "fs";
 import * as mime from "mime-types";
 
@@ -12,8 +13,10 @@ import JSONObject from "./utils/type/JSONObject.js";
 const urlResolver:URLResolver = new URLResolver();
 const parameterResolver:ParameterResolver = new ParameterResolver();
 
-const server:http.Server = http.createServer((req:http.IncomingMessage, res:http.ServerResponse<http.IncomingMessage>)=>{
+const key = fs.readFileSync('./src/protected/privkey.pem');
+const cert = fs.readFileSync('./src/protected/fullchain.pem');
 
+const server:https.Server = https.createServer({key: key, cert: cert}, (req:http.IncomingMessage, res:http.ServerResponse<http.IncomingMessage>)=>{
     if(req.url == "/"){
         new URLRedirector().redirect(res, '/src/html/index.html');
         return;
@@ -159,4 +162,4 @@ const server:http.Server = http.createServer((req:http.IncomingMessage, res:http
     
 });
 
-server.listen(5000);
+server.listen(443);

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket 클라이언트</title>
+
+    <script>
+      let devHandler = {};
+      let skHandler;
+      let dialog = {};
+
+
+      window.onload = ()=>{
+        dialog["movieadd"] = document.querySelector("#dialog-input-movie");
+        // dialog.addEventListener('click', (event) => {
+        //   if (event.target.nodeName === 'DIALOG') {
+        //     dialog.close();
+        //   }
+        // });
+
+        console.log(devHandler.GlobalDefine.kinggod);
+
+        console.log(devHandler.ReviewHandler.categories);
+      }
+    </script>
+    <script type="module">
+      // import SocketHandler from "../../typeout/frontend/socket/SocketHandler.js";
+
+      import GlobalDefine from "../../typeout/frontend/variables/GlobalDefine.js";
+      import ClickHandler from "../../typeout/frontend/event/ClickHandler.js";
+      import ReviewHandler from "../../typeout/frontend/review/ReviewHandler.js";
+
+      devHandler["GlobalDefine"] = GlobalDefine;
+      devHandler["ClickHandler"] = new ClickHandler();
+      devHandler["ReviewHandler"] = new ReviewHandler();
+
+      // skHandler = SocketHandler.instance;
+
+      // skHandler.sendMessage("HELLO WORLD?!");
+    </script>
+
+  </head>
+  <body>
+
+
+    <div id="wrapper">
+      
+      <dialog>
+        <textarea></textarea>
+        <input type="button" onclick="skHandler.sendMessage(document.querySelector('textarea').value)" value="send textarea">
+      </dialog>
+
+      <dialog id="dialog-input-movie">
+        <input type="text" name="영화 제목" placeholder="영화 제목">
+        <textarea name="영화 리뷰" placeholder="영화 리뷰"></textarea>
+        <input type="button" value="입력" onclick="devHandler.ClickHandler.addMovieClickEvent(event)">
+      </dialog>
+
+      <!--input type="button" value="show modal" onclick="dialog.showModal()"-->
+
+      <div id="review">
+        <div class="review-outofrange-review review">
+          <span>Default Previous Text</span>
+        </div>
+        <div class="review-current-review review">
+          <span>Default Text</span>
+        </div>
+        <div class="review-outofrange-review review">
+          <span>Default Next Text</span>
+        </div>
+        <div class="review-outofrange-review review">
+          <span>something in the air...</span>
+        </div>
+        <div class="review-outofrange-review review">
+          <span>undefined</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="editor">
+      <div id="top-down">
+        <div id="td-btn"></div>
+      </div>
+      <div id="editor-panel">
+        <div id="editor-tabmenu">
+          <span class="editor-tabmenu-font" onclick="devHandler.ClickHandler.tabmenuClickEvent(event)">태그 목록</span>
+          <span class="editor-tabmenu-font" onclick="devHandler.ClickHandler.tabmenuClickEvent(event)">영화 목록</span>
+          <span class="editor-tabmenu-font" onclick="devHandler.ClickHandler.tabmenuClickEvent(event)">출력</span>
+        </div>
+        <div name="태그 목록" class="editor-tabmenu-content show" id="editor-content">
+          <form>
+
+            <fieldset class="field-top">
+              <legend>🧧영화 종류</legend>
+              <fieldset class="middle">
+                <legend>📂기타</legend>
+                <input type="button" value="액션">
+                <input type="button" value="원작 재현">
+                <input type="button" value="미스터리한">
+                <input type="button" value="로맨스">
+                <input type="button" value="애니메이션">
+                <input type="button" value="추리">
+              </fieldset>
+              
+              <fieldset class="middle">
+                <legend>📂사회, 경제 활동</legend>
+                <input type="button" value="농업">
+                <input type="button" value="사회문제">
+                <input type="button" value="시민운동">
+                <input type="button" value="법적 분쟁">
+                <input type="button" value="정치">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂모험</legend>
+                <input type="button" value="모험">
+                <input type="button" value="고대 유적 탐험">
+                <input type="button" value="우주 모험">
+                <input type="button" value="심해 탐험">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂예체능</legend>
+                <input type="button" value="스포츠(구기 종목)">
+                <input type="button" value="스포츠(수상 종목)">
+                <input type="button" value="익스트림 스포츠">
+                <input type="button" value="무술">
+                <input type="button" value="예술">
+                <input type="button" value="미술">
+                <input type="button" value="뮤지컬">
+                <input type="button" value="춤을 추고있다">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂코미디</legend>
+                <input type="button" value="코미디">
+                <input type="button" value="로맨틱코미디">
+                <input type="button" value="블랙코미디">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂판타지</legend>
+                <input type="button" value="판타지">
+                <input type="button" value="동화">
+              </fieldset>
+              <fieldset name="과학">
+                <legend>📂과학/SF</legend>
+                <input type="button" value="과학적인">
+                <fieldset>
+                  <legend>📋우주</legend>
+                  <input type="button" value="우주 개발">
+                  <input type="button" value="천체 물리학">
+                </fieldset>
+                <fieldset>
+                  <legend>📋컴퓨터</legend>
+                  <input type="button" value="컴퓨터 공학">
+                  <input type="button" value="해킹">
+                </fieldset>
+                <fieldset>
+                  <legend>📋실질적인 물리</legend>
+                  <input type="button" value="양자 물리학">
+                  <input type="button" value="지질학">
+                </fieldset>
+                <fieldset>
+                  <legend>📋생물</legend>
+                  <input type="button" value="생물학">
+                  <input type="button" value="유전공학">
+                  <input type="button" value="의료">
+                </fieldset>
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂역사</legend>
+                <input type="button" value="서양 역사">
+                <input type="button" value="동양 역사">
+                <input type="button" value="실제 역사">
+              </fieldset>
+              
+            </fieldset>
+            <fieldset class="field-top">
+              <legend>🧧위기, 시련</legend>
+              <fieldset class="middle">
+                <legend>📂괴물</legend>
+                <input type="button" value="흡혈귀">
+                <input type="button" value="좀비">
+                <input type="button" value="괴물">
+                <input type="button" value="귀신">
+                <input type="button" value="외계인">
+              </fieldset>
+             
+              <fieldset class="middle">
+                <legend>📂무력</legend>
+                <input type="button" value="학살">
+                <input type="button" value="배신">
+                <input type="button" value="반란">
+                <input type="button" value="전쟁">
+                <input type="button" value="복수">
+                <input type="button" value="테러">
+                <input type="button" value="폭발">
+                <input type="button" value="전투">
+                <input type="button" value="고문">
+              </fieldset>
+              <fieldset>
+                <legend>📂재난</legend>
+                <input type="button" value="재난">
+                <input type="button" value="인간 재난">
+                <input type="button" value="멸망">
+                <input type="button" value="질병">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂환경 문제</legend>
+                <input type="button" value="기후 위기">
+                <input type="button" value="식량 문제">
+                <input type="button" value="환경 파괴">
+              </fieldset>
+            </fieldset>
+
+            <fieldset class="field-top" style="max-width: 30%;">
+              <legend>🧧배경</legend>
+
+              <fieldset class="middle">
+                <legend>📂기타</legend>
+                <input type="button" value="신분제">
+                <input type="button" value="꿈">
+                <input type="button" value="학교">
+                <input type="button" value="요리">
+                <input type="button" value="맛있는 음식">
+                <input type="button" value="감옥">
+                <input type="button" value="종교적인">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂지역</legend>
+                <input type="button" value="해양">
+                <input type="button" value="정글">
+                <input type="button" value="외계 행성">
+                <input type="button" value="서부시대 배경">
+                <input type="button" value="도시 배경">
+              </fieldset>
+              <fieldset>
+                <legend>📂분위기</legend>
+                <fieldset class="middle">
+                  <legend>📋희망적인</legend>
+                  <input type="button" value="유쾌한 분위기">
+                  <input type="button" value="희망적인 상황">
+                  <input type="button" value="감동적인">
+                  <input type="button" value="미래에 대한 희망">
+                </fieldset>
+                <fieldset class="middle">
+                  <legend>📋절망적인</legend>
+                  <input type="button" value="음산한 분위기">
+                  <input type="button" value="희망적인 상황">
+                  <input type="button" value="미지에 대한 공포">
+                </fieldset class="middle">
+                <input type="button" value="시골 분위기">
+                <input type="button" value="긴장감 있는">
+                <input type="button" value="흥미로운 이야기">
+                <input type="button" value="현실적인">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂자연</legend>
+                <input type="button" value="아름다운 풍경">
+                <input type="button" value="신비로운 자연 환경">
+                <input type="button" value="야생">
+                <input type="button" value="서바이벌">
+              </fieldset>
+              <fieldset>
+                <legend>📂전해지는 설화(전설)</legend>
+                <input type="button" value="신화">
+                <input type="button" value="음모론">
+                <input type="button" value="괴담">
+              </fieldset>
+              
+              <fieldset>
+                <legend>📂멀티미디어</legend>
+                <input type="button" value="소셜미디어">
+                <input type="button" value="방송">
+                <input type="button" value="음악">
+              </fieldset>
+              
+            </fieldset>
+
+            <fieldset class="field-top">
+              <legend>🧧인물 타입</legend>
+              <fieldset class="middle">
+                <legend>📂영화적인 타입</legend>
+                <input type="button" value="공주">
+                <input type="button" value="슈퍼히어로">
+                <input type="button" value="복제 인간">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂범죄자 타입</legend>
+                <input type="button" value="도둑">
+                <input type="button" value="해적">
+                <input type="button" value="스파이">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂직업</legend>
+                <input type="button" value="탐정">
+                <input type="button" value="전직 군인">
+                <input type="button" value="현역 군인">
+                <input type="button" value="공군">
+                <input type="button" value="해군">
+                <input type="button" value="경찰">
+                <input type="button" value="학생">
+                <input type="button" value="선생">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂마음</legend>
+                <input type="button" value="정신병">
+                <input type="button" value="인간성">
+                <input type="button" value="부도덕">
+              </fieldset>
+              <fieldset class="middle">
+                <legend>📂기타</legend>
+                <input type="button" value="원시 부족">
+                <input type="button" value="인형">
+                <input type="button" value="언더독">
+                <input type="button" value="마스코트 캐릭터">
+                <input type="button" value="신비로운 인물">
+              </fieldset>
+            </fieldset>
+            
+            <fieldset class="field-top">
+              <legend>🧧기타</legend>
+                <fieldset class="middle">
+                  <legend>📂가정</legend>
+                  <input type="button" value="가족의 사랑">
+                  <input type="button" value="불우한 가정환경">
+                  <input type="button" value="가족간의 갈등">
+                </fieldset>
+                <fieldset class="middle">
+                  <legend>📂날씨</legend>
+                  <input type="button" value="겨울">
+                  <input type="button" value="폭풍우">
+                  <input type="button" value="여름">
+                  <input type="button" value="봄">
+                  <input type="button" value="비오는 날씨">
+                </fieldset>
+    
+    
+                <fieldset class="middle">
+                  <legend>📂엔딩 타입</legend>
+                  <input type="button" value="정의 구현">
+                  <input type="button" value="해피 엔딩">
+                  <input type="button" value="새드 엔딩">
+                </fieldset>
+            </fieldset>
+          </form>
+        </div>
+        <div name="영화 목록" class="editor-tabmenu-content hidden" id="editor-movielist">
+          <div id="editor-movielist-review-panel"></div>
+          <div id="editor-movielist-addBTN" onclick="dialog.movieadd.showModal()"></div>
+        </div>
+        <div name="출력" class="editor-tabmenu-content hidden" id="editor-output"></div>
+      </div>
+    </div>
+
+  </body>
+  <foot>
+    <footscript>
+      <!--script type="module" src="../../typeout/frontend/variables/GlobalDefine.js"></script-->
+      <!--script type="module" src="../../typeout/frontend/socket/SocketHandler.js"></script-->
+    </footscript>
+    <footstyle>
+      <link rel="stylesheet" href="../src/css/variable.css">
+      <link rel="stylesheet" href="../src/css/main.css">
+      <link rel="stylesheet" href="../src/css/style/view.css">
+
+      <link rel="stylesheet" href="../src/css/editor/editor.css">
+      <link rel="stylesheet" href="../src/css/editor/button.css">
+
+      <link rel="stylesheet" href="../src/css/review/review.css">
+    </footstyle>
+  </foot>
+</html>

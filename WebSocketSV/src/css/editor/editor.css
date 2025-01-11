@@ -1,0 +1,72 @@
+#editor{
+    position: absolute;
+    height: 68%;
+    width: 100%;
+    bottom: 0px;
+    background-color: var(--editor-background-color);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+
+    overflow: hidden;
+
+    border-top-left-radius: 2vw;
+    border-top-right-radius: 2vw;
+}
+
+/*그룹 묶음 최상단*/
+fieldset.field-top:nth-of-type(n + 2) {
+    max-width: 20%;
+    height: fit-content;
+}
+
+
+
+
+#editor-tabmenu{
+    height: 4vh;
+
+    display: flex;
+    align-items: center;
+}
+
+
+.editor-tabmenu-font{
+    color: var(--editor-tabmenu-font-color);
+
+    padding-left: 1.5em;
+    font-size: 1.5vh;
+    font-weight: normal;
+    cursor: pointer;
+}
+.editor-tabmenu-font:hover{
+    color: var(--editor-tabmenu-font-color-hover);
+}
+
+
+
+.editor-tabmenu-content{
+    overflow-y: scroll;
+}
+
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.8); /* 어두운 배경색 설정 */
+}
+
+
+
+
+
+
+
+
+.editor-movielist-movie {
+    display: flex;
+}
+
+.editor-movielist-movie > span {
+    margin-left: 3vh;
+    font-size: 1.5em;
+    margin-top: 1.5vh;
+
+    cursor:pointer;
+}
