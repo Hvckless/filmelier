@@ -21,7 +21,6 @@ class MovieContentHandler {
      * @param movie_json 영화 데이터가 들어있는 JSONObject
      */
     createMoviePanel(movie_json, target_panel) {
-        console.log(movie_json);
         let movie_panel = target_panel; //document.querySelector("#movieContents");
         for (let movie of movie_json) {
             let movie_name = movie["name"];
@@ -163,7 +162,7 @@ class MovieContentHandler {
                         loading_panel.classList.remove("showflex");
                         loading_panel.classList.add("invisible");
                         document.querySelector("#ranking").classList.remove("invisible");
-                        let originObject = JSON.parse(data["reqMsg"].replaceAll("'", '"'));
+                        let originObject = data["reqMsg"];
                         //let sendMap:Array<JSONObject> = [];
                         let sendData = [];
                         Object.keys(originObject).forEach((key) => {
@@ -182,9 +181,8 @@ class MovieContentHandler {
     }
     getMoviePoster(param) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield FetchAPI.postJSON("/protected/FakeRankSQL.do", param)
+            yield FetchAPI.postJSON("/protected/RankSQL.do", param)
                 .then((data) => {
-                console.log(data);
                 document.querySelector("#sendAnalysticsButton").classList.remove("showflex");
                 MovieContentHandler.getInstance.createPosterPanel(data, document.querySelector("#ranking_toprank"));
             })
@@ -196,7 +194,11 @@ class MovieContentHandler {
     createPosterPanel(movie_json, target_panel) {
         let movie_panel = target_panel; //document.querySelector("#movieContents");
         for (let i = 0; i < movie_json.length; i++) {
-            let movie = movie_json[i];
+            //let movie = movie_json[i]; //구버전 json 포맷에 맞춘 코드
+            let movie = movie_json.find((movie_json) => movie_json["index"] == i);
+            if (movie == undefined) {
+                continue;
+            }
             let movie_name = movie["name"];
             let movie_image = movie["image"];
             let poster_top = document.createElement('div');

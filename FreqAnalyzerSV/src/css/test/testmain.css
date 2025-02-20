@@ -309,6 +309,10 @@ nav{
     display:flex;
 }
 
+#ranking_underrank{
+    justify-content: center;
+}
+
 .poster{
     height: fit-content;
 }

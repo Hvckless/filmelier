@@ -45,7 +45,7 @@ class AnalyzeMovieData {
                     this.python_process.stdout.on('data', (data) => {
                         try {
                             const result = JSON.parse(data.toString('utf-8').trim());
-                            resolve(result);
+                            resolve({ "reqMsg": result });
                         }
                         catch (err) {
                             console.error(`결과 파싱 에러: ${err}`);

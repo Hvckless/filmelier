@@ -21,7 +21,6 @@ class MovieContentHandler{
      * @param movie_json 영화 데이터가 들어있는 JSONObject
      */
     createMoviePanel(movie_json:Array<JSONObject>, target_panel:HTMLDivElement){
-        console.log(movie_json);
         let movie_panel:HTMLDivElement = target_panel;//document.querySelector("#movieContents");
 
         for(let movie of movie_json){
@@ -231,8 +230,7 @@ class MovieContentHandler{
                         loading_panel.classList.add("invisible");
                         
                         document.querySelector("#ranking").classList.remove("invisible");
-
-                        let originObject:JSONObject = JSON.parse(data["reqMsg"].replaceAll("'", '"'));
+                        let originObject:JSONObject = data["reqMsg"];
                         //let sendMap:Array<JSONObject> = [];
 
                         let sendData:Array<string> = [];
@@ -255,9 +253,8 @@ class MovieContentHandler{
     }
 
     async getMoviePoster(param:JSONObject){
-        await FetchAPI.postJSON("/protected/FakeRankSQL.do", param)
+        await FetchAPI.postJSON("/protected/RankSQL.do", param)
             .then((data:Array<JSONObject>)=>{
-                console.log(data);
 
                 document.querySelector("#sendAnalysticsButton").classList.remove("showflex");
 
@@ -275,7 +272,12 @@ class MovieContentHandler{
 
         for(let i = 0; i < movie_json.length; i++){
 
-            let movie = movie_json[i];
+            //let movie = movie_json[i]; //구버전 json 포맷에 맞춘 코드
+            let movie = movie_json.find((movie_json)=>movie_json["index"] == i);
+
+            if(movie == undefined){
+                continue;
+            }
 
             let movie_name:string = movie["name"];
             let movie_image:string = movie["image"];

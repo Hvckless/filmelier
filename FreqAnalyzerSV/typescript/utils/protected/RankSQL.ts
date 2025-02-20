@@ -10,8 +10,9 @@ class RankSQL implements Protect, MySQLayer{
         throw new Error("Method not implemented.");
     }
     initial(param?: Parameter): Promise<JSONObject> {
-        console.log("파라메터 출력");
-        console.log(param);
+
+        let paramArray = Array.isArray(param) ? param : [param];
+
         return new Promise((resolve, reject)=>{
             const sql:string = 'select movie_name, movie_image from movie_info where movie_name in (?)';
 
@@ -40,6 +41,7 @@ class RankSQL implements Protect, MySQLayer{
                 }
 
                 const movie_info = results.map((row:any)=>({
+                    index: paramArray.indexOf(row.movie_name),
                     name: row.movie_name,
                     image: Buffer.from(row.movie_image).toString("base64"),
                 }));
