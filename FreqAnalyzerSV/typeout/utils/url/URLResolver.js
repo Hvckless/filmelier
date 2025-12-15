@@ -59,7 +59,7 @@ class URLResolver {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 const queryString = url.split("/")[2];
                 if (queryString.split(".").length != 2) {
-                    reject(new Error("request method is incorrect"));
+                    reject(new Error("request method is incorrect" + ` url : ${url}`));
                 }
                 const modulename = queryString.split(".")[0];
                 const extension = queryString.split(".")[1];

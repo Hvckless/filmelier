@@ -10,7 +10,7 @@ class ParameterResolver{
             let paramFragment:Array<string> = param.split("=");
 
             if(paramFragment.length != 2){
-                throw new Error("parameter is not constructed correctly.");
+                throw new Error("parameter is not constructed correctly." + ` parameter : ${urlContext}`);
             }else{
                 result[paramFragment[0]] = paramFragment[1];
             }

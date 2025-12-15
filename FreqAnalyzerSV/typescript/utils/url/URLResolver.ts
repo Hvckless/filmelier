@@ -56,7 +56,7 @@ class URLResolver{
         return new Promise(async (resolve, reject)=>{
             const queryString:string = url.split("/")[2];
             if(queryString.split(".").length != 2){
-                reject(new Error("request method is incorrect"));
+                reject(new Error("request method is incorrect" + ` url : ${url}`));
             }
 
             const modulename:string = queryString.split(".")[0];
