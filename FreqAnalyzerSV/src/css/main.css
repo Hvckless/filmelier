@@ -19,6 +19,8 @@ html{
 @media(max-width: 890px){
     #moviePanel{
         width: 100%;
+        height: fit-content;
+        min-height: 100%;
 /* 
         margin-left: 5vw;
         margin-right: 5vw; */

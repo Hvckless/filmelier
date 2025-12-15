@@ -16,10 +16,10 @@
 }
 
 article{
-    width: calc(100vw - 2 * var(--article-margin)); height: fit-content;
+    width: calc(100% - 2 * var(--article-margin-percentage)); height: fit-content;
 
-    margin-left: var(--article-margin);
-    margin-right: var(--article-margin);
+    margin-left: var(--article-margin-percentage);
+    margin-right: var(--article-margin-percentage);
 
     /* background-color: #00ffff0f; */
 }

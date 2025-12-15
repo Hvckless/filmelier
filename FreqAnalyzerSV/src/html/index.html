@@ -62,11 +62,6 @@
 
 
             window.onload = ()=>{
-                /*
-                릴리즈시 삭제
-                console.log("WORK!");
-                let hel = new Hello();
-                */
 
                 if('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('../../typeout/web/service/ServiceWorker.js').then(function(registration) {
@@ -80,25 +75,20 @@
 
                 devcaller["moviehandler"] = new MoviePanelHandler();
                 devcaller["search"] = new Search(); //릴리즈시 삭제
+                devcaller["moviecontenthandler"] = movie_content_handler;
                 
-                // for(let i = 0; i < 11; i++){
-                //     devcaller["search"].submit(document.querySelector("#searchInput"));
-                // }
 
                 transition.applyTransition(); // 트랜지션 적용
                 document.querySelector("html").style.display = "block";
 
-                //document.querySelector("#searchInput").focus();
-                
-                //devcaller.moviehandler.createMoviePanel(100);
             }
 
         </script>
         <style>
             html, body{
                 margin: 0px;
-                overflow: hidden;
                 
+                overscroll-behavior: none;
             }
         </style>
     </head>
@@ -131,6 +121,7 @@
                         <img class="imageSlider_imageSlot" name="king" src="../image/imageSlider/lalaland.webp">
                         <img class="imageSlider_imageSlot" name="king" src="../image/imageSlider/martian.webp">
                         <img class="imageSlider_imageSlot" name="king" src="../image/imageSlider/springonseoul.webp">
+                        <img class="imageSlider_imageSlot" name="king" src="../image/imageSlider/avatar.webp">
                         </div>
                     </div>
                     
@@ -166,8 +157,8 @@
 
             <div id="navigationPanel" class="wrapper"></div>
                 <div id="topNavigation">
-                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/HumanMediProject/filmelier/blob/main/README.md">About Us</a></div>
-                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/HumanMediProject/filmelier/issues/new">Report Issue</a> <img src="../image/svg/github-mark-white.svg"></div>
+                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/Hvckless/filmelier/blob/main/README.md">About Us</a></div>
+                    <div class="navComponent trans-Nav waitTransition"><a class="officialLink" target="_blank" href="https://github.com/Hvckless/filmelier/issues/new">Report Issue</a> <img src="../image/svg/github-mark-white.svg"></div>
                 </div>
             </div>
 

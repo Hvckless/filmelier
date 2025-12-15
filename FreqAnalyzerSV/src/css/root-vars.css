@@ -2,4 +2,15 @@
     /*메인 article CSS*/
 
     --article-margin: 5vw;
+    --article-margin-percentage: 5%;
+    --star-size: 70px;
+    --movie-search-list-width: 176px;
+
+    --img-cnt: 9;
+}
+
+@media(max-width: 890px){
+    :root{
+        --movie-search-list-width: calc(calc(calc(100vw - 2 * var(--article-margin)) / 3) - 20px);
+    }
 }

@@ -1,7 +1,7 @@
 .emptystar{
     background-image: url(../../image/stars/preempty.png);
-    height: 30px;
-    width: 30px;
+    height: var(--star-size);
+    width: var(--star-size);
 
     background-repeat: no-repeat;
     background-size: contain;

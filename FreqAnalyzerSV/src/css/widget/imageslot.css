@@ -7,8 +7,8 @@
 
         display: block;
 
-        width: 100%;
-        height: 350px;
+        width: 100vw;
+        height: 35vh;
     
         background-color: rgb(203, 203, 203);
         background-attachment:initial;
@@ -19,17 +19,20 @@
 
     #imageSlider{
         height: 100%;
+        width: calc(100%*var(--img-cnt));
         display: flex;
 
-        transform: translate(-500px, 0px);
+        transform: translate(-100vw, 0px);
         transition-duration: 0.5s;
         transition-property: transform;
         transition-timing-function: ease-in-out;
+
+        animation: imgSlider 45s cubic-bezier(1, 0, 0, 0.92) infinite;
     }
 
     .imageSlider_imageSlot{
         height: 100%;
-        width: 500px;
+        width: 100vw;
 
         object-fit: cover;
     }
