@@ -23,14 +23,17 @@ class MovieContentHandler{
     createMoviePanel(movie_json:Array<JSONObject>, target_panel:HTMLDivElement){
         let movie_panel:HTMLDivElement = target_panel;//document.querySelector("#movieContents");
 
+        console.log(movie_json);
+
+        if((movie_json === null) || (movie_json === undefined)){
+            console.error("해당 영화를 찾을 수 없습니다.");
+            return;
+        }
+
         for(let movie of movie_json){
 
             let movie_name:string = movie["name"];
             let movie_image:string = movie["image"];
-
-
-            
-
 
             let mv_content = document.createElement('div');
             mv_content.classList.add('movie_content');
@@ -39,11 +42,18 @@ class MovieContentHandler{
             mv_content_image_div.classList.add('movie_content_img_panel');
             mv_content_image_div.classList.add('relative');
 
+            // let mv_content_image_like = document.createElement('div');
+            // mv_content_image_like.classList.add('movie_content_img_like');
+            // mv_content_image_like.classList.add('absolute');
+            // mv_content_image_like.setAttribute("mvname", `${movie_name}`);
 
+            
             let mv_content_image_star = document.createElement('div');
             mv_content_image_star.classList.add('movie_content_img_star');
             mv_content_image_star.classList.add('absolute');
             mv_content_image_star.setAttribute("mvname", `${movie_name}`);
+
+            //starrealcheck = 체크된 경우 사용 | starcheck = 마우스가 올라간 경우 사용
 
             mv_content_image_star.onmouseleave = (ev:MouseEvent)=>{
                 if(ev.target instanceof HTMLDivElement){
@@ -56,30 +66,58 @@ class MovieContentHandler{
                 mv_content_image_star.setAttribute("starsel", starcounter);
             }
 
-            for(let i = 0; i < 5; i++){
-                let mv_content_image_realstar = document.createElement('div');
-                mv_content_image_realstar.classList.add('emptystar');
-                mv_content_image_realstar.classList.add('starlight');
-                mv_content_image_realstar.setAttribute("starnum", i+"");
+            let mv_content_image_realstar = document.createElement('div');
+            mv_content_image_realstar.classList.add('emptystar');
+            mv_content_image_realstar.classList.add('starlight');
+            mv_content_image_realstar.setAttribute("starnum", "4");
 
-
-
-                mv_content_image_realstar.onmouseenter = (ev:MouseEvent)=>{
-
-                    if(ev.target instanceof HTMLDivElement){
-                        ev.target.parentElement.setAttribute("starnum", ev.target.getAttribute("starnum"));
-                    }
-
+            mv_content_image_realstar.onmouseenter = (ev:MouseEvent)=>{
+                if(ev.target instanceof HTMLDivElement){
+                    ev.target.parentElement.setAttribute("starnum", ev.target.getAttribute("starnum"));
                 }
-                mv_content_image_realstar.onmousedown = (ev:MouseEvent)=>{
-                    if(ev.target instanceof HTMLDivElement){
+            }
+            // 스타를 클릭하는 경우 starsel에 숫자를 기입해 
+            mv_content_image_realstar.onmousedown = (ev:MouseEvent)=>{
+                if(ev.target instanceof HTMLDivElement){
+                    let starvalue = ev.target.parentElement.getAttribute("starsel");
+
+                    if(starvalue == null){
+                        //값이 없음 (체크 안 됨)
                         ev.target.parentElement.setAttribute("starsel", ev.target.getAttribute("starnum"));
                         MovieContentHandler.getInstance.insertContent(`${movie_name}`, ev.target.getAttribute("starnum"));
+                    }else{
+                        //값이 있는 경우 (체크 됨)
+                        MovieContentHandler.getInstance.removeContent(ev.target.parentElement.getAttribute("mvname"));
                     }
                 }
-
-                mv_content_image_star.append(mv_content_image_realstar);
             }
+
+            mv_content_image_star.append(mv_content_image_realstar);
+
+            // for(let i = 0; i < 5; i++){
+            //     let mv_content_image_realstar = document.createElement('div');
+            //     mv_content_image_realstar.classList.add('emptystar');
+            //     mv_content_image_realstar.classList.add('starlight');
+            //     mv_content_image_realstar.setAttribute("starnum", i+"");
+
+
+
+            //     mv_content_image_realstar.onmouseenter = (ev:MouseEvent)=>{
+
+            //         if(ev.target instanceof HTMLDivElement){
+            //             ev.target.parentElement.setAttribute("starnum", ev.target.getAttribute("starnum"));
+            //         }
+
+            //     }
+            //     mv_content_image_realstar.onmousedown = (ev:MouseEvent)=>{
+            //         if(ev.target instanceof HTMLDivElement){
+            //             ev.target.parentElement.setAttribute("starsel", ev.target.getAttribute("starnum"));
+            //             MovieContentHandler.getInstance.insertContent(`${movie_name}`, ev.target.getAttribute("starnum"));
+            //         }
+            //     }
+
+            //     mv_content_image_star.append(mv_content_image_realstar);
+            // }
 
 
 
@@ -106,6 +144,7 @@ class MovieContentHandler{
 
             mv_content_image_div.append(mv_content_image);
             mv_content_image_div.append(mv_content_image_star);
+            // mv_content_image_div.append(mv_content_image_like);
 
             mv_content.append(mv_content_image_div);
             mv_content.append(mv_content_button_div);
@@ -114,10 +153,6 @@ class MovieContentHandler{
 
         }
 
-        // movie_json.forEach((movie)=>{
-        //     Object.keys(movie).forEach((movie_name)=>{
-        //     });
-        // });
 
     }
 
@@ -129,10 +164,9 @@ class MovieContentHandler{
     createLogSpan(movie_name:string){
 
         let searbox_logger = document.querySelector("#searchLog");
-
         let search_log_div = document.createElement('div');
-
         let search_log_text = document.createElement('span');
+
         search_log_text.classList.add('searchlog');
         search_log_text.textContent = movie_name;
 
@@ -151,13 +185,13 @@ class MovieContentHandler{
 
         let search_log_button = document.createElement('div');
         search_log_button.classList.add('ssearchLogRemover');
+        search_log_button.setAttribute("sslog_mvname", movie_name);
         search_log_button.textContent = "X";
 
         search_log_button.onmousedown = (ev:MouseEvent)=>{
             if(ev.target instanceof HTMLDivElement){
-                MovieContentHandler.getInstance.removeContent(ev.target.parentElement.querySelector(".searchlog").textContent);
-                ev.target.parentElement.parentElement.removeChild(ev.target.parentElement);
-                document.querySelector(`.movie_content_img_star[mvname='${movie_name}']`).removeAttribute("starsel");
+                //LogSpan 삭제 메서드 실행
+                MovieContentHandler.getInstance.removeContent(ev.target.getAttribute("sslog_mvname"));
             }
         }
 
@@ -195,7 +229,12 @@ class MovieContentHandler{
 
         let analysticsBTN = document.querySelector("#sendAnalysticsButton");
 
-
+        document.querySelector("#searchLog").childNodes.forEach((element:HTMLElement)=>{
+            if(element.querySelector("span.searchLog").textContent == movie_name){
+                document.querySelector("#searchLog").removeChild(element);
+                document.querySelector(`.movie_content_img_star[mvname='${movie_name}']`)?.removeAttribute("starsel");
+            }
+        });
 
         delete(Vars.SelectedMovies[movie_name]);
 
@@ -224,6 +263,11 @@ class MovieContentHandler{
                 loading_panel.classList.remove("invisible");
                 loading_panel.classList.add("showflex");
 
+
+                /**
+                 * 영화 분석 파이썬 코드를 실행하는 API 호출
+                 * 
+                 */
                 await FetchAPI.postJSON("/protected/AnalyzeMovieData.do", Vars.SelectedMovies)
                     .then((data:JSONObject)=>{
                         loading_panel.classList.remove("showflex");
@@ -231,7 +275,6 @@ class MovieContentHandler{
                         
                         document.querySelector("#ranking").classList.remove("invisible");
                         let originObject:JSONObject = data["reqMsg"];
-                        //let sendMap:Array<JSONObject> = [];
 
                         let sendData:Array<string> = [];
 
