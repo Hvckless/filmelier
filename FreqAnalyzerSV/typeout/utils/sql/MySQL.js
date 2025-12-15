@@ -3,9 +3,9 @@ class MySQL {
     constructor() {
         this.connection = null;
         this.db_info = {
-            host: '192.168.0.11',
+            host: '192.168.0.20',
             port: 3306,
-            user: 'root',
+            user: 'mysqluser',
             password: '1234',
             database: 'movie_db'
         };
