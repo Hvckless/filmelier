@@ -5,7 +5,6 @@ import os
 import time
 import math
 import json
-#import numpy as np
 class FileReader:
     def __init__(self):
         self.initial = 1
@@ -92,13 +91,14 @@ class WeightCalculator:
     def getWeightFromMovieList(self, mvlist_param):
         something_like_this = {}
         for movie in mvlist_param:
-            mvweight = self.movie_weight_map[movie]
-            for category in mvweight:
-                mvweight_index = mvweight[category][0][0]
-                mvweight_weight = mvweight[category][0][1]
-                if something_like_this.get(category) == None:
-                    something_like_this[category] = []
-                something_like_this[category].append((mvweight_index, mvweight_weight))
+            if movie in self.movie_weight_map:
+                mvweight = self.movie_weight_map[movie]
+                for category in mvweight:
+                    mvweight_index = mvweight[category][0][0]
+                    mvweight_weight = mvweight[category][0][1]
+                    if something_like_this.get(category) == None:
+                        something_like_this[category] = []
+                    something_like_this[category].append((mvweight_index, mvweight_weight))
         weightpointsV2 = something_like_this
         return weightpointsV2
     def getWeightFromMovieElement(self, args):
@@ -178,7 +178,8 @@ class Main:
         )
         sorted_dictionary = dict(sorted(score_dictionary.items(), key=lambda item: item[0], reverse=True))
         top_10 = {score: name for score, name in list(sorted_dictionary.items())[:10]}
-        print(json.loads(json.dumps(top_10)))
+        #print(json.loads(json.dumps(top_10)))
+        print(json.dumps(top_10, ensure_ascii=False))
         #print(f"elapse time : {time.time() - start_time}")
         self.makeResult()
     def setReviewFolderpath(self, filepath):
