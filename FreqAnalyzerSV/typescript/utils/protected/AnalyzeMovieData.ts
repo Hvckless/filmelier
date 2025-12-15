@@ -2,15 +2,13 @@ import JSONObject from "../type/JSONObject";
 import { Parameter } from "../type/Parameter";
 import Protect from "./Protect";
 import * as path from "path";
-import { spawn } from "child_process";
+import { ChildProcess, spawn } from "child_process";
 import PythonRunner from "../process/PythonRunner";
 import PythonProcess from "../process/PythonProcess.js";
 
 class AnalyzeMovieData implements Protect, PythonRunner{
-    private python_process:any;
-    constructor() {
-        this.python_process = PythonProcess.instance.python_process;
-    }
+    private python_process:ChildProcess | null = null;
+    constructor() { }//this.python_process = PythonProcess.instance.python_process;
     async execute(param: Parameter): Promise<string> {
         return new Promise((resolve, reject)=>{
 
@@ -21,6 +19,8 @@ class AnalyzeMovieData implements Protect, PythonRunner{
     }
     async initial(param: Parameter): Promise<JSONObject> {
         return new Promise(async (resolve, reject)=>{
+
+            this.python_process = PythonProcess.instance.python_process;
 
             let obj_keys:Array<string> = Object.keys(param);
             let movie_name_list:string = "[";
@@ -37,23 +37,16 @@ class AnalyzeMovieData implements Protect, PythonRunner{
 
             if (obj_keys.length > 0) {
                 console.log(`Python으로 전송: ${movie_name_list}`);
-                this.python_process.stdin.write(`${movie_name_list}\n`, 'utf-8', (err) => {
-                    if (err) {
-                        console.error("데이터 전송 에러:", err);
-                    } else {
-                        console.log("데이터 전송 완료:", movie_name_list);
-                    }
-                });
 
-                this.python_process.stdout.on('data', (data) => {
-                    try {
-                        const result = JSON.parse(data.toString('utf-8').trim());
-                        resolve({"reqMsg": result});
-                    } catch (err) {
-                        console.error(`결과 파싱 에러: ${err}`);
-                        reject({ "reqMsg": `파싱 에러: ${err}` });
-                    }
-                });
+                try{
+                    const result:string = await PythonProcess.instance.execute(movie_name_list);
+
+                    resolve({"reqMsg": result});
+                }catch(err){
+                    console.error(`처리 실패 : ${err}`);
+                    reject({ "reqMsg": `파싱 에러: ${err}` });
+                }
+
 
             } else {
                 reject({ "reqMsg": "parameter does not exist" });

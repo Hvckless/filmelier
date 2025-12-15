@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import PythonProcess from "../process/PythonProcess.js";
 class AnalyzeMovieData {
     constructor() {
-        this.python_process = PythonProcess.instance.python_process;
-    }
+        this.python_process = null;
+    } //this.python_process = PythonProcess.instance.python_process;
     execute(param) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
@@ -23,6 +23,7 @@ class AnalyzeMovieData {
     initial(param) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                this.python_process = PythonProcess.instance.python_process;
                 let obj_keys = Object.keys(param);
                 let movie_name_list = "[";
                 for (let i = 0; i < obj_keys.length; i++) {
@@ -34,24 +35,14 @@ class AnalyzeMovieData {
                 movie_name_list += "]";
                 if (obj_keys.length > 0) {
                     console.log(`Python으로 전송: ${movie_name_list}`);
-                    this.python_process.stdin.write(`${movie_name_list}\n`, 'utf-8', (err) => {
-                        if (err) {
-                            console.error("데이터 전송 에러:", err);
-                        }
-                        else {
-                            console.log("데이터 전송 완료:", movie_name_list);
-                        }
-                    });
-                    this.python_process.stdout.on('data', (data) => {
-                        try {
-                            const result = JSON.parse(data.toString('utf-8').trim());
-                            resolve({ "reqMsg": result });
-                        }
-                        catch (err) {
-                            console.error(`결과 파싱 에러: ${err}`);
-                            reject({ "reqMsg": `파싱 에러: ${err}` });
-                        }
-                    });
+                    try {
+                        const result = yield PythonProcess.instance.execute(movie_name_list);
+                        resolve({ "reqMsg": result });
+                    }
+                    catch (err) {
+                        console.error(`처리 실패 : ${err}`);
+                        reject({ "reqMsg": `파싱 에러: ${err}` });
+                    }
                 }
                 else {
                     reject({ "reqMsg": "parameter does not exist" });
