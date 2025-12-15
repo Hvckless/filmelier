@@ -16,6 +16,8 @@ const parameterResolver:ParameterResolver = new ParameterResolver();
 const key = fs.readFileSync('./src/protected/privkey.pem');
 const cert = fs.readFileSync('./src/protected/fullchain.pem');
 
+const path_whitelist = ['src', 'typeout', 'favicon.ico'];
+
 const server:https.Server = https.createServer({key: key, cert: cert}, (req:http.IncomingMessage, res:http.ServerResponse<http.IncomingMessage>)=>{
     if(req.url == "/"){
         new URLRedirector().redirect(res, '/src/html/index.html');
@@ -40,7 +42,7 @@ const server:https.Server = https.createServer({key: key, cert: cert}, (req:http
 
             
             let fileExtension = mime.lookup(filepath.split("/")[(filepath.split("/").length - 1)].split("?")[0])+"";
-            console.log(filepath + " / " + fileExtension);
+            //console.log(filepath + " / " + fileExtension);
             res.writeHead(200, 
                 {
                     'Content-Type': fileExtension,
@@ -79,47 +81,65 @@ const server:https.Server = https.createServer({key: key, cert: cert}, (req:http
     let param:Parameter = null;
 
     if(urlstruct.length > 1){
-        param = parameterResolver.resolveParameter(urlstruct[1]);
+        try{
+            param = parameterResolver.resolveParameter(urlstruct[1]);
+        }catch(e){
+            console.error(e);
+        }
     }
 
     let body:string = "";
 
+    /**
+     * 요청이 POST인 경우
+     */
     if(req.method == "POST"){
         req.on('data',(data)=>{
             body += data;
         });
         req.on('end', ()=>{
             console.log("포스트 데이터 : " + body);
-            param = JSON.parse(body);
 
-            fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
-                if(urlResolver.isRequest(url)){
-                    urlResolver.resolveData(res, url, param)
-                        .then((data)=>{
-                            sendBuffer(res, data);
-                        })
-                        .catch((error)=>{
-                            console.error(error);
-                            sendFile(res, "./src/html/fallback/nourl.html");
-                        });
-                    
-                    return;
-                }else{
-                    sendFile(res, "./src/html/fallback/nourl.html");
-                    return;
-                }
-            });
+            try{
+                param = JSON.parse(body);
+                fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
+                    if(urlResolver.isRequest(url)){
+                        urlResolver.resolveData(res, url, param)
+                            .then((data)=>{
+                                sendBuffer(res, data);
+                            })
+                            .catch((error)=>{
+                                console.error(error);
+                                sendFile(res, "./src/html/fallback/nourl.html");
+                            });
+                        
+                        return;
+                    }else{
+                        sendFile(res, "./src/html/fallback/nourl.html");
+                        return;
+                    }
+                });
+            }catch(e){
+                console.error("JSON 파싱 오류", e.message);
+                sendFile(res, "./src/html/fallback/nourl.html");
+                return;
+            }
+
+
         });
     }
 
+    /**
+     * 요청이 GET인 경우
+     */
     if(req.method == "GET"){
         fs.stat("."+url, (error:NodeJS.ErrnoException, stats:fs.Stats)=>{
 
+
             /**
-             * 아직 완전하지 않은 기능. protected로 요청하지 마시오
+             * 사용자가 메서드로 리퀘스트를 보내는 경우
              */
             if(urlResolver.isRequest(url)){
-                //sendBuffer(res, urlResolver.resolveData(res, url, param)[0]);
                 urlResolver.resolveData(res, url, param)
                     .then((data)=>{
                         sendBuffer(res, data);
@@ -147,7 +167,14 @@ const server:https.Server = https.createServer({key: key, cert: cert}, (req:http
                 sendFile(res, "./src/html/fallback/nourl.html");
             }else{
                 if(stats.isFile()){
-                    sendFile(res, "."+url);
+                    if(path_whitelist.includes(url.split("/")[1])){
+                        sendFile(res, "."+url);
+                    }
+                    else{
+                        console.log("FORBBIDEN FILE : " + url);
+                        sendFile(res, "./src/html/fallback/nourl.html");
+                    }
+                    
                 }else{
                     console.log("NO FILE : " + url);
                     sendFile(res, "./src/html/fallback/nourl.html");
