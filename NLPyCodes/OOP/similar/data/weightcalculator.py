@@ -74,6 +74,10 @@ class WeightCalculator:
 
         scorelist:ScoredMovieList = {}
 
+        combined_weightlist:WeightList = self.getAverageWeight(weightlist)
+
+        # start_time = time.perf_counter()
+
         #리뷰 == 영화, review == movie
         for index, review in enumerate(mvlist_review):
             #리뷰가 입력된 파라메터에 없다면 -> 비교 대상 영화
@@ -92,11 +96,11 @@ class WeightCalculator:
                     distance_multiplier:float = 0
                     similarity_multiplier:float = 0
 
-                    if (weightlist.get(category) == None) or (target_movie_weightlist.get(category) == None):
+                    if (combined_weightlist.get(category) == None) or (target_movie_weightlist.get(category) == None):
                         continue
 
-                    distance:float = weightlist[category][0][0]
-                    similarity:float = weightlist[category][0][1]
+                    distance:float = combined_weightlist[category][0][0]
+                    similarity:float = combined_weightlist[category][0][1]
 
                     target_distance:float = target_movie_weightlist[category][0][0]
                     target_similarity:float = target_movie_weightlist[category][0][1]
@@ -111,8 +115,25 @@ class WeightCalculator:
 
                 #print(f"영화 {review} 비교 완료 ({index}/{len(mvlist_review)})")
                 # print(f"비교 경과 시간 {time.time() - start_time}")
+        
+        # print(f"elapse time : {(time.perf_counter() - start_time):.9f}")
 
         return scorelist
+    
+
+    def getAverageWeight(self, weightlist:WeightList)->WeightList:
+
+        result:WeightList = {}
+
+        if weightlist == None:
+            result.append([(0,0)])
+            return result
+        
+        for category in weightlist:
+            result[category] = []
+            result[category].append((sum(item[0] for item in weightlist[category])/len(weightlist[category]),(sum(item[1] for item in weightlist[category])/len(weightlist[category]))))
+
+        return result
     
 
     def getWeightFromMovieList(self, reviewpath:str, mvlist_param:MovieList, format:CSVFormat)->WeightList:
@@ -139,19 +160,20 @@ class WeightCalculator:
         #     weightpoints = self.getWeightFromMovieElement(filepath, format, weightpoints)
         something_like_this:WeightList = {}
         for movie in mvlist_param:
-            mvweight:WeightList = self.movie_weight_map[movie]
-            for category in mvweight:
-                
-                # if category == "부도덕":
-                #     print(movie)
-                #     print(self.movie_weight_map[movie][category][0][0])
-                #print(self.movie_weight_map[movie][category][0][0] + self.movie_weight_map[movie][category][0][1])
-                mvweight_index = mvweight[category][0][0]
-                mvweight_weight = mvweight[category][0][1]
+            if movie in self.movie_weight_map:
+                mvweight:WeightList = self.movie_weight_map[movie]
+                for category in mvweight:
+                    
+                    # if category == "부도덕":
+                    #     print(movie)
+                    #     print(self.movie_weight_map[movie][category][0][0])
+                    #print(self.movie_weight_map[movie][category][0][0] + self.movie_weight_map[movie][category][0][1])
+                    mvweight_index = mvweight[category][0][0]
+                    mvweight_weight = mvweight[category][0][1]
 
-                if something_like_this.get(category) == None:
-                    something_like_this[category] = []
-                something_like_this[category].append((mvweight_index, mvweight_weight))
+                    if something_like_this.get(category) == None:
+                        something_like_this[category] = []
+                    something_like_this[category].append((mvweight_index, mvweight_weight))
             #print(movie)
 
 
